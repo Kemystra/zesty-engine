@@ -1,6 +1,6 @@
 # Zesty 3D Engine
 
-## A minimal raster 3D engine for learning purposes
+*A minimal raster 3D engine for learning purposes*
 
 The Zesty Engine is a CPU-based 3D engine based on the rasterization technique, a very common technique for realtime 3D rendering. The output is rendered through SDL2 (Simple DirectMedia Layer) in order to utilize its user input capabilities.
 
