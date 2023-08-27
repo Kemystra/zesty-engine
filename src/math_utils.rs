@@ -1,28 +1,43 @@
-use std::ops::{Add, Sub};
+use std::ops::{Add, Sub, Mul};
 
-use crate::{Matrix2D, Matrix3D};
+
+pub struct Matrix3D {
+    x: f64,
+    y: f64,
+    z: f64,
+}
 
 
 impl Add for Matrix3D {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
-        [
-            self[0] + rhs[0],
-            self[1] + rhs[1],
-            self[2] + rhs[2]
-        ]
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z
+        }
     }
 }
 
-impl Sub<Matrix3D> for Matrix3D {
-    type Output = Matrix3D;
 
-    fn add(self, rhs: Matrix3D) -> Self::Output {
-        let x = self[0] - rhs[0];
-        let y = self[1] - rhs[1];
-        let z = self[2] - rhs[2];
+impl Sub for Matrix3D {
+    type Output = Self;
 
-        [x,y,z]
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z
+        }
+    }
+}
+
+// Dot product for vector
+impl Mul for Matrix3D {
+    type Output = f64;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
     }
 }
