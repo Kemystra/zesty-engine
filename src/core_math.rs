@@ -4,6 +4,20 @@ pub struct Transform {
     scale: f64
 }
 
+impl Transform {
+    pub fn translate(&mut self, x: f64, y: f64, z: f64) -> () {
+        self.translation += [x,y,z];
+    }
+
+    pub fn scale(&mut self, scale: f64) -> () {
+        self.scale *= scale;
+    }
+
+    pub fn rotate() -> () {
+        
+    }
+}
+
 pub fn local_to_world_coord(
     transform: &Transform, 
     local_coord: &[f64; 3]) -> [f64; 3] {
