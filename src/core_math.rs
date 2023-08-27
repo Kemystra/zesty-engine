@@ -5,10 +5,6 @@ pub struct Transform {
 }
 
 impl Transform {
-    pub fn translate(&mut self, x: f64, y: f64, z: f64) -> () {
-        self.translation += [x,y,z];
-    }
-
     pub fn scale(&mut self, scale: f64) -> () {
         self.scale *= scale;
     }
