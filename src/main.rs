@@ -6,6 +6,10 @@ use sdl2::pixels::PixelFormatEnum;
 use sdl2::rect::Rect;
 
 mod transform;
+mod math_utils;
+
+type Matrix3D = [f64; 3];
+type Matrix2D = [f64; 2];
 
 const SCREEN_WIDTH: u32 = 480;
 const SCREEN_HEIGHT: u32 = 360;
