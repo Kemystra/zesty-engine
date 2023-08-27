@@ -5,7 +5,7 @@ use sdl2::keyboard::Keycode;
 use sdl2::pixels::PixelFormatEnum;
 use sdl2::rect::Rect;
 
-mod core_math;
+mod transform;
 
 const SCREEN_WIDTH: u32 = 480;
 const SCREEN_HEIGHT: u32 = 360;
