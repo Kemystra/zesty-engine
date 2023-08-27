@@ -1,14 +1,14 @@
 use std::ops::{Add, Sub, Mul};
 
 
-pub struct Matrix3D {
+pub struct Vector3D {
     x: f64,
     y: f64,
     z: f64,
 }
 
 
-impl Add for Matrix3D {
+impl Add for Vector3D {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -21,7 +21,7 @@ impl Add for Matrix3D {
 }
 
 
-impl Sub for Matrix3D {
+impl Sub for Vector3D {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
@@ -34,7 +34,7 @@ impl Sub for Matrix3D {
 }
 
 // Dot product for vector
-impl Mul for Matrix3D {
+impl Mul for Vector3D {
     type Output = f64;
 
     fn mul(self, rhs: Self) -> Self::Output {
