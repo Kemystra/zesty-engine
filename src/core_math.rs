@@ -1,11 +1,11 @@
-pub struct MatrixTransform {
+pub struct Transform {
     translation: [f64; 3],
     rotation: [[f64; 3]; 3],
     scale: f64
 }
 
 pub fn local_to_world_coord(
-    transform: &MatrixTransform, 
+    transform: &Transform, 
     local_coord: &[f64; 3]) -> [f64; 3] {
 
     let mut world_coord = [0.0; 3];
@@ -36,7 +36,7 @@ mod tests {
     #[test]
     fn transform_to_world() {
         let mat_a = [5.0,3.0,12.0];
-        let transform_b = MatrixTransform {
+        let transform_b = Transform {
             translation: [10.0,12.0,11.0],
             rotation: [
                 [0.3, 0.4, 0.12],
@@ -49,6 +49,7 @@ mod tests {
         let result = local_to_world_coord(&transform_b, &mat_a);
         let mut rounded_result = [0.0_f64; 3];
         for (i,&n) in result.iter().enumerate() {rounded_result[i] = round_place(n, 2)};
+
         assert_eq!(rounded_result, [17.8, 18.98, 45.5]);
     }
 }
