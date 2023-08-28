@@ -3,9 +3,9 @@ use crate::math_utils::Vector3D;
 
 #[derive(Debug)]
 pub struct Transform {
-    translation: Vector3D,
-    rotation: [[f64; 3]; 3],
-    scale: f64
+    pub translation: Vector3D,
+    pub rotation: [[f64; 3]; 3],
+    pub scale: f64
 }
 
 
