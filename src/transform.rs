@@ -8,15 +8,6 @@ pub struct Transform {
     scale: f64
 }
 
-impl Transform {
-    pub fn scale(&mut self, scale: f64) -> () {
-        self.scale *= scale;
-    }
-
-    pub fn rotate() -> () {
-        
-    }
-}
 
 pub fn local_to_world_coord(
     transform: &Transform, 
