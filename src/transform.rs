@@ -1,6 +1,7 @@
 use crate::math_utils::Vector3D;
 
 
+#[derive(Debug)]
 pub struct Transform {
     translation: Vector3D,
     rotation: [[f64; 3]; 3],
