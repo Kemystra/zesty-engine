@@ -9,7 +9,7 @@ pub struct Object3D {
 }
 
 impl Object3D {
-    fn new(triangles: Vec<Vector3D>) -> Self {
+    pub fn new(triangles: Vec<Vector3D>) -> Self {
         Self {
             transform: Transform {
                 translation: Vector3D::new(0, 0, 0),

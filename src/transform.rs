@@ -27,15 +27,14 @@ pub fn local_to_world_coord(
 }
 
 
-fn round_place(num: f64, place: usize) -> f64{
-    let mult = 10_f64.powf(place as f64);
-    (num*mult).round() / mult
-}
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn round_place(num: f64, place: usize) -> f64{
+        let mult = 10_f64.powf(place as f64);
+        (num*mult).round() / mult
+    }
 
     #[test]
     fn transform_to_world() {
