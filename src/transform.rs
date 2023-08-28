@@ -1,8 +1,8 @@
-use crate::math_utils;
+use crate::math_utils::Vector3D;
 
 
 pub struct Transform {
-    translation: [f64; 3],
+    translation: Vector3D,
     rotation: [[f64; 3]; 3],
     scale: f64
 }
@@ -19,20 +19,19 @@ impl Transform {
 
 pub fn local_to_world_coord(
     transform: &Transform, 
-    local_coord: &[f64; 3]) -> [f64; 3] {
+    local_coord: &Vector3D) -> Vector3D {
 
-    let mut world_coord = [0.0; 3];
-    for i in 0..3 {
-        let mut sum = 0.0;
-        for j in 0..3 {
-            let norm_sum = local_coord[j]*transform.rotation[j][i];
-            sum += if i==j {norm_sum*transform.scale} else {norm_sum};
-        }
-        sum += transform.translation[i];
-        world_coord[i] = sum;
+    Vector3D {
+        x: local_coord.x*transform.rotation[0][0]*transform.scale +
+            local_coord.y*transform.rotation[1][0] +
+            local_coord.z*transform.rotation[2][0] + transform.translation.x,
+        y: local_coord.x*transform.rotation[0][1] +
+            local_coord.y*transform.rotation[1][1]*transform.scale +
+            local_coord.z*transform.rotation[2][1] + transform.translation.y,
+        z: local_coord.x*transform.rotation[0][2] +
+            local_coord.y*transform.rotation[1][2] +
+            local_coord.z*transform.rotation[2][2]*transform.scale + transform.translation.z,
     }
-
-    world_coord
 }
 
 
@@ -48,9 +47,9 @@ mod tests {
 
     #[test]
     fn transform_to_world() {
-        let mat_a = [5.0,3.0,12.0];
+        let mat_a = Vector3D::new(5.0,3.0,12.0);
         let transform_b = Transform {
-            translation: [10.0,12.0,11.0],
+            translation: Vector3D::new(10.0,12.0,11.0),
             rotation: [
                 [0.3, 0.4, 0.12],
                 [0.7, 0.02, 0.5],
@@ -60,8 +59,11 @@ mod tests {
         };
 
         let result = local_to_world_coord(&transform_b, &mat_a);
-        let mut rounded_result = [0.0_f64; 3];
-        for (i,&n) in result.iter().enumerate() {rounded_result[i] = round_place(n, 2)};
+        let rounded_result = [
+            round_place(result.x, 2),
+            round_place(result.y, 2),
+            round_place(result.z, 2)
+        ];
 
         assert_eq!(rounded_result, [17.8, 18.98, 45.5]);
     }
