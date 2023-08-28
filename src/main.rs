@@ -10,7 +10,7 @@ mod object;
 mod scene;
 mod renderer;
 
-use renderer::Renderer;
+use renderer::{Renderer, RenderMode};
 use scene::Scene;
 use object::Object;
 use transform::Transform;
@@ -39,6 +39,7 @@ pub fn main() -> Result<(), String> {
         objects: vec![cube]
     };
     let mut renderer = Renderer::new(scene);
+    renderer.render_mode = RenderMode::VertexOnly;
     // End boilerplate section
 
     // SDL2 Initialization
