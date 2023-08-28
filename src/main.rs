@@ -8,6 +8,7 @@ use sdl2::rect::Rect;
 mod transform;
 mod math_utils;
 mod object;
+mod scene;
 
 const SCREEN_WIDTH: u32 = 480;
 const SCREEN_HEIGHT: u32 = 360;
