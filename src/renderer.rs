@@ -1,6 +1,14 @@
 use crate::object;
-use crate::scene;
+use crate::scene::Scene;
 
-pub fn render(buffer: &mut [u8], pitch: usize) -> () {
-    
+
+#[derive(Debug)]
+pub struct Renderer {
+    scene: Scene
+}
+
+impl Renderer {
+    pub fn new(scene: Scene) -> Self {
+        Self { scene }
+    }
 }
