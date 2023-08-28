@@ -10,12 +10,38 @@ mod object;
 mod scene;
 mod renderer;
 
-use renderer::render;
+use renderer::Renderer;
+use scene::Scene;
+use object::Object;
+use transform::Transform;
+use math_utils::Vector3D;
 
 const SCREEN_WIDTH: u32 = 480;
 const SCREEN_HEIGHT: u32 = 360;
 
 pub fn main() -> Result<(), String> {
+
+    // Boilerplate section for testing
+    let cube = Object {
+        transform: Transform {
+            translation: Vector3D::new(0, 0, -3),
+            rotation: [
+                [1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+                [0.0, 0.0, 1.0]
+            ],
+            scale: 1.0
+        },
+
+        triangles: vec![]
+    };
+    let scene = Scene {
+        objects: vec![cube]
+    };
+    let renderer = Renderer::new(scene);
+    // End boilerplate section
+
+    // SDL2 Initialization
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
 
@@ -28,7 +54,6 @@ pub fn main() -> Result<(), String> {
     let mut canvas = window.into_canvas().build().map_err(|e| e.to_string())?;
     let texture_creator = canvas.texture_creator();
 
-    // The rest of the game loop goes here...
     let mut texture = texture_creator
         .create_texture_streaming(PixelFormatEnum::RGB24, SCREEN_WIDTH, SCREEN_HEIGHT)
         .map_err(|e| e.to_string())?;
@@ -46,7 +71,7 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        texture.with_lock(None, render)?;
+        texture.with_lock(None, renderer.render)?;
         canvas.clear();
         canvas.copy(&texture, None, None)?; 
         canvas.present();
