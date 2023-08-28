@@ -11,4 +11,8 @@ impl Renderer {
     pub fn new(scene: Scene) -> Self {
         Self { scene }
     }
+
+    pub fn render(&mut self, buffer: &mut [u8], pitch: usize) {
+
+    }
 }
