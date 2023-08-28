@@ -38,7 +38,7 @@ pub fn main() -> Result<(), String> {
     let scene = Scene {
         objects: vec![cube]
     };
-    let renderer = Renderer::new(scene);
+    let mut renderer = Renderer::new(scene);
     // End boilerplate section
 
     // SDL2 Initialization
@@ -71,7 +71,7 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        texture.with_lock(None, renderer.render)?;
+        texture.with_lock(None, |a: &mut [u8], b: usize| { renderer.render(a,b) })?;
         canvas.clear();
         canvas.copy(&texture, None, None)?; 
         canvas.present();
