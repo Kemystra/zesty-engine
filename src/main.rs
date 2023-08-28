@@ -12,7 +12,7 @@ mod renderer;
 
 use renderer::{Renderer, RenderMode};
 use scene::Scene;
-use object::Object;
+use object::Object3D;
 use transform::Transform;
 use math_utils::Vector3D;
 
@@ -22,7 +22,7 @@ const SCREEN_HEIGHT: u32 = 360;
 pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
-    let cube = Object {
+    let cube = Object3D {
         transform: Transform {
             translation: Vector3D::new(0, 0, -3),
             rotation: [
@@ -32,8 +32,6 @@ pub fn main() -> Result<(), String> {
             ],
             scale: 1.0
         },
-
-        triangles: vec![]
     };
     let scene = Scene {
         objects: vec![cube]

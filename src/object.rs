@@ -3,7 +3,30 @@ use crate::math_utils::Vector3D;
 
 
 #[derive(Debug)]
-pub struct Object {
+pub struct Object3D {
     pub transform: Transform,
-    pub triangles: Vec<Vector3D> 
+    triangles: Vec<Vector3D> 
+}
+
+impl Object3D {
+    fn new(triangles: Vec<Vector3D>) -> Self {
+        Self {
+            transform: Transform {
+                translation: Vector3D::new(0, 0, 0),
+                rotation: [
+                    [1.0, 0.0, 0.0],
+                    [0.0, 1.0, 0.0],
+                    [0.0, 0.0, 1.0]
+                ],
+                scale: 1.0
+            },
+            triangles
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Camera {
+    pub transform: Transform,
+
 }
