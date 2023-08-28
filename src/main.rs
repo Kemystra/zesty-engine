@@ -22,17 +22,7 @@ const SCREEN_HEIGHT: u32 = 360;
 pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
-    let cube = Object3D {
-        transform: Transform {
-            translation: Vector3D::new(0, 0, -3),
-            rotation: [
-                [1.0, 0.0, 0.0],
-                [0.0, 1.0, 0.0],
-                [0.0, 0.0, 1.0]
-            ],
-            scale: 1.0
-        },
-    };
+    let cube = Object3D::new(vec![]);
     let scene = Scene {
         objects: vec![cube]
     };
