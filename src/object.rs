@@ -28,5 +28,7 @@ impl Object3D {
 #[derive(Debug)]
 pub struct Camera {
     pub transform: Transform,
-
+    pub near_clip_distance: f64,
+    pub far_clip_distance: f64,
+    pub field_of_view: u32
 }
