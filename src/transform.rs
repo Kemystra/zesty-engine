@@ -8,8 +8,9 @@ pub struct Transform {
     pub scale: f64
 }
 
-
-pub fn local_to_world(
+// Helps to convert between local and world coord. system
+// Note that transform can also be the inverted version
+fn convert_coord_system(
     transform: &Transform, 
     coord: &Vector3D) -> Vector3D {
 
@@ -27,7 +28,7 @@ pub fn local_to_world(
 }
 
 
-pub fn world_to_local(
+fn invert_transform(
     transform: &Transform,
     coord: &Vector3D) -> Vector3D {
 }
