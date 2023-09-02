@@ -8,21 +8,27 @@ pub struct Transform {
     pub scale: f64
 }
 
+impl Transform {
+    pub fn world_to_local_coord(&mut self, coord: &Vector3D) -> Vector3D {
+
+    }
+}
+
 
 pub fn local_to_world_coord(
     transform: &Transform, 
-    local_coord: &Vector3D) -> Vector3D {
+    coord: &Vector3D) -> Vector3D {
 
     Vector3D {
-        x: local_coord.x*transform.rotation[0][0]*transform.scale +
-            local_coord.y*transform.rotation[1][0] +
-            local_coord.z*transform.rotation[2][0] + transform.translation.x,
-        y: local_coord.x*transform.rotation[0][1] +
-            local_coord.y*transform.rotation[1][1]*transform.scale +
-            local_coord.z*transform.rotation[2][1] + transform.translation.y,
-        z: local_coord.x*transform.rotation[0][2] +
-            local_coord.y*transform.rotation[1][2] +
-            local_coord.z*transform.rotation[2][2]*transform.scale + transform.translation.z,
+        x: coord.x*transform.rotation[0][0]*transform.scale +
+            coord.y*transform.rotation[1][0] +
+            coord.z*transform.rotation[2][0] + transform.translation.x,
+        y: coord.x*transform.rotation[0][1] +
+            coord.y*transform.rotation[1][1]*transform.scale +
+            coord.z*transform.rotation[2][1] + transform.translation.y,
+        z: coord.x*transform.rotation[0][2] +
+            coord.y*transform.rotation[1][2] +
+            coord.z*transform.rotation[2][2]*transform.scale + transform.translation.z,
     }
 }
 
@@ -34,6 +40,14 @@ mod tests {
     fn round_place(num: f64, place: usize) -> f64{
         let mult = 10_f64.powf(place as f64);
         (num*mult).round() / mult
+    }
+
+    fn round_vector3d(vector: &Vector3D) -> [f64; 3] {
+        [
+            round_place(vector.x, 2),
+            round_place(vector.y, 2),
+            round_place(vector.z, 2)
+        ]
     }
 
     #[test]
@@ -50,12 +64,27 @@ mod tests {
         };
 
         let result = local_to_world_coord(&transform_b, &mat_a);
-        let rounded_result = [
-            round_place(result.x, 2),
-            round_place(result.y, 2),
-            round_place(result.z, 2)
-        ];
+        let rounded_result = round_vector3d(&result);
 
         assert_eq!(rounded_result, [17.8, 18.98, 45.5]);
+    }
+
+    #[test]
+    fn transform_to_local() {
+        let mat_a = Vector3D::new(5,10,2);
+        let mut transform_b = Transform {
+            translation: Vector3D::new(3,4,2),
+            rotation: [
+                [1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+                [0.0, 0.0, 1.0]
+            ],
+            scale: 1.0
+        };
+
+        let result = transform_b.world_to_local_coord(&mat_a);
+        let rounded_result = round_vector3d(&result);
+
+        assert_eq!(rounded_result, [2.0, 6, 0, 1]);
     }
 }
