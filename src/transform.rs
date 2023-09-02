@@ -8,14 +8,8 @@ pub struct Transform {
     pub scale: f64
 }
 
-impl Transform {
-    pub fn world_to_local_coord(&mut self, coord: &Vector3D) -> Vector3D {
 
-    }
-}
-
-
-pub fn local_to_world_coord(
+pub fn local_to_world(
     transform: &Transform, 
     coord: &Vector3D) -> Vector3D {
 
@@ -30,6 +24,12 @@ pub fn local_to_world_coord(
             coord.y*transform.rotation[1][2] +
             coord.z*transform.rotation[2][2]*transform.scale + transform.translation.z,
     }
+}
+
+
+pub fn world_to_local(
+    transform: &Transform,
+    coord: &Vector3D) -> Vector3D {
 }
 
 
