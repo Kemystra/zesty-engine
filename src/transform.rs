@@ -1,4 +1,14 @@
+use std::mem;
+
 use crate::math_utils::Vector3D;
+
+
+const IDENTITY_TRANSFORM: [[f64; 3]; 4] = [
+    [1.0, 0.0, 0.0], 
+    [0.0, 1.0, 0.0], 
+    [0.0, 0.0, 1.0], 
+    [0.0, 0.0, 0.0], 
+];
 
 
 #[derive(Debug)]
@@ -28,9 +38,57 @@ fn convert_coord_system(
 }
 
 
-fn invert_transform(
-    transform: &Transform,
-    coord: &Vector3D) -> Vector3D {
+fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
+
+    const ROW: usize = 4;
+    const COL: usize = 3;
+
+    // Load into matrix
+    let mut matrix = [[0.0; COL]; ROW];
+    matrix[..3].clone_from_slice(&transform.rotation);
+    matrix[3][0] = transform.translation.x;
+    matrix[3][1] = transform.translation.y;
+    matrix[3][2] = transform.translation.z;
+
+    let mut inv_matrix = [[0.0; 3]; 4];
+    inv_matrix.copy_from_slice(&IDENTITY_TRANSFORM);
+
+    for i in 0..ROW {
+        matrix[i][i] *= transform.scale;
+    }
+
+    for column in 0..COL {
+        // Making sure pivot is a non-zero number
+        // If zero, swap row with one that has the biggest absolute value
+        let pivot = column;
+        let pivot_val = matrix[column][column];
+
+        if pivot_val == 0.0 {
+            for curr_row in 0..ROW {
+                if matrix[curr_row][column].abs() > pivot_val.abs() {
+                    pivot = curr_row;
+                    pivot_val = matrix[curr_row][column];
+                }
+            }
+
+            if pivot_val == 0.0 { return Err("Matrix has no inverse") }
+            mem::swap(&mut matrix[column], &mut matrix[pivot]);
+            mem::swap(&mut inv_matrix[column], &mut inv_matrix[pivot]);
+        }
+
+        // Forward substitution
+        for row_under_pivot in (column + 1)..ROW {
+            // Refer to scratchapixel.com, under Gauss-Jordan Matrix Inverse
+            // cuz I dunno wth I'm doing
+            let multiplier = matrix[row_under_pivot][column] / pivot_val;
+            for i in 0..COL {
+                matrix[row_under_pivot][i] -= multiplier * matrix[column][i];
+                inv_matrix[row_under_pivot][i] -= multiplier * inv_matrix[column][i];
+            }
+        }
+    }
+
+    Ok(transform)
 }
 
 
