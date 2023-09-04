@@ -85,6 +85,31 @@ fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
                 matrix[row_under_pivot][i] -= multiplier * matrix[column][i];
                 inv_matrix[row_under_pivot][i] -= multiplier * inv_matrix[column][i];
             }
+
+            matrix[row_under_pivot][column] = 0.0;
+        }
+    }
+
+    // Divide each row to turn the pivot into 1
+    for column in 0..COL {
+        let divisor = matrix[column][column];
+        for i in 0..COL {
+            matrix[column][i] /= divisor;
+            inv_matrix[column][i] /= divisor;
+        }
+        matrix[column][column] = 1.0;
+    }
+
+    // Backward substitution
+    for row in 0..ROW {
+        for column in (row+1)..COL {
+            let constant = matrix[row][column];
+            for i in 0..ROW {
+                matrix[row][i] -= matrix[column][i] * constant;
+                inv_matrix[row][i] -= inv_matrix[column] * constant;
+            }
+
+            matrix[row][column] = 0.0;
         }
     }
 
