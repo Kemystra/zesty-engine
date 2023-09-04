@@ -3,11 +3,10 @@ use std::mem;
 use crate::math_utils::Vector3D;
 
 
-const IDENTITY_TRANSFORM: [[f64; 3]; 4] = [
+const IDENTITY_MATRIX: [[f64; 3]; 3] = [
     [1.0, 0.0, 0.0], 
     [0.0, 1.0, 0.0], 
     [0.0, 0.0, 1.0], 
-    [0.0, 0.0, 0.0], 
 ];
 
 
@@ -16,6 +15,16 @@ pub struct Transform {
     pub translation: Vector3D,
     pub rotation: [[f64; 3]; 3],
     pub scale: f64
+}
+
+impl Transform {
+    fn new() -> Self {
+        Transform { 
+            translation: Vector3D::new(0, 0, 0),
+            rotation: IDENTITY_MATRIX,
+            scale: 1.0 
+        }
+    }
 }
 
 // Helps to convert between local and world coord. system
@@ -51,7 +60,7 @@ fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
     matrix[3][2] = transform.translation.z;
 
     let mut inv_matrix = [[0.0; 3]; 4];
-    inv_matrix.copy_from_slice(&IDENTITY_TRANSFORM);
+    inv_matrix.copy_from_slice(&IDENTITY_MATRIX);
 
     for i in 0..ROW {
         matrix[i][i] *= transform.scale;
@@ -60,8 +69,8 @@ fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
     for column in 0..COL {
         // Making sure pivot is a non-zero number
         // If zero, swap row with one that has the biggest absolute value
-        let pivot = column;
-        let pivot_val = matrix[column][column];
+        let mut pivot = column;
+        let mut pivot_val = matrix[column][column];
 
         if pivot_val == 0.0 {
             for curr_row in 0..ROW {
@@ -106,14 +115,20 @@ fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
             let constant = matrix[row][column];
             for i in 0..ROW {
                 matrix[row][i] -= matrix[column][i] * constant;
-                inv_matrix[row][i] -= inv_matrix[column] * constant;
+                inv_matrix[row][i] -= inv_matrix[column][i] * constant;
             }
 
             matrix[row][column] = 0.0;
         }
     }
 
-    Ok(transform)
+    let mut result = Transform::new();
+    for (i, val) in inv_matrix[..3].iter().enumerate() {
+        result.rotation[i] = *val;
+    }
+    result.translation = Vector3D::new(inv_matrix[3][0], inv_matrix[3][1], inv_matrix[3][2]);
+
+    Ok(result)
 }
 
 
