@@ -1,4 +1,4 @@
-use crate::transform::Transform;
+use crate::transform::{Transform, IDENTITY_TRANSFORM};
 use crate::math_utils::Vector3D;
 
 
@@ -12,7 +12,7 @@ pub struct Object3D {
 impl Object3D {
     pub fn new(vertices: Vec<Vector3D>, triangles: Vec<[usize; 3]>) -> Self {
         Self {
-            transform: Transform::new(),
+            transform: IDENTITY_TRANSFORM,
             vertices,
             triangles
         }
@@ -24,5 +24,5 @@ pub struct Camera {
     pub transform: Transform,
     pub near_clip_distance: f64,
     pub far_clip_distance: f64,
-    pub field_of_view: u32
+    pub field_of_view: usize
 }
