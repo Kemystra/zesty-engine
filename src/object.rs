@@ -5,21 +5,15 @@ use crate::math_utils::Vector3D;
 #[derive(Debug)]
 pub struct Object3D {
     pub transform: Transform,
-    triangles: Vec<Vector3D> 
+    vertices: Vec<Vector3D>,
+    triangles: Vec<[usize; 3]>
 }
 
 impl Object3D {
-    pub fn new(triangles: Vec<Vector3D>) -> Self {
+    pub fn new(vertices: Vec<Vector3D>, triangles: Vec<[usize; 3]>) -> Self {
         Self {
-            transform: Transform {
-                translation: Vector3D::new(0, 0, 0),
-                rotation: [
-                    [1.0, 0.0, 0.0],
-                    [0.0, 1.0, 0.0],
-                    [0.0, 0.0, 1.0]
-                ],
-                scale: 1.0
-            },
+            transform: Transform::new(),
+            vertices,
             triangles
         }
     }
