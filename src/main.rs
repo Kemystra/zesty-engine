@@ -13,8 +13,6 @@ mod renderer;
 use renderer::{Renderer, RenderMode};
 use scene::Scene;
 use object::Object3D;
-use transform::Transform;
-use math_utils::Vector3D;
 
 const SCREEN_WIDTH: u32 = 480;
 const SCREEN_HEIGHT: u32 = 360;

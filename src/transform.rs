@@ -18,7 +18,7 @@ pub struct Transform {
 }
 
 impl Transform {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Transform { 
             translation: Vector3D::new(0, 0, 0),
             rotation: IDENTITY_MATRIX,
@@ -29,7 +29,7 @@ impl Transform {
 
 // Helps to convert between local and world coord. system
 // Note that transform can also be the inverted version
-fn convert_coord_system(
+pub fn convert_space(
     transform: &Transform, 
     coord: &Vector3D) -> Vector3D {
 
@@ -47,7 +47,7 @@ fn convert_coord_system(
 }
 
 
-fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
+pub fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
 
     const ROW: usize = 4;
     const COL: usize = 3;
@@ -60,9 +60,9 @@ fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
     matrix[3][2] = transform.translation.z;
 
     let mut inv_matrix = [[0.0; 3]; 4];
-    inv_matrix.copy_from_slice(&IDENTITY_MATRIX);
+    inv_matrix[..3].copy_from_slice(&IDENTITY_MATRIX);
 
-    for i in 0..ROW {
+    for i in 0..COL {
         matrix[i][i] *= transform.scale;
     }
 
@@ -81,8 +81,15 @@ fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
             }
 
             if pivot_val == 0.0 { return Err("Matrix has no inverse") }
-            mem::swap(&mut matrix[column], &mut matrix[pivot]);
-            mem::swap(&mut inv_matrix[column], &mut inv_matrix[pivot]);
+            let mut tmp = matrix[pivot];
+            matrix[pivot] = matrix[column];
+            matrix[column] = tmp;
+
+            tmp = inv_matrix[pivot];
+            inv_matrix[pivot] = inv_matrix[column];
+            inv_matrix[column] = tmp;
+
+
         }
 
         // Forward substitution
@@ -113,7 +120,7 @@ fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
     for row in 0..ROW {
         for column in (row+1)..COL {
             let constant = matrix[row][column];
-            for i in 0..ROW {
+            for i in 0..COL {
                 matrix[row][i] -= matrix[column][i] * constant;
                 inv_matrix[row][i] -= inv_matrix[column][i] * constant;
             }
@@ -162,7 +169,7 @@ mod tests {
             scale: 3.0 
         };
 
-        let result = local_to_world_coord(&transform_b, &mat_a);
+        let result = convert_space(&transform_b, &mat_a);
         let rounded_result = round_vector3d(&result);
 
         assert_eq!(rounded_result, [17.8, 18.98, 45.5]);
@@ -171,7 +178,7 @@ mod tests {
     #[test]
     fn transform_to_local() {
         let mat_a = Vector3D::new(5,10,2);
-        let mut transform_b = Transform {
+        let transform_b = Transform {
             translation: Vector3D::new(3,4,2),
             rotation: [
                 [1.0, 0.0, 0.0],
@@ -181,9 +188,9 @@ mod tests {
             scale: 1.0
         };
 
-        let result = transform_b.world_to_local_coord(&mat_a);
+        let result = convert_space(&invert_transform(&transform_b).unwrap(), &mat_a);
         let rounded_result = round_vector3d(&result);
 
-        assert_eq!(rounded_result, [2.0, 6, 0, 1]);
+        assert_eq!(rounded_result, [2.0, 6.0, 0.0]);
     }
 }
