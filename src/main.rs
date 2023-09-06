@@ -4,10 +4,10 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::PixelFormatEnum;
 
-mod transform;
-mod math_utils;
-mod object;
-mod scene;
+pub mod transform;
+pub mod math_utils;
+pub mod object;
+pub mod scene;
 
 use scene::{Scene, RenderMode};
 use object::{Object3D, Camera};
