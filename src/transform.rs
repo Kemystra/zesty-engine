@@ -1,5 +1,3 @@
-use std::mem;
-
 use crate::math_utils::Vector3D;
 
 
@@ -9,22 +7,18 @@ const IDENTITY_MATRIX: [[f64; 3]; 3] = [
     [0.0, 0.0, 1.0], 
 ];
 
+pub const IDENTITY_TRANSFORM: Transform = Transform {
+    translation: Vector3D::new(0,0,0),
+    rotation: IDENTITY_MATRIX,
+    scale: 1.0
+};
+
 
 #[derive(Debug)]
 pub struct Transform {
     pub translation: Vector3D,
     pub rotation: [[f64; 3]; 3],
     pub scale: f64
-}
-
-impl Transform {
-    pub fn new() -> Self {
-        Transform { 
-            translation: Vector3D::new(0, 0, 0),
-            rotation: IDENTITY_MATRIX,
-            scale: 1.0 
-        }
-    }
 }
 
 // Helps to convert between local and world coord. system
@@ -129,7 +123,7 @@ pub fn invert_transform(transform: &Transform) -> Result<Transform, &str> {
         }
     }
 
-    let mut result = Transform::new();
+    let mut result = IDENTITY_TRANSFORM;
     for (i, val) in inv_matrix[..3].iter().enumerate() {
         result.rotation[i] = *val;
     }
