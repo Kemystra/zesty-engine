@@ -18,7 +18,7 @@ const SCREEN_HEIGHT: u32 = 360;
 pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
-    let cube = Object3D::new(vec![]);
+    let cube = Object3D::new(vec![], vec![]);
     let mut scene = Scene {
         objects: vec![cube],
         render_mode: RenderMode::VertexOnly
