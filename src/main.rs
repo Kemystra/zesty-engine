@@ -19,7 +19,7 @@ const SCREEN_HEIGHT: u32 = 360;
 pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
-    let cube = Object3D::new(vec![], vec![]);
+    let mut cube = Object3D::new(vec![], vec![]);
     let camera = Camera {
         transform: IDENTITY_TRANSFORM,
         near_clip_distance: 2.0,
