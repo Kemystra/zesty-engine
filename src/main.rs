@@ -10,7 +10,8 @@ mod object;
 mod scene;
 
 use scene::{Scene, RenderMode};
-use object::Object3D;
+use object::{Object3D, Camera};
+use transform::IDENTITY_TRANSFORM;
 
 const SCREEN_WIDTH: u32 = 480;
 const SCREEN_HEIGHT: u32 = 360;
@@ -19,9 +20,17 @@ pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
     let cube = Object3D::new(vec![], vec![]);
+    let camera = Camera {
+        transform: IDENTITY_TRANSFORM,
+        near_clip_distance: 2.0,
+        far_clip_distance: 10.0,
+        field_of_view: 80
+    };
+
     let mut scene = Scene {
         objects: vec![cube],
-        render_mode: RenderMode::VertexOnly
+        render_mode: RenderMode::VertexOnly,
+        camera
     };
     // End boilerplate section
 
