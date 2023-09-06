@@ -8,9 +8,7 @@ mod transform;
 mod math_utils;
 mod object;
 mod scene;
-mod renderer;
 
-use renderer::{Renderer, RenderMode};
 use scene::Scene;
 use object::Object3D;
 
@@ -21,11 +19,9 @@ pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
     let cube = Object3D::new(vec![]);
-    let scene = Scene {
+    let mut scene = Scene {
         objects: vec![cube]
     };
-    let mut renderer = Renderer::new(scene);
-    renderer.render_mode = RenderMode::VertexOnly;
     // End boilerplate section
 
     // SDL2 Initialization
@@ -58,7 +54,7 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        texture.with_lock(None, |a: &mut [u8], b: usize| { renderer.render(a,b) })?;
+        texture.with_lock(None, |a: &mut [u8], b: usize| { scene.render(a,b) })?;
         canvas.clear();
         canvas.copy(&texture, None, None)?; 
         canvas.present();
