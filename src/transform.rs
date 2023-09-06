@@ -8,7 +8,7 @@ const IDENTITY_MATRIX: [[f64; 3]; 3] = [
 ];
 
 pub const IDENTITY_TRANSFORM: Transform = Transform {
-    translation: Vector3D::new(0,0,0),
+    translation: Vector3D { x: 0.0, y: 0.0, z: 0.0 },
     rotation: IDENTITY_MATRIX,
     scale: 1.0
 };
