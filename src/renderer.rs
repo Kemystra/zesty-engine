@@ -1,8 +1,6 @@
-use crate::object;
 use crate::scene::Scene;
 
-use crate::{SCREEN_WIDTH, SCREEN_HEIGHT};
-
+#[allow(dead_code)]
 #[derive(Debug)]
 pub enum RenderMode {
     VertexOnly,
@@ -27,13 +25,21 @@ impl Renderer {
 
     pub fn render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
         match self.render_mode {
-            RenderMode::VertexOnly => vertex_render(buffer, pitch),
-            RenderMode::Wireframe => wireframe_render(buffer, pitch),
-            RenderMode::Full => full_render(buffer, pitch)
+            RenderMode::VertexOnly => self.vertex_render(buffer, pitch),
+            RenderMode::Wireframe => self.wireframe_render(buffer, pitch),
+            RenderMode::Full => self.full_render(buffer, pitch)
         }
     }
 
     fn vertex_render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
+
+    }
+
+    fn wireframe_render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
+
+    }
+
+    fn full_render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
 
     }
 }
