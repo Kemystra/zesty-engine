@@ -9,7 +9,7 @@ mod math_utils;
 mod object;
 mod scene;
 
-use scene::Scene;
+use scene::{Scene, RenderMode};
 use object::Object3D;
 
 const SCREEN_WIDTH: u32 = 480;
@@ -20,7 +20,8 @@ pub fn main() -> Result<(), String> {
     // Boilerplate section for testing
     let cube = Object3D::new(vec![]);
     let mut scene = Scene {
-        objects: vec![cube]
+        objects: vec![cube],
+        render_mode: RenderMode::VertexOnly
     };
     // End boilerplate section
 
