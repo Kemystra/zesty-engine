@@ -18,7 +18,9 @@ impl Object3D {
         }
     }
 
-    pub fn get_vertices(&mut self) -> &Vec<Vector3D> {
+    // Note that we use read-only borrow here
+    // because we don't need to edit anything really
+    pub fn get_vertices(&self) -> &Vec<Vector3D> {
         &self.vertices
     }
 }

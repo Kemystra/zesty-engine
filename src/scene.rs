@@ -26,10 +26,11 @@ impl Scene {
     }
 
     fn vertex_render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
-        let world_to_cam_transform = invert_transform(&self.camera.transform);
+        let world_to_cam_transform = invert_transform(&self.camera.transform).unwrap();
         for obj in self.objects.iter() {
             for vertex in obj.get_vertices() {
-                
+                let vertex_in_world = convert_space(&obj.transform, &vertex);
+                let vertex_in_cam = convert_space(&world_to_cam_transform, &vertex_in_world);
             }
         }
     }
