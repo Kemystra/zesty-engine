@@ -1,24 +1,26 @@
 use crate::math_utils::Vector3D;
 
 
-const IDENTITY_MATRIX: [[f64; 3]; 3] = [
+const IDENTITY_MATRIX3X3: [[f64; 3]; 3] = [
     [1.0, 0.0, 0.0], 
     [0.0, 1.0, 0.0], 
     [0.0, 0.0, 1.0], 
 ];
 
-pub const IDENTITY_TRANSFORM: Transform = Transform {
-    translation: Vector3D { x: 0.0, y: 0.0, z: 0.0 },
-    rotation: IDENTITY_MATRIX,
-    scale: 1.0
+pub const NIL_TRANSFORM: Transform = Transform {
+    matrix: [
+        [1.0, 0.0, 0.0], 
+        [0.0, 1.0, 0.0], 
+        [0.0, 0.0, 1.0], 
+        [0.0, 0.0, 0.0]
+    ]
 };
 
 
 #[derive(Debug)]
 pub struct Transform {
-    pub translation: Vector3D,
-    pub rotation: [[f64; 3]; 3],
-    pub scale: f64
+    pub matrix: [[f64; 3]; 4],
+    dirty_flag: bool
 }
 
 impl Transform {
@@ -26,19 +28,10 @@ impl Transform {
         const ROW: usize = 4;
         const COL: usize = 3;
 
-        // Load into matrix
-        let mut matrix = [[0.0; COL]; ROW];
-        matrix[..3].clone_from_slice(&self.rotation);
-        matrix[3][0] = self.translation.x;
-        matrix[3][1] = self.translation.y;
-        matrix[3][2] = self.translation.z;
+        let matrix = self.matrix;
 
         let mut inv_matrix = [[0.0; 3]; 4];
-        inv_matrix[..3].copy_from_slice(&IDENTITY_MATRIX);
-
-        for i in 0..COL {
-            matrix[i][i] *= self.scale;
-        }
+        inv_matrix[..3].copy_from_slice(&IDENTITY_MATRIX3X3);
 
         for column in 0..COL {
             // Making sure pivot is a non-zero number
@@ -103,7 +96,7 @@ impl Transform {
             }
         }
 
-        let mut result = IDENTITY_TRANSFORM;
+        let mut result = NIL_TRANSFORM;
         for (i, val) in inv_matrix[..3].iter().enumerate() {
             result.rotation[i] = *val;
         }
