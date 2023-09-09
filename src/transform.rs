@@ -24,6 +24,18 @@ pub struct Transform {
 }
 
 impl Transform {
+    pub fn new() -> Self {
+        Self {
+            matrix: [
+                [1.0, 0.0, 0.0], 
+                [0.0, 1.0, 0.0], 
+                [0.0, 0.0, 1.0], 
+                [0.0, 0.0, 0.0]
+            ],
+            dirty_flag: false
+        }
+    }
+
     pub fn invert_matrix(&self) -> Result<Transform, &str> {
         const ROW: usize = 4;
         const COL: usize = 3;
