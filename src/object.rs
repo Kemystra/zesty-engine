@@ -1,4 +1,4 @@
-use crate::transform::{Transform, IDENTITY_TRANSFORM};
+use crate::transform::{Transform, NIL_TRANSFORM};
 use crate::math_utils::Vector3D;
 
 
@@ -12,7 +12,7 @@ pub struct Object3D {
 impl Object3D {
     pub fn new(vertices: Vec<Vector3D>, triangles: Vec<[usize; 3]>) -> Self {
         Self {
-            transform: IDENTITY_TRANSFORM,
+            transform: NIL_TRANSFORM,
             vertices,
             triangles
         }
