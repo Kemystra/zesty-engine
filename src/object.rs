@@ -1,7 +1,5 @@
-use std::f64::consts::PI;
-
 use crate::transform::Transform;
-use crate::math_utils::Vector3D;
+use crate::math_utils::{Vector3D, ProjectionData};
 
 
 #[derive(Debug)]
@@ -45,7 +43,7 @@ impl Camera {
             near_clip_distance: n.into(),
             far_clip_distance: f.into(),
             field_of_view: fov.into(),
-            projection_data: Self::calc_projection_data(n.into(), f.into(), fov.into()),
+            projection_data: ProjectionData::generate(n.into(), f.into(), fov.into()),
             dirty_flag: false
         }
     } 
