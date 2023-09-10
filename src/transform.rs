@@ -171,17 +171,14 @@ mod tests {
     #[test]
     fn transform_to_world() {
         let mat_a = Vector3D::new(5.0,3.0,12.0);
-        let transform_b = Transform {
-            translation: Vector3D::new(10.0,12.0,11.0),
-            rotation: [
-                [0.3, 0.4, 0.12],
-                [0.7, 0.02, 0.5],
-                [0.1, 0.4, 0.9],
-            ],
-            scale: 3.0 
-        };
-
-        let result = convert_space(&transform_b, &mat_a);
+        let matrix = [
+                [0.9, 0.4, 0.12],
+                [0.7, 0.06, 0.5],
+                [0.1, 0.4, 2.7],
+                [10.0,12.0,11.0],
+            ];
+        let transform_b = Transform::from_matrix(matrix).unwrap();
+        let result = transform_b.to_world_space(&mat_a);
         let rounded_result = round_vector3d(&result);
 
         assert_eq!(rounded_result, [17.8, 18.98, 45.5]);
@@ -190,17 +187,14 @@ mod tests {
     #[test]
     fn transform_to_local() {
         let mat_a = Vector3D::new(5,10,2);
-        let transform_b = Transform {
-            translation: Vector3D::new(3,4,2),
-            rotation: [
-                [1.0, 0.0, 0.0],
-                [0.0, 1.0, 0.0],
-                [0.0, 0.0, 1.0]
-            ],
-            scale: 1.0
-        };
-
-        let result = convert_space(&transform_b.invert_matrix().unwrap(), &mat_a);
+        let matrix = [
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [3.0, 4.0, 2.0]
+        ];
+        let transform_b = Transform::from_matrix(matrix).unwrap();
+        let result = transform_b.to_local_space(&mat_a);
         let rounded_result = round_vector3d(&result);
 
         assert_eq!(rounded_result, [2.0, 6.0, 0.0]);
