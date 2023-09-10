@@ -68,7 +68,7 @@ impl Transform {
         const ROW: usize = 4;
         const COL: usize = 3;
 
-        let matrix = matrix;
+        let mut matrix = matrix.clone();
 
         let mut inv_matrix = [[0.0; 3]; 4];
         inv_matrix[..3].copy_from_slice(&IDENTITY_MATRIX3X3);
