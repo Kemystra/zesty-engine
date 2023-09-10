@@ -37,14 +37,6 @@ pub struct Camera {
     dirty_flag: bool
 }
 
-#[derive(Debug)]
-pub struct ProjectionData {
-    w_scaler: f64,
-    h_scaler: f64,
-    m1: f64,
-    m2: f64,
-}
-
 
 impl Camera {
     pub fn new<T: Into<f64>+Copy>(n: T, f: T, fov: T) -> Self {
@@ -56,16 +48,5 @@ impl Camera {
             projection_data: Self::calc_projection_data(n.into(), f.into(), fov.into()),
             dirty_flag: false
         }
-    }
-
-    fn calc_projection_data(n: f64, f: f64, fov: f64) -> ProjectionData {
-        let fov_tan_val = (fov/2.0 * PI/180.0).tan();
-        let near_far_interval = f - n;
-        ProjectionData {
-            w_scaler: 9.0 / (16.0*fov_tan_val),
-            h_scaler: 1.0 / fov_tan_val,
-            m1: -f / near_far_interval,
-            m2: -f*n / near_far_interval
-        }
-    }
+    } 
 }
