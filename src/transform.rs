@@ -7,19 +7,14 @@ const IDENTITY_MATRIX3X3: [[f64; 3]; 3] = [
     [0.0, 0.0, 1.0], 
 ];
 
-pub const NIL_TRANSFORM: Transform = Transform {
-    matrix: [
-        [1.0, 0.0, 0.0], 
-        [0.0, 1.0, 0.0], 
-        [0.0, 0.0, 1.0], 
-        [0.0, 0.0, 0.0]
-    ]
-};
+type Matrix3x4 = [[f64; 3]; 4];
 
-
+// The struct will have getter and setter
+// So that we can use a dirty flag to track any changes
 #[derive(Debug)]
 pub struct Transform {
-    pub matrix: [[f64; 3]; 4],
+    matrix: Matrix3x4,
+    inverse_matrix: Matrix3x4,
     dirty_flag: bool
 }
 
@@ -32,15 +27,48 @@ impl Transform {
                 [0.0, 0.0, 1.0], 
                 [0.0, 0.0, 0.0]
             ],
+            inverse_matrix: [
+                [1.0, 0.0, 0.0], 
+                [0.0, 1.0, 0.0], 
+                [0.0, 0.0, 1.0], 
+                [0.0, 0.0, 0.0]
+            ],
             dirty_flag: false
         }
     }
 
-    pub fn invert_matrix(&self) -> Result<Transform, &str> {
+    pub fn from_matrix(matrix: Matrix3x4) -> Result<Self, String>{
+        Ok(
+        Self {
+            matrix,
+            inverse_matrix: Self::invert_matrix(&matrix)?,
+            dirty_flag: false
+        })
+    }
+
+    pub fn get_matrix(&self) -> Matrix3x4 {
+       self.matrix 
+    }
+
+    pub fn get_inverse_matrix(&self) -> Matrix3x4 {
+       self.inverse_matrix 
+    }
+
+    #[inline]
+    pub fn to_world_space(&self, coord: &Vector3D) -> Vector3D {
+        fast_3x4_multiply(&self.matrix, coord)
+    }
+
+    #[inline]
+    pub fn to_local_space(&self, coord: &Vector3D) -> Vector3D {
+        fast_3x4_multiply(&self.inverse_matrix, coord)
+    }
+
+    fn invert_matrix(matrix: &Matrix3x4) -> Result<Matrix3x4, String> {
         const ROW: usize = 4;
         const COL: usize = 3;
 
-        let matrix = self.matrix;
+        let matrix = matrix;
 
         let mut inv_matrix = [[0.0; 3]; 4];
         inv_matrix[..3].copy_from_slice(&IDENTITY_MATRIX3X3);
@@ -59,7 +87,7 @@ impl Transform {
                     }
                 }
 
-                if pivot_val == 0.0 { return Err("Matrix has no inverse") }
+                if pivot_val == 0.0 { return Err("Matrix has no inverse".to_string()) }
                 let mut tmp = matrix[pivot];
                 matrix[pivot] = matrix[column];
                 matrix[column] = tmp;
@@ -107,33 +135,18 @@ impl Transform {
                 matrix[row][column] = 0.0;
             }
         }
-
-        let mut result = NIL_TRANSFORM;
-        for (i, val) in inv_matrix[..3].iter().enumerate() {
-            result.rotation[i] = *val;
-        }
-        result.translation = Vector3D::new(inv_matrix[3][0], inv_matrix[3][1], inv_matrix[3][2]);
-
-        Ok(result)
+        Ok(inv_matrix)
     }
 }
 
 // Helps to convert between local and world coord. system
 // Note that transform can also be the inverted version
-pub fn convert_space(
-    transform: &Transform, 
-    coord: &Vector3D) -> Vector3D {
-
-    Vector3D {
-        x: coord.x*transform.rotation[0][0]*transform.scale +
-            coord.y*transform.rotation[1][0] +
-            coord.z*transform.rotation[2][0] + transform.translation.x,
-        y: coord.x*transform.rotation[0][1] +
-            coord.y*transform.rotation[1][1]*transform.scale +
-            coord.z*transform.rotation[2][1] + transform.translation.y,
-        z: coord.x*transform.rotation[0][2] +
-            coord.y*transform.rotation[1][2] +
-            coord.z*transform.rotation[2][2]*transform.scale + transform.translation.z,
+#[inline]
+fn fast_3x4_multiply(matrix: &Matrix3x4, point: &Vector3D) -> Vector3D {
+    Vector3D { 
+        x: matrix[0][0]*point.x + matrix[1][0]*point.y + matrix[2][0]*point.z + matrix[3][0],
+        y: matrix[0][1]*point.x + matrix[1][1]*point.y + matrix[2][1]*point.z + matrix[3][1],
+        z: matrix[0][2]*point.x + matrix[1][2]*point.y + matrix[2][2]*point.z + matrix[3][2],
     }
 }
 
