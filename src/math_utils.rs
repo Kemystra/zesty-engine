@@ -135,6 +135,22 @@ pub fn invert_matrix(matrix: &Matrix3x4) -> Result<Matrix3x4, String> {
     Ok(inv_matrix)
 }
 
+#[derive(Debug)]
+pub struct ProjectionData(f64, f64, f64, f64);
+
+impl ProjectionData {
+    pub fn generate(n: f64, f: f64, fov: f64) -> ProjectionData {
+        let fov_tan_val = (fov/2.0 * PI/180.0).tan();
+        let near_far_interval = f - n;
+        ProjectionData(
+            9.0 / (16.0*fov_tan_val),
+            1.0 / fov_tan_val,
+            -f / near_far_interval,
+            -f*n / near_far_interval
+        )
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
