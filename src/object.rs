@@ -29,7 +29,7 @@ impl Object3D {
 
 #[derive(Debug)]
 pub struct Camera {
-    transform: Transform,
+    pub transform: Transform,
     near_clip_distance: f64,
     far_clip_distance: f64,
     field_of_view: f64,
@@ -47,13 +47,13 @@ pub struct ProjectionData {
 
 
 impl Camera {
-    pub fn new(n: f64, f: f64, fov: f64) -> Self {
+    pub fn new<T: Into<f64>+Copy>(n: T, f: T, fov: T) -> Self {
         Self {
             transform: Transform::new(),
-            near_clip_distance: n,
-            far_clip_distance: f,
-            field_of_view: fov,
-            projection_data: Self::calc_projection_data(n, f, fov),
+            near_clip_distance: n.into(),
+            far_clip_distance: f.into(),
+            field_of_view: fov.into(),
+            projection_data: Self::calc_projection_data(n.into(), f.into(), fov.into()),
             dirty_flag: false
         }
     }
