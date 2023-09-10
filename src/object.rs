@@ -1,3 +1,5 @@
+use std::f64::consts::PI;
+
 use crate::transform::Transform;
 use crate::math_utils::Vector3D;
 
@@ -27,8 +29,43 @@ impl Object3D {
 
 #[derive(Debug)]
 pub struct Camera {
-    pub transform: Transform,
-    pub near_clip_distance: f64,
-    pub far_clip_distance: f64,
-    pub field_of_view: usize
+    transform: Transform,
+    near_clip_distance: f64,
+    far_clip_distance: f64,
+    field_of_view: f64,
+    projection_data: ProjectionData,
+    dirty_flag: bool
+}
+
+#[derive(Debug)]
+pub struct ProjectionData {
+    w_scaler: f64,
+    h_scaler: f64,
+    m1: f64,
+    m2: f64,
+}
+
+
+impl Camera {
+    pub fn new(n: f64, f: f64, fov: f64) -> Self {
+        Self {
+            transform: Transform::new(),
+            near_clip_distance: n,
+            far_clip_distance: f,
+            field_of_view: fov,
+            projection_data: Self::calc_projection_data(n, f, fov),
+            dirty_flag: false
+        }
+    }
+
+    fn calc_projection_data(n: f64, f: f64, fov: f64) -> ProjectionData {
+        let fov_tan_val = (fov/2.0 * PI/180.0).tan();
+        let near_far_interval = f - n;
+        ProjectionData {
+            w_scaler: 9.0 / (16.0*fov_tan_val),
+            h_scaler: 1.0 / fov_tan_val,
+            m1: -f / near_far_interval,
+            m2: -f*n / near_far_interval
+        }
+    }
 }
