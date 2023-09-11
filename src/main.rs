@@ -11,6 +11,7 @@ pub mod scene;
 
 use scene::{Scene, RenderMode};
 use object::{Object3D, Camera};
+use math_utils::Vector3D;
 
 pub const SCREEN_WIDTH: u32 = 480;
 pub const SCREEN_HEIGHT: u32 = 360;
@@ -18,7 +19,16 @@ pub const SCREEN_HEIGHT: u32 = 360;
 pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
-    let mut cube = Object3D::new(vec![], vec![]);
+    let cube = Object3D::new(vec![
+        Vector3D::new(1.0, -1.0, 1.0),
+        Vector3D::new(1.0, -1.0, -1.0),
+        Vector3D::new(1.0, 1.0, -1.0),
+        Vector3D::new(1.0, 1.0, 1.0),
+        Vector3D::new(-1.0, 1.0, 1.0),
+        Vector3D::new(-1.0, 1.0, -1.0),
+        Vector3D::new(-1.0, -1.0, -1.0),
+        Vector3D::new(-1.0, -1.0, 1.0),
+    ], vec![]);
     let camera = Camera::new(2, 10, 80);
 
     let mut scene = Scene {
