@@ -137,7 +137,7 @@ pub fn invert_matrix(matrix: &Matrix3x4) -> Result<Matrix3x4, String> {
 }
 
 #[derive(Debug)]
-pub struct ProjectionData(f64, f64, f64, f64);
+pub struct ProjectionData(pub f64, pub f64, pub f64, pub f64);
 
 // I'm just gonna hard code the aspect ratio lol
 impl ProjectionData {
