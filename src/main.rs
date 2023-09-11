@@ -12,8 +12,8 @@ pub mod scene;
 use scene::{Scene, RenderMode};
 use object::{Object3D, Camera};
 
-const SCREEN_WIDTH: u32 = 480;
-const SCREEN_HEIGHT: u32 = 360;
+pub const SCREEN_WIDTH: u32 = 480;
+pub const SCREEN_HEIGHT: u32 = 360;
 
 pub fn main() -> Result<(), String> {
 
