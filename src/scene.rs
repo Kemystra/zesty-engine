@@ -16,7 +16,7 @@ pub enum RenderMode {
     Full
 }
 
-const BLACK: (u8, u8, u8) = (255, 255, 255);
+const WHITE: (u8, u8, u8) = (255, 255, 255);
 
 fn color_pixel(
     x: usize, y: usize,
@@ -53,7 +53,7 @@ impl Scene {
                 color_pixel(
                     (ncd_coords.x * SCREEN_WIDTH as f64) as usize,
                     (ncd_coords.y * SCREEN_HEIGHT as f64) as usize,
-                    BLACK,
+                    WHITE,
                     buffer, pitch);
             }
         }
