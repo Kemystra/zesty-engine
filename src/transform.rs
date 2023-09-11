@@ -42,8 +42,12 @@ impl Transform {
        self.matrix 
     }
 
-    pub fn get_inverse_matrix(&self) -> Matrix3x4 {
-       self.inverse_matrix 
+    pub fn get_inverse_matrix(&mut self) -> Matrix3x4 {
+        if self.dirty_flag {
+            self.inverse_matrix = invert_matrix(&self.matrix).unwrap();
+        }
+
+        self.inverse_matrix
     }
 
     #[inline]
