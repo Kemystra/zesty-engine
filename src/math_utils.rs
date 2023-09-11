@@ -1,3 +1,4 @@
+use std::f64::consts::PI;
 use std::ops::{Add, Sub, Mul};
 
 
@@ -138,13 +139,14 @@ pub fn invert_matrix(matrix: &Matrix3x4) -> Result<Matrix3x4, String> {
 #[derive(Debug)]
 pub struct ProjectionData(f64, f64, f64, f64);
 
+// I'm just gonna hard code the aspect ratio lol
 impl ProjectionData {
     pub fn generate(n: f64, f: f64, fov: f64) -> ProjectionData {
         let fov_tan_val = (fov/2.0 * PI/180.0).tan();
         let near_far_interval = f - n;
         ProjectionData(
-            9.0 / (16.0*fov_tan_val),
-            1.0 / fov_tan_val,
+            9.0 / (n*16.0*fov_tan_val),
+            1.0 / (n*fov_tan_val),
             -f / near_far_interval,
             -f*n / near_far_interval
         )
@@ -155,6 +157,11 @@ impl ProjectionData {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn round_place(num: f64, place: usize) -> f64{
+        let mult = 10_f64.powf(place as f64);
+        (num*mult).round() / mult
+    }
 
     #[test]
     fn add_vector3d() {
@@ -178,5 +185,19 @@ mod tests {
         let b = Vector3D::new(10,2,3);
 
         assert_eq!(a*b, 83_f64);
+    }
+
+    #[test]
+    fn invert_trs_matrix() {
+        let mat = [
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [3.0, 10.0, 1.0]
+        ];
+        let result = invert_matrix(&mat).unwrap();
+        assert_eq!(round_place(result[3][0], 2), -3.0);
+        assert_eq!(round_place(result[3][1], 2), -10.0);
+        assert_eq!(round_place(result[3][2], 2), -1.0);
     }
 }
