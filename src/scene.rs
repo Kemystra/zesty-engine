@@ -50,11 +50,15 @@ impl Scene {
                     z: (screen_coords.z + 1.0)/2.0,
                 };
 
-                color_pixel(
-                    (ncd_coords.x * SCREEN_WIDTH as f64) as usize,
-                    (ncd_coords.y * SCREEN_HEIGHT as f64) as usize,
-                    WHITE,
-                    buffer, pitch);
+                for i in 0..5 {
+                    for j in 0..5 {
+                        color_pixel(
+                        (ncd_coords.x * SCREEN_WIDTH as f64) as usize + i,
+                        (ncd_coords.y * SCREEN_HEIGHT as f64) as usize + j,
+                        WHITE,
+                        buffer, pitch);
+                    }
+                }
             }
         }
     }
