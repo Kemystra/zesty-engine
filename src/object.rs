@@ -1,3 +1,6 @@
+use std::io::{self, BufReader, BufRead};
+use std::fs::File;
+
 use crate::transform::Transform;
 use crate::math_utils::{Vector3D, ProjectionData};
 
@@ -16,6 +19,47 @@ impl Object3D {
             vertices,
             triangles
         }
+    }
+
+    pub fn load_obj(file_path: String) -> io::Result<Self> {
+        let file = File::open(file_path)?;
+        let mut lines = BufReader::new(file).lines();
+
+        let mut vertices: Vec<Vector3D> = vec![];
+        let mut triangles: Vec<[usize; 3]> = vec![];
+
+        // I just want to parse text
+        // Why tf is it so complicated
+        while let Some(Ok(line)) = lines.next() {
+            if line.chars().nth(0) == Some('v') {
+                let mut vertex_data = line.split_whitespace();
+                let vertex = Vector3D::new(
+                    vertex_data.nth(1).unwrap().parse::<f64>().unwrap(),
+                    vertex_data.nth(2).unwrap().parse::<f64>().unwrap(),
+                    vertex_data.nth(3).unwrap().parse::<f64>().unwrap(),
+                );
+
+                vertices.push(vertex);
+            }
+
+            if line.chars().nth(0) == Some('f') {
+                let mut facet_data = line.split_whitespace();
+                let facet = [
+                    facet_data.nth(1).unwrap().parse::<usize>().unwrap(),
+                    facet_data.nth(2).unwrap().parse::<usize>().unwrap(),
+                    facet_data.nth(3).unwrap().parse::<usize>().unwrap(),
+                ];
+
+                triangles.push(facet);
+            }
+        }
+
+        if vertices.len() == 0 || triangles.len() == 0 {
+            let no_3d_data_error = io::Error::new(io::ErrorKind::Other, "No 3D data found.");
+            return Err(no_3d_data_error)
+        }
+
+        Ok(Self::new(vertices, triangles))
     }
 
     // Note that we use read-only borrow here
