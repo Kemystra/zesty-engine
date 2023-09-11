@@ -67,6 +67,10 @@ impl Object3D {
     pub fn get_vertices(&self) -> &Vec<Vector3D> {
         &self.vertices
     }
+
+    pub fn get_triangles(&self) -> &Vec<[usize; 3]> {
+        &self.triangles
+    }
 }
 
 #[derive(Debug)]
