@@ -44,6 +44,14 @@ impl Scene {
                 let vertex_in_cam = self.camera.transform.to_local_space(&vertex_in_world);
                 let screen_coords = self.camera.project_to_screen_space(vertex_in_cam);
 
+                if screen_coords.x > 1.0 || screen_coords.x < -1.0 {
+                    continue;
+                }
+
+                if screen_coords.y > 1.0 || screen_coords.y < -1.0 {
+                    continue;
+                }
+
                 let ncd_coords = Vector3D {
                     x: (screen_coords.x + 1.0)/2.0,
                     y: (screen_coords.y + 1.0)/2.0,

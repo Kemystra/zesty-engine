@@ -13,8 +13,8 @@ use scene::{Scene, RenderMode};
 use object::{Object3D, Camera};
 use math_utils::Vector3D;
 
-pub const SCREEN_WIDTH: u32 = 480;
-pub const SCREEN_HEIGHT: u32 = 360;
+pub const SCREEN_WIDTH: u32 = 640;
+pub const SCREEN_HEIGHT: u32 = 640;
 
 pub fn main() -> Result<(), String> {
 
@@ -29,9 +29,9 @@ pub fn main() -> Result<(), String> {
         Vector3D::new(-1.0, -1.0, -1.0),
         Vector3D::new(-1.0, -1.0, 1.0),
     ], vec![]);
-    cube.transform.translate(&Vector3D::new(0, 0, 2));
+    cube.transform.translate(&Vector3D::new(0, 0, 5));
 
-    let camera = Camera::new(1, 10, 80);
+    let camera = Camera::new(1, 30, 90);
 
     let mut scene = Scene {
         objects: vec![cube],
