@@ -146,7 +146,7 @@ impl ProjectionData {
         let near_far_interval = f - n;
         ProjectionData(
             1.0 / (n*fov_tan_val),
-            1.0 / (n*fov_tan_val),
+            16.0 / (9.0*n*fov_tan_val),
             -f / near_far_interval,
             -f*n / near_far_interval
         )

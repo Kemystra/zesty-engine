@@ -14,7 +14,7 @@ use object::{Object3D, Camera};
 use math_utils::Vector3D;
 
 pub const SCREEN_WIDTH: u32 = 640;
-pub const SCREEN_HEIGHT: u32 = 640;
+pub const SCREEN_HEIGHT: u32 = 360;
 
 pub fn main() -> Result<(), String> {
 
