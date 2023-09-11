@@ -16,6 +16,17 @@ pub enum RenderMode {
     Full
 }
 
+const BLACK: (u8, u8, u8) = (255, 255, 255);
+
+fn color_pixel(
+    x: usize, y: usize,
+    color: (u8, u8, u8),
+    buffer: &mut [u8], pitch: usize) -> () {
+    let offset = (x*3) + (y*pitch);
+    buffer[offset] = color.0;
+    buffer[offset + 1] = color.1;
+    buffer[offset + 2] = color.2;
+}
 
 impl Scene {
     pub fn render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
@@ -39,6 +50,11 @@ impl Scene {
                     z: (screen_coords.z + 1.0)/2.0,
                 };
 
+                color_pixel(
+                    (ncd_coords.x * SCREEN_WIDTH as f64) as usize,
+                    (ncd_coords.y * SCREEN_HEIGHT as f64) as usize,
+                    BLACK,
+                    buffer, pitch);
             }
         }
     }
