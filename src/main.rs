@@ -19,7 +19,7 @@ pub const SCREEN_HEIGHT: u32 = 360;
 pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
-    let cube = Object3D::new(vec![
+    let mut cube = Object3D::new(vec![
         Vector3D::new(1.0, -1.0, 1.0),
         Vector3D::new(1.0, -1.0, -1.0),
         Vector3D::new(1.0, 1.0, -1.0),
@@ -29,7 +29,9 @@ pub fn main() -> Result<(), String> {
         Vector3D::new(-1.0, -1.0, -1.0),
         Vector3D::new(-1.0, -1.0, 1.0),
     ], vec![]);
-    let camera = Camera::new(2, 10, 80);
+    cube.transform.translate(&Vector3D::new(0, 0, 2));
+
+    let camera = Camera::new(1, 10, 80);
 
     let mut scene = Scene {
         objects: vec![cube],
