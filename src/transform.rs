@@ -58,7 +58,14 @@ impl Transform {
     #[inline]
     pub fn to_local_space(&self, coord: &Vector3D) -> Vector3D {
         fast_3x4_multiply(&self.inverse_matrix, coord)
-    } 
+    }
+
+    pub fn translate(&mut self, amount: &Vector3D) -> () {
+        self.dirty_flag = true;
+        self.matrix[3][0] += amount.x;
+        self.matrix[3][1] += amount.y;
+        self.matrix[3][2] += amount.z;
+    }
 }
 
 // Helps to convert between local and world coord. system
