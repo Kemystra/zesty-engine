@@ -33,10 +33,12 @@ impl Object3D {
         while let Some(Ok(line)) = lines.next() {
             if line.chars().nth(0) == Some('v') {
                 let mut vertex_data = line.split_whitespace();
+                // Hacky way to consume the first element
+                vertex_data.next();
                 let vertex = Vector3D::new(
-                    vertex_data.nth(1).unwrap().parse::<f64>().unwrap(),
-                    vertex_data.nth(2).unwrap().parse::<f64>().unwrap(),
-                    vertex_data.nth(3).unwrap().parse::<f64>().unwrap(),
+                    vertex_data.next().unwrap().parse::<f64>().unwrap(),
+                    vertex_data.next().unwrap().parse::<f64>().unwrap(),
+                    vertex_data.next().unwrap().parse::<f64>().unwrap(),
                 );
 
                 vertices.push(vertex);
@@ -44,10 +46,12 @@ impl Object3D {
 
             if line.chars().nth(0) == Some('f') {
                 let mut facet_data = line.split_whitespace();
+
+                facet_data.next();
                 let facet = [
-                    facet_data.nth(1).unwrap().parse::<usize>().unwrap(),
-                    facet_data.nth(2).unwrap().parse::<usize>().unwrap(),
-                    facet_data.nth(3).unwrap().parse::<usize>().unwrap(),
+                    facet_data.next().unwrap().parse::<usize>().unwrap(),
+                    facet_data.next().unwrap().parse::<usize>().unwrap(),
+                    facet_data.next().unwrap().parse::<usize>().unwrap(),
                 ];
 
                 triangles.push(facet);

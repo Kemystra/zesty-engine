@@ -19,16 +19,7 @@ pub const SCREEN_HEIGHT: u32 = 360;
 pub fn main() -> Result<(), String> {
 
     // Boilerplate section for testing
-    let mut cube = Object3D::new(vec![
-        Vector3D::new(1.0, -1.0, 1.0),
-        Vector3D::new(1.0, -1.0, -1.0),
-        Vector3D::new(1.0, 1.0, -1.0),
-        Vector3D::new(1.0, 1.0, 1.0),
-        Vector3D::new(-1.0, 1.0, 1.0),
-        Vector3D::new(-1.0, 1.0, -1.0),
-        Vector3D::new(-1.0, -1.0, -1.0),
-        Vector3D::new(-1.0, -1.0, 1.0),
-    ], vec![]);
+    let mut cube = Object3D::load_obj("test_scene/tinker.obj".to_string()).unwrap();
     cube.transform.translate(&Vector3D::new(0, 0, 5));
 
     let camera = Camera::new(1, 30, 90);
