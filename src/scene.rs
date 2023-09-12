@@ -1,5 +1,5 @@
 use crate::object::{Object3D, Camera};
-use crate::math_utils::Vector3D;
+use crate::math_utils::{Vector3D, clamp};
 use crate::{SCREEN_WIDTH, SCREEN_HEIGHT};
 
 #[derive(Debug)]
@@ -60,11 +60,15 @@ impl Scene {
                     z: (screen_coords.z + 1.0)/2.0,
                 };
 
+                let final_x = (ncd_coords.x * SCREEN_WIDTH as f64) as usize; 
+                let final_y = (ncd_coords.y * SCREEN_HEIGHT as f64) as usize;
+
+
                 for i in 0..5 {
                     for j in 0..5 {
                         color_pixel(
-                        (ncd_coords.x * SCREEN_WIDTH as f64) as usize + i,
-                        (ncd_coords.y * SCREEN_HEIGHT as f64) as usize + j,
+                        clamp(final_x + i, 0, SCREEN_WIDTH-1),
+                        clamp(final_y + j, 0, SCREEN_HEIGHT-1),
                         WHITE,
                         buffer);
                     }
