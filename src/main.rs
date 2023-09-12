@@ -28,7 +28,7 @@ pub fn main() {
     };
     // End boilerplate section
     
-    let mut buffer = vec![0; SCREEN_WIDTH * SCREEN_HEIGHT];
+    let mut buffer: Vec<u32> = vec![0; SCREEN_WIDTH * SCREEN_HEIGHT];
     let mut window = Window::new(
         "Zesty Engine v0.25", 
         SCREEN_WIDTH, 

@@ -21,23 +21,25 @@ const WHITE: (u8, u8, u8) = (255, 255, 255);
 fn color_pixel(
     x: usize, y: usize,
     color: (u8, u8, u8),
-    buffer: &mut [u8], pitch: usize) -> () {
-    let offset = (x*3) + (y*pitch);
-    buffer[offset] = color.0;
-    buffer[offset + 1] = color.1;
-    buffer[offset + 2] = color.2;
+    buffer: &mut [u32]) -> () {
+
+    let (r,g,b) = (color.0 as u32, color.1 as u32, color.2 as u32);
+    let color_32bit = (r << 16) | (g << 8) | b;
+    let offset = x + (y*SCREEN_WIDTH);
+
+    buffer[offset] = color_32bit;
 }
 
 impl Scene {
-    pub fn render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
+    pub fn render(&mut self, buffer: &mut [u32]) -> () {
         match self.render_mode {
-            RenderMode::VertexOnly => self.vertex_render(buffer, pitch),
-            RenderMode::Wireframe => self.wireframe_render(buffer, pitch),
-            RenderMode::Full => self.full_render(buffer, pitch)
+            RenderMode::VertexOnly => self.vertex_render(buffer),
+            RenderMode::Wireframe => self.wireframe_render(buffer),
+            RenderMode::Full => self.full_render(buffer)
         }
     }
 
-    fn vertex_render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
+    fn vertex_render(&mut self, buffer: &mut [u32]) -> () {
         for obj in self.objects.iter() {
             for vertex in obj.get_vertices() {
                 let vertex_in_world = obj.transform.to_world_space(&vertex);
@@ -64,18 +66,18 @@ impl Scene {
                         (ncd_coords.x * SCREEN_WIDTH as f64) as usize + i,
                         (ncd_coords.y * SCREEN_HEIGHT as f64) as usize + j,
                         WHITE,
-                        buffer, pitch);
+                        buffer);
                     }
                 }
             }
         }
     }
 
-    fn wireframe_render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
+    fn wireframe_render(&mut self, buffer: &mut [u32]) -> () {
         
     }
 
-    fn full_render(&mut self, buffer: &mut [u8], pitch: usize) -> () {
+    fn full_render(&mut self, buffer: &mut [u32]) -> () {
         
     }
 }
