@@ -153,6 +153,19 @@ impl ProjectionData {
     }
 }
 
+pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
+    if !(min <= max) { panic!("min bigger than max") }
+
+    if val > max {
+        return max;
+    }
+    else if val < min {
+        return min;
+    }
+
+    val
+}
+
 
 #[cfg(test)]
 mod tests {
