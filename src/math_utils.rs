@@ -166,7 +166,7 @@ pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
     val
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Quaternion(f64, f64, f64, f64);
 
 impl Quaternion {
@@ -239,5 +239,11 @@ mod tests {
         assert_eq!(round_place(result[3][0], 2), -3.0);
         assert_eq!(round_place(result[3][1], 2), -10.0);
         assert_eq!(round_place(result[3][2], 2), -1.0);
+    }
+
+    #[test]
+    fn quaternion_from_euler_angle() {
+        let q = Quaternion::from_euler_angles(10,5,1.9);
+        assert_eq!(q, Quaternion(0.0,0.0,0.0,0.0));
     }
 }
