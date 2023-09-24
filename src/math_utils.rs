@@ -142,11 +142,11 @@ pub struct ProjectionData(pub f64, pub f64, pub f64, pub f64);
 // I'm just gonna hard code the aspect ratio lol
 impl ProjectionData {
     pub fn generate(n: f64, f: f64, fov: f64) -> ProjectionData {
-        let fov_tan_val = (fov/2.0 * PI/180.0).tan();
+        let fov_tan_val = n * (fov/2.0 * PI/180.0).tan();
         let near_far_interval = f - n;
         ProjectionData(
-            1.0 / (n*fov_tan_val),
-            16.0 / (9.0*n*fov_tan_val),
+            1.0 / (fov_tan_val),
+            16.0 / (9.0*fov_tan_val),
             -f / near_far_interval,
             -f*n / near_far_interval
         )
@@ -154,7 +154,7 @@ impl ProjectionData {
 }
 
 pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
-    if !(min <= max) { panic!("min bigger than max") }
+    if !(min <= max) { panic!("min bigger than max")}
 
     if val > max {
         return max;
