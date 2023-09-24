@@ -170,7 +170,12 @@ pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
 pub struct Quaternion(f64, f64, f64, f64);
 
 impl Quaternion {
-    pub fn from_euler_angles<T: Into<f64> + Copy>(x: T, y: T, z: T) -> Self {
+    pub fn from_euler_angles<X,Y,Z>(x: X, y: Y, z: Z) -> Self
+    where
+        X: Into<f64> + Copy,
+        Y: Into<f64> + Copy,
+        Z: Into<f64> + Copy,
+    {
         // Got this abomination from Wikipedia lul
         // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
         let cr = (x.into() * 0.5).cos();
