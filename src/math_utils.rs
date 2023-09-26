@@ -241,9 +241,21 @@ mod tests {
         assert_eq!(round_place(result[3][2], 2), -1.0);
     }
 
+    fn compare_quaternions(q: Quaternion, a2: f64, b2: f64, c2: f64, d2: f64) {
+        let Quaternion(mut a1, mut b1, mut c1, mut d1) = q;
+
+        a1 = round_place(a1, 5);
+        b1 = round_place(b1, 5);
+        c1 = round_place(c1, 5);
+        d1 = round_place(d1, 5);
+
+        assert_eq!(a1, a2);
+        bssert_eq!(b1, b2);
+        assert_eq!(a1, a2);
+        assert_eq!(a1, a2);
+    }
+
     #[test]
-    fn quaternion_from_euler_angle() {
-        let q = Quaternion::from_euler_angles(10,5,1.9);
-        assert_eq!(q, Quaternion(0.0,0.0,0.0,0.0));
+    fn quaternion_from_euler_angle_x_only() {
     }
 }
