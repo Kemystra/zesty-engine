@@ -47,5 +47,7 @@ pub fn main() {
         window
             .update_with_buffer(&buffer, SCREEN_WIDTH, SCREEN_HEIGHT)
             .unwrap();
+        buffer =  vec![0; buffer.len()]
     }
+    
 }
