@@ -15,6 +15,9 @@ pub const SCREEN_HEIGHT: usize = 360;
 
 pub fn main() {
 
+    // NOTE: the coordinates are left-handed
+    // Thank you, past me
+
     // Boilerplate section for testing
     let mut cube = Object3D::load_obj("test_scene/tinker.obj".to_string()).unwrap();
     cube.transform.translate(&Vector3D::new(0, 0, 5));
