@@ -170,7 +170,7 @@ pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
 pub struct Quaternion(f64, f64, f64, f64);
 
 impl Quaternion {
-    pub fn from_euler_angles<X,Y,Z>(x: X, y: Y, z: Z) -> Self
+    pub fn from_euler_angles<X,Y,Z>(z: X, x: Y, y: Z) -> Self
     where
         X: Into<f64> + Copy,
         Y: Into<f64> + Copy,
@@ -249,13 +249,35 @@ mod tests {
         c1 = round_place(c1, 5);
         d1 = round_place(d1, 5);
 
+        dbg!(a1, b1, c1, d1);
+
         assert_eq!(a1, a2);
-        bssert_eq!(b1, b2);
-        assert_eq!(a1, a2);
-        assert_eq!(a1, a2);
+        assert_eq!(b1, b2);
+        assert_eq!(c1, c2);
+        assert_eq!(d1, d2);
     }
 
     #[test]
     fn quaternion_from_euler_angle_x_only() {
+        let q = Quaternion::from_euler_angles(1,0,0);
+        compare_quaternions(q, 0.87758, 0.47943, 0.0, 0.0);
+    }
+    
+    #[test]
+    fn quaternion_from_euler_angle_y_only() {
+        let q = Quaternion::from_euler_angles(0,1,0);
+        compare_quaternions(q, 0.87758, 0.0, 0.47943, 0.0);
+    }
+
+    #[test]
+    fn quaternion_from_euler_angle_z_only() {
+        let q = Quaternion::from_euler_angles(0,0,1);
+        compare_quaternions(q, 0.87758, 0.0, 0.0, 0.47943);
+    }
+
+    #[test]
+    fn quaternion_from_euler_angle_all() {
+        let q = Quaternion::from_euler_angles(1,1,1);
+        compare_quaternions(q, 0.56568, 0.57094, 0.16752, 0.57094);
     }
 }
