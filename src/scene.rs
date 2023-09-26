@@ -40,7 +40,7 @@ impl Scene {
     }
 
     fn vertex_render(&mut self, buffer: &mut [u32]) -> () {
-        for obj in self.objects.iter() {
+        for obj in self.objects.iter_mut() {
             for vertex in obj.get_vertices() {
                 let vertex_in_world = obj.transform.to_world_space(&vertex);
                 let vertex_in_cam = self.camera.transform.to_local_space(&vertex_in_world);
