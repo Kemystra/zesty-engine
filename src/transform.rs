@@ -133,13 +133,16 @@ mod tests {
     #[test]
     fn translate_transform() {
         let mut rng = rand::thread_rng();
-        let vec = &Vector3D::new(
-            rng.gen_range(0..10000),
-            rng.gen_range(0..10000),
-            rng.gen_range(0..10000)
-        );
+        let a = rng.gen_range(0.0..10000.0);
+        let b = rng.gen_range(0.0..10000.0);
+        let c = rng.gen_range(0.0..10000.0);
+
+        let vec_random = &Vector3D::new(a,b,c);
 
         let mut transform = Transform::new();
-        transform.translate();
+        transform.translate(vec_random);
+
+        let new_matrix = transform.get_matrix();
+        assert_eq!(new_matrix[3], [a,b,c]);
     }
 }
