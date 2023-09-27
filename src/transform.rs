@@ -60,6 +60,10 @@ impl Transform {
         fast_3x4_multiply(&self.inverse_matrix, coord)
     }
 
+    pub fn has_changed(&self) {
+        self.dirty_flag
+    }
+
     pub fn translate(&mut self, amount: &Vector3D) -> () {
         self.dirty_flag = true;
         self.matrix[3][0] += amount.x;
