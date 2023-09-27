@@ -145,6 +145,7 @@ mod tests {
 
         let mut transform = Transform::new();
         transform.translate(vec_random);
+        assert_eq!(transform.has_changed, true);
 
         let new_matrix = transform.get_matrix();
         assert_eq!(new_matrix[3], [a,b,c]);
