@@ -83,6 +83,7 @@ fn fast_3x4_multiply(matrix: &Matrix3x4, point: &Vector3D) -> Vector3D {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rand::Rng;
 
     fn round_place(num: f64, place: usize) -> f64{
         let mult = 10_f64.powf(place as f64);
@@ -127,5 +128,18 @@ mod tests {
         let rounded_result = round_vector3d(&result);
 
         assert_eq!(rounded_result, [2.0, 6.0, 0.0]);
+    }
+
+    #[test]
+    fn translate_transform() {
+        let mut rng = rand::thread_rng();
+        let vec = &Vector3D::new(
+            rng.gen_range(0..10000),
+            rng.gen_range(0..10000),
+            rng.gen_range(0..10000)
+        );
+
+        let mut transform = Transform::new();
+        transform.translate();
     }
 }
