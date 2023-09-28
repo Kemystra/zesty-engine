@@ -1,4 +1,4 @@
-use crate::math_utils::{Vector3D, Matrix3x4, invert_matrix};
+use crate::math_utils::{self, Vector3D, Matrix3x4, invert_matrix, Quaternion};
 
 
 // The struct will have getter and setter
@@ -7,6 +7,7 @@ use crate::math_utils::{Vector3D, Matrix3x4, invert_matrix};
 pub struct Transform {
     matrix: Matrix3x4,
     inverse_matrix: Matrix3x4,
+    rotation: Quaternion,
     dirty_flag: bool
 }
 
@@ -25,6 +26,7 @@ impl Transform {
                 [0.0, 0.0, 1.0], 
                 [0.0, 0.0, 0.0]
             ],
+            rotation: math_utils::IDENTITY_QUATERNION,
             dirty_flag: false
         }
     }
@@ -34,6 +36,7 @@ impl Transform {
         Self {
             matrix,
             inverse_matrix: invert_matrix(&matrix)?,
+            rotation: math_utils::IDENTITY_QUATERNION,
             dirty_flag: false
         })
     }
@@ -65,6 +68,10 @@ impl Transform {
         self.matrix[3][0] += amount.x;
         self.matrix[3][1] += amount.y;
         self.matrix[3][2] += amount.z;
+    }
+
+    pub fn rotate<T: Into<f64>>(&mut self, x: T, y: T, z: T) {
+
     }
 }
 
