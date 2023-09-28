@@ -159,4 +159,13 @@ mod tests {
         let new_matrix = transform.get_matrix();
         assert_eq!(new_matrix[3], [a,b,c]);
     }
+
+    #[test]
+    fn rotate_transform() {
+        let mut transform = Transform::new();
+        transform.rotate(1.0, 2.0, 0.5);
+
+        dbg!(transform.get_matrix());
+        panic!("help");
+    }
 }
