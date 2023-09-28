@@ -169,6 +169,7 @@ pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
 // Reminder: Quaternion(w,x,y,z)
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub struct Quaternion(f64, f64, f64, f64);
+pub const IDENTITY_QUATERNION: Quaternion = Quaternion(1,0,0,0);
 
 impl Mul for Quaternion {
     type Output = Quaternion;
