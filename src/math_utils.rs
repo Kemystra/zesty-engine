@@ -1,5 +1,5 @@
 use std::f64::consts::PI;
-use std::ops::{Add, Sub, Mul};
+use std::ops::{Add, Sub, Mul, MulAssign};
 
 
 #[derive(Debug, PartialEq)]
@@ -169,7 +169,7 @@ pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
 // Reminder: Quaternion(w,x,y,z)
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub struct Quaternion(f64, f64, f64, f64);
-pub const IDENTITY_QUATERNION: Quaternion = Quaternion(1,0,0,0);
+pub const IDENTITY_QUATERNION: Quaternion = Quaternion(1.0, 0.0, 0.0, 0.0);
 
 impl Mul for Quaternion {
     type Output = Quaternion;
@@ -225,15 +225,30 @@ impl Quaternion {
 
         let zz = self.3 * self.3 * 2.0;
 
-        matrix[0][0] = (1 - yy - zz) * scale.x;
+        matrix[0][0] = (1.0 - yy - zz) * scale.x;
         matrix[0][1] = xy - wz;
         matrix[0][2] = xz + wy;
         matrix[1][0] = xy + wz;
-        matrix[1][1] = (1 - xx - zz) * scale.y;
+        matrix[1][1] = (1.0 - xx - zz) * scale.y;
         matrix[1][2] = yz - wx;
         matrix[2][0] = xz - wy;
         matrix[2][1] = yz + wx;
-        matrix[2][2] = (1 - xx - yy) * scale.z;
+        matrix[2][2] = (1.0 - xx - yy) * scale.z;
+    }
+
+    pub fn lazy_normalize(&mut self) {
+        let magnitude_sq = (self.0*self.0)+(self.1*self.1)+(self.2*self.2)+(self.3*self.3);
+
+        // Check if squared magnitude is off by less than 0.21
+        // Why? Cuz 0.1^2 = 0.21
+        // Why 0.1? Dunno
+        if (1.0 - magnitude_sq).abs() < 0.21 { return }
+        let magnitude = magnitude_sq.sqrt();
+
+        self.0 /= magnitude;
+        self.1 /= magnitude;
+        self.2 /= magnitude;
+        self.3 /= magnitude;
     }
 }
 
