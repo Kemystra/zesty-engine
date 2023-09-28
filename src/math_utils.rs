@@ -186,6 +186,12 @@ impl Mul for Quaternion {
     }
 }
 
+impl MulAssign for Quaternion {
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = *self * rhs;
+    }
+}
+
 impl Quaternion {
     pub fn from_euler_angles<T: Into<f64>>(x: T, y: T, z: T) -> Self
     {
