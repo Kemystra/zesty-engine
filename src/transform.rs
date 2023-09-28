@@ -8,7 +8,7 @@ pub struct Transform {
     matrix: Matrix3x4,
     inverse_matrix: Matrix3x4,
     rotation: Quaternion,
-    scale: Vector3,
+    scale: Vector3D,
     dirty_flag: bool
 }
 
@@ -74,9 +74,11 @@ impl Transform {
     }
 
     pub fn rotate<T: Into<f64>>(&mut self, x: T, y: T, z: T) {
+        self.dirty_flag = true;
         let new_q = Quaternion::from_euler_angles(x,y,z);
         self.rotation *= new_q;
-
+        self.rotation.lazy_normalize();
+        self.rotation.update_3x4_matrix(&mut self.matrix, &self.scale);
     }
 }
 
