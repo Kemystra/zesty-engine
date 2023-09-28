@@ -8,6 +8,7 @@ pub struct Transform {
     matrix: Matrix3x4,
     inverse_matrix: Matrix3x4,
     rotation: Quaternion,
+    scale: Vector3,
     dirty_flag: bool
 }
 
@@ -27,6 +28,7 @@ impl Transform {
                 [0.0, 0.0, 0.0]
             ],
             rotation: math_utils::IDENTITY_QUATERNION,
+            scale: Vector3D::new(1,1,1),
             dirty_flag: false
         }
     }
@@ -37,6 +39,7 @@ impl Transform {
             matrix,
             inverse_matrix: invert_matrix(&matrix)?,
             rotation: math_utils::IDENTITY_QUATERNION,
+            scale: Vector3D::new(1,1,1),
             dirty_flag: false
         })
     }
@@ -71,6 +74,8 @@ impl Transform {
     }
 
     pub fn rotate<T: Into<f64>>(&mut self, x: T, y: T, z: T) {
+        let new_q = Quaternion::from_euler_angles(x,y,z);
+        self.rotation *= new_q;
 
     }
 }
