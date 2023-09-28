@@ -166,8 +166,24 @@ pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
     val
 }
 
-#[derive(Debug, PartialEq)]
+// Reminder: Quaternion(w,x,y,z)
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub struct Quaternion(f64, f64, f64, f64);
+
+impl Mul for Quaternion {
+    type Output = Quaternion;
+
+    // Another abomination for quaternion multiplication
+    // Credit to https://paroj.github.io/gltut/Positioning/Tut08%20Quaternions.html
+    fn mul(self, rhs: Self) -> Self::Output {
+        Quaternion(
+            self.0*rhs.0 - self.1*rhs.1 - self.2*rhs.2 - self.3*rhs.3,
+            self.0*rhs.1 + self.1*rhs.0 + self.2*rhs.3 - self.3*rhs.2,
+            self.0*rhs.2 + self.2*rhs.0 + self.3*rhs.1 - self.1*rhs.3,
+            self.0*rhs.3 + self.3*rhs.0 + self.1*rhs.2 - self.2*rhs.1
+        )
+    }
+}
 
 impl Quaternion {
     pub fn from_euler_angles<X,Y,Z>(x: X, y: Y, z: Z) -> Self
