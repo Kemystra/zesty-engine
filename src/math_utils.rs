@@ -262,7 +262,7 @@ mod tests {
         assert_eq!(round_place(result[3][2], 2), -1.0);
     }
 
-    fn compare_quaternions(q: Quaternion, precision: f64,
+    fn compare_quaternions(q: Quaternion, precision: usize,
         a2: f64, b2: f64, c2: f64, d2: f64) {
         let Quaternion(a1, b1, c1, d1) = q;
 
@@ -278,25 +278,25 @@ mod tests {
     #[test]
     fn quaternion_from_euler_angle_x_only() {
         let q = Quaternion::from_euler_angles(1,0,0);
-        compare_quaternions(q, 0.87758, 0.47943, 0.0, 0.0);
+        compare_quaternions(q, 5, 0.87758, 0.47943, 0.0, 0.0);
     }
     
     #[test]
     fn quaternion_from_euler_angle_y_only() {
         let q = Quaternion::from_euler_angles(0,1,0);
-        compare_quaternions(q, 0.87758, 0.0, 0.47943, 0.0);
+        compare_quaternions(q, 5, 0.87758, 0.0, 0.47943, 0.0);
     }
 
     #[test]
     fn quaternion_from_euler_angle_z_only() {
         let q = Quaternion::from_euler_angles(0,0,1);
-        compare_quaternions(q, 0.87758, 0.0, 0.0, 0.47943);
+        compare_quaternions(q, 5, 0.87758, 0.0, 0.0, 0.47943);
     }
 
     #[test]
     fn quaternion_from_euler_angle_all() {
         let q = Quaternion::from_euler_angles(1,1,1);
-        compare_quaternions(q, 0.56568, 0.57094, 0.16752, 0.57094);
+        compare_quaternions(q, 5, 0.56568, 0.57094, 0.16752, 0.57094);
     }
 
     #[test]
@@ -307,8 +307,8 @@ mod tests {
         let res1 = q1 * q2;
         let res2 = q2 * q1;
 
-        assert_eq!(res1, 3, Quaternion(1.276, 1.191, 1.144, 2.026));
-        assert_eq!(res2, 3, Quaternion(1.276, 0.809, 1.536, 1.954));
+        compare_quaternions(res1, 3, 1.276, 1.191, 1.144, 2.026);
+        compare_quaternions(res2, 3, 1.276, 0.809, 1.536, 1.954);
         assert_ne!(res1, res2);
     }
 }
