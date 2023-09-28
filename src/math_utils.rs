@@ -187,11 +187,7 @@ impl Mul for Quaternion {
 }
 
 impl Quaternion {
-    pub fn from_euler_angles<X,Y,Z>(x: X, y: Y, z: Z) -> Self
-    where
-        X: Into<f64> + Copy,
-        Y: Into<f64> + Copy,
-        Z: Into<f64> + Copy,
+    pub fn from_euler_angles<T: Into<f64>>(x: T, y: T, z: T) -> Self
     {
         // Got this abomination from Wikipedia lul
         // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
@@ -213,6 +209,31 @@ impl Quaternion {
             cc*sb*ca + sc*cb*sa,
             sc*cb*ca - cc*sb*sa
         )
+    }
+
+    pub fn update_3x4_matrix(&self, matrix: &mut Matrix3x4, scale: Vector3D) {
+        let wx = self.0 * self.1 * 2.0;
+        let wy = self.0 * self.2 * 2.0;
+        let wz = self.0 * self.3 * 2.0;
+
+        let xx = self.1 * self.1 * 2.0;
+        let xy = self.1 * self.2 * 2.0;
+        let xz = self.1 * self.3 * 2.0;
+
+        let yy = self.2 * self.2 * 2.0;
+        let yz = self.2 * self.3 * 2.0;
+
+        let zz = self.3 * self.3 * 2.0;
+
+        matrix[0][0] = (1 - yy - zz) * scale.x;
+        matrix[0][1] = xy - wz;
+        matrix[0][2] = xz + wy;
+        matrix[1][0] = xy + wz;
+        matrix[1][1] = (1 - xx - zz) * scale.y;
+        matrix[1][2] = yz - wx;
+        matrix[2][0] = xz - wy;
+        matrix[2][1] = yz + wx;
+        matrix[2][2] = (1 - xx - yy) * scale.z;
     }
 }
 
