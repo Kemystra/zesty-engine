@@ -2,7 +2,7 @@ use std::io::{self, BufReader, BufRead};
 use std::fs::File;
 
 use crate::transform::Transform;
-use crate::math_utils::{Vector3D, ProjectionData};
+use crate::math_utils::{vector3d::Vector3D, ProjectionData};
 
 
 #[derive(Debug)]

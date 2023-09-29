@@ -1,4 +1,7 @@
-use crate::math_utils::{self, Vector3D, Matrix3x4, invert_matrix, Quaternion};
+use crate::math_utils::{vector3d, quaternion, matrix3x4};
+use matrix3x4::{Matrix3x4, invert_matrix};
+use quaternion::{Quaternion, IDENTITY_QUATERNION};
+use vector3d::Vector3D;
 
 
 // The struct will have getter and setter
@@ -27,7 +30,7 @@ impl Transform {
                 [0.0, 0.0, 1.0], 
                 [0.0, 0.0, 0.0]
             ],
-            rotation: math_utils::IDENTITY_QUATERNION,
+            rotation: IDENTITY_QUATERNION,
             scale: Vector3D::new(1,1,1),
             dirty_flag: false
         }
@@ -38,7 +41,7 @@ impl Transform {
         Self {
             matrix,
             inverse_matrix: invert_matrix(&matrix)?,
-            rotation: math_utils::IDENTITY_QUATERNION,
+            rotation: IDENTITY_QUATERNION,
             scale: Vector3D::new(1,1,1),
             dirty_flag: false
         })
@@ -159,7 +162,7 @@ mod tests {
 
         let mut transform = Transform::new();
         transform.translate(vec_random);
-        assert_eq!(transform.has_changed, true);
+        assert_eq!(transform.has_changed(), true);
 
         let new_matrix = transform.get_matrix();
         assert_eq!(new_matrix[3], [a,b,c]);
