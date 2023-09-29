@@ -2,6 +2,8 @@ use crate::object::{Object3D, Camera};
 use crate::math_utils::{Vector3D, clamp};
 use crate::{SCREEN_WIDTH, SCREEN_HEIGHT};
 
+use std::f64::consts::PI;
+
 #[derive(Debug)]
 pub struct Scene {
     pub objects: Vec<Object3D>,
@@ -40,6 +42,7 @@ impl Scene {
     }
 
     fn vertex_render(&mut self, buffer: &mut [u32]) -> () {
+        let rot = (PI/4.0) * (1.0/60.0);
         for obj in self.objects.iter_mut() {
             for vertex in obj.get_vertices() {
                 let vertex_in_world = obj.transform.to_world_space(&vertex);
@@ -74,6 +77,7 @@ impl Scene {
                     }
                 }
             }
+            obj.transform.rotate(rot, 0.0, rot);
         }
     }
 

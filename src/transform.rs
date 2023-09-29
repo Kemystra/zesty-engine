@@ -1,4 +1,4 @@
-use crate::math_utils::{Vector3D, Matrix3x4, invert_matrix};
+use crate::math_utils::{self, Vector3D, Matrix3x4, invert_matrix, Quaternion};
 
 
 // The struct will have getter and setter
@@ -7,6 +7,8 @@ use crate::math_utils::{Vector3D, Matrix3x4, invert_matrix};
 pub struct Transform {
     matrix: Matrix3x4,
     inverse_matrix: Matrix3x4,
+    rotation: Quaternion,
+    scale: Vector3D,
     dirty_flag: bool
 }
 
@@ -25,6 +27,8 @@ impl Transform {
                 [0.0, 0.0, 1.0], 
                 [0.0, 0.0, 0.0]
             ],
+            rotation: math_utils::IDENTITY_QUATERNION,
+            scale: Vector3D::new(1,1,1),
             dirty_flag: false
         }
     }
@@ -34,6 +38,8 @@ impl Transform {
         Self {
             matrix,
             inverse_matrix: invert_matrix(&matrix)?,
+            rotation: math_utils::IDENTITY_QUATERNION,
+            scale: Vector3D::new(1,1,1),
             dirty_flag: false
         })
     }
@@ -69,6 +75,14 @@ impl Transform {
         self.matrix[3][0] += amount.x;
         self.matrix[3][1] += amount.y;
         self.matrix[3][2] += amount.z;
+    }
+
+    pub fn rotate<T: Into<f64>>(&mut self, x: T, y: T, z: T) {
+        self.dirty_flag = true;
+        let new_q = Quaternion::from_euler_angles(x,y,z);
+        self.rotation *= new_q;
+        self.rotation.lazy_normalize();
+        self.rotation.update_3x4_matrix(&mut self.matrix, &self.scale);
     }
 }
 
@@ -149,5 +163,14 @@ mod tests {
 
         let new_matrix = transform.get_matrix();
         assert_eq!(new_matrix[3], [a,b,c]);
+    }
+
+    #[test]
+    fn rotate_transform() {
+        let mut transform = Transform::new();
+        transform.rotate(1.0, 2.0, 0.5);
+
+        dbg!(transform.get_matrix());
+        panic!("help");
     }
 }
