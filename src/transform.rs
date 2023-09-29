@@ -66,7 +66,7 @@ impl Transform {
         fast_3x4_multiply(&self.inverse_matrix, coord)
     }
 
-    pub fn has_changed(&self) {
+    pub fn has_changed(&self) -> bool {
         self.dirty_flag
     }
 
