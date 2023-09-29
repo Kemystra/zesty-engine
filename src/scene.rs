@@ -45,8 +45,8 @@ impl Scene {
         let rot = (PI/4.0) * (1.0/60.0);
         for obj in self.objects.iter_mut() {
             for vertex in obj.get_vertices() {
-                let vertex_in_world = obj.transform.to_world_space(&vertex);
-                let vertex_in_cam = self.camera.transform.to_local_space(&vertex_in_world);
+                let vertex_in_world = obj.transform.to_world_space(*vertex);
+                let vertex_in_cam = self.camera.transform.to_local_space(vertex_in_world);
                 let screen_coords = self.camera.project_to_screen_space(vertex_in_cam);
 
                 if screen_coords.x > 1.0 || screen_coords.x < -1.0 {
