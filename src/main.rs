@@ -8,7 +8,7 @@ pub mod scene;
 
 use scene::{Scene, RenderMode};
 use object::{Object3D, Camera};
-use math_utils::Vector3D;
+use math_utils::vector3d::Vector3D;
 
 pub const SCREEN_WIDTH: usize = 640;
 pub const SCREEN_HEIGHT: usize = 360;
