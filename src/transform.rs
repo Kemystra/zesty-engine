@@ -60,12 +60,12 @@ impl Transform {
     }
 
     #[inline]
-    pub fn to_world_space(&self, coord: &Vector3D) -> Vector3D {
+    pub fn to_world_space(&self, coord: Vector3D) -> Vector3D {
         fast_3x4_multiply(&self.matrix, coord)
     }
 
     #[inline]
-    pub fn to_local_space(&self, coord: &Vector3D) -> Vector3D {
+    pub fn to_local_space(&self, coord: Vector3D) -> Vector3D {
         fast_3x4_multiply(&self.inverse_matrix, coord)
     }
 
@@ -73,7 +73,7 @@ impl Transform {
         self.dirty_flag
     }
 
-    pub fn translate(&mut self, amount: &Vector3D) -> () {
+    pub fn translate(&mut self, amount: Vector3D) -> () {
         self.dirty_flag = true;
         self.matrix[3][0] += amount.x;
         self.matrix[3][1] += amount.y;
@@ -92,7 +92,7 @@ impl Transform {
 // Helps to convert between local and world coord. system
 // Note that transform can also be the inverted version
 #[inline]
-fn fast_3x4_multiply(matrix: &Matrix3x4, point: &Vector3D) -> Vector3D {
+fn fast_3x4_multiply(matrix: &Matrix3x4, point: Vector3D) -> Vector3D {
     Vector3D { 
         x: matrix[0][0]*point.x + matrix[1][0]*point.y + matrix[2][0]*point.z + matrix[3][0],
         y: matrix[0][1]*point.x + matrix[1][1]*point.y + matrix[2][1]*point.z + matrix[3][1],
@@ -111,7 +111,7 @@ mod tests {
         (num*mult).round() / mult
     }
 
-    fn round_vector3d(vector: &Vector3D) -> [f64; 3] {
+    fn round_vector3d(vector: Vector3D) -> [f64; 3] {
         [
             round_place(vector.x, 2),
             round_place(vector.y, 2),
@@ -129,8 +129,8 @@ mod tests {
                 [10.0,12.0,11.0],
             ];
         let transform_b = Transform::from_matrix(matrix).unwrap();
-        let result = transform_b.to_world_space(&mat_a);
-        let rounded_result = round_vector3d(&result);
+        let result = transform_b.to_world_space(mat_a);
+        let rounded_result = round_vector3d(result);
 
         assert_eq!(rounded_result, [17.8, 18.98, 45.5]);
     }
@@ -145,8 +145,8 @@ mod tests {
             [3.0, 4.0, 2.0]
         ];
         let transform_b = Transform::from_matrix(matrix).unwrap();
-        let result = transform_b.to_local_space(&mat_a);
-        let rounded_result = round_vector3d(&result);
+        let result = transform_b.to_local_space(mat_a);
+        let rounded_result = round_vector3d(result);
 
         assert_eq!(rounded_result, [2.0, 6.0, 0.0]);
     }
@@ -158,7 +158,7 @@ mod tests {
         let b = rng.gen_range(0.0..10000.0);
         let c = rng.gen_range(0.0..10000.0);
 
-        let vec_random = &Vector3D::new(a,b,c);
+        let vec_random = Vector3D::new(a,b,c);
 
         let mut transform = Transform::new();
         transform.translate(vec_random);

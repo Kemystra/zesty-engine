@@ -1,6 +1,6 @@
 use std::ops::{Add, Sub, Mul};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Vector3D {
     pub x: f64,
     pub y: f64,
