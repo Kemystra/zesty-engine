@@ -1,3 +1,7 @@
+use crate::math_utils::{matrix3x4, vector3d};
+use matrix3x4::Matrix3x4;
+use vector3d::Vector3D;
+
 use std::ops::{Mul, MulAssign};
 
 // Reminder: Quaternion(w,x,y,z)
