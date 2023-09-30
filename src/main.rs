@@ -5,6 +5,7 @@ pub mod transform;
 pub mod math_utils;
 pub mod object;
 pub mod scene;
+pub mod graphic;
 
 use scene::Scene;
 use object::{Object3D, Camera};

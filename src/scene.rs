@@ -1,5 +1,5 @@
 use crate::object::{Object3D, Camera};
-use crate::math_utils::{vector3d::Vector3D, clamp};
+use crate::math_utils::vector3d::Vector3D;
 use crate::{SCREEN_WIDTH, SCREEN_HEIGHT};
 
 use std::f64::consts::PI;
@@ -12,17 +12,7 @@ pub struct Scene {
 
 const WHITE: (u8, u8, u8) = (255, 255, 255);
 
-fn color_pixel(
-    x: usize, y: usize,
-    color: (u8, u8, u8),
-    buffer: &mut [u32]) -> () {
 
-    let (r,g,b) = (color.0 as u32, color.1 as u32, color.2 as u32);
-    let color_32bit = (r << 16) | (g << 8) | b;
-    let offset = x + (y*SCREEN_WIDTH);
-
-    buffer[offset] = color_32bit;
-}
 
 impl Scene {
     pub fn render(&mut self, buffer: &mut [u32]) -> () {
