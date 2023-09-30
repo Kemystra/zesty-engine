@@ -7,15 +7,7 @@ use std::f64::consts::PI;
 #[derive(Debug)]
 pub struct Scene {
     pub objects: Vec<Object3D>,
-    pub render_mode: RenderMode,
     pub camera: Camera
-}
-
-#[derive(Debug)]
-pub enum RenderMode {
-    VertexOnly,
-    Wireframe,
-    Full
 }
 
 const WHITE: (u8, u8, u8) = (255, 255, 255);
@@ -34,14 +26,6 @@ fn color_pixel(
 
 impl Scene {
     pub fn render(&mut self, buffer: &mut [u32]) -> () {
-        match self.render_mode {
-            RenderMode::VertexOnly => self.vertex_render(buffer),
-            RenderMode::Wireframe => self.wireframe_render(buffer),
-            RenderMode::Full => self.full_render(buffer)
-        }
-    }
-
-    fn vertex_render(&mut self, buffer: &mut [u32]) -> () {
         let rot = (PI/4.0) * (1.0/60.0);
         for obj in self.objects.iter_mut() {
             for vertex in obj.get_vertices() {
@@ -79,13 +63,5 @@ impl Scene {
             }
             obj.transform.rotate(rot, 0.0, rot);
         }
-    }
-
-    fn wireframe_render(&mut self, buffer: &mut [u32]) -> () {
-        
-    }
-
-    fn full_render(&mut self, buffer: &mut [u32]) -> () {
-        
     }
 }
