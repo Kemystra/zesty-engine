@@ -32,7 +32,7 @@ pub fn main() {
     
     let mut buffer: Vec<u32> = vec![0; SCREEN_WIDTH * SCREEN_HEIGHT];
     let mut window = Window::new(
-        "Zesty Engine v0.25", 
+        "Zesty Engine v0.5",
         SCREEN_WIDTH, 
         SCREEN_HEIGHT,
         WindowOptions::default()
