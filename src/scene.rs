@@ -36,9 +36,9 @@ impl Scene {
                 let screen_coords = self.camera.project_to_screen_space(vertex_in_cam);
 
                 let ncd_coords = Vector3D {
-                    x: (screen_coords.x + 1.0)/2.0,
-                    y: (screen_coords.y + 1.0)/2.0,
-                    z: (screen_coords.z + 1.0)/2.0,
+                    x: (screen_coords.x + 1.0) * 0.5,
+                    y: (screen_coords.y + 1.0) * 0.5,
+                    z: (screen_coords.z + 1.0) * 0.5,
                 };
 
                 let final_x = ncd_coords.x * SCREEN_WIDTH as f64;
