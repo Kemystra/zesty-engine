@@ -6,7 +6,7 @@ pub mod math_utils;
 pub mod object;
 pub mod scene;
 
-use scene::{Scene, RenderMode};
+use scene::Scene;
 use object::{Object3D, Camera};
 use math_utils::vector3d::Vector3D;
 
@@ -26,7 +26,6 @@ pub fn main() {
 
     let mut scene = Scene {
         objects: vec![cube],
-        render_mode: RenderMode::VertexOnly,
         camera
     };
     // End boilerplate section
