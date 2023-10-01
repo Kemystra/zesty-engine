@@ -1,6 +1,7 @@
 use crate::object::{Object3D, Camera};
 use crate::math_utils::vector3d::Vector3D;
 use crate::{SCREEN_WIDTH, SCREEN_HEIGHT};
+use crate::graphic::Buffer;
 
 use std::f64::consts::PI;
 
@@ -12,10 +13,8 @@ pub struct Scene {
 
 const WHITE: (u8, u8, u8) = (255, 255, 255);
 
-
-
 impl Scene {
-    pub fn render(&mut self, buffer: &mut [u32]) -> () {
+    pub fn render(&mut self, buffer: &mut Buffer) -> () {
         let rot = (PI/4.0) * (1.0/60.0);
         for obj in self.objects.iter_mut() {
 
