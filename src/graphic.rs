@@ -2,16 +2,16 @@ use crate::SCREEN_WIDTH;
 
 #[derive(Debug)]
 pub struct Buffer {
-    buffer: Vec<u32>,
+    pub raw_buffer: Vec<u32>,
     width: usize,
     height: usize
 }
 
 impl Buffer {
-    pub fn new(window: minifb::Window) -> Buffer {
+    pub fn new(window: &minifb::Window) -> Buffer {
         let (width, height) = window.get_size();
         Buffer {
-            buffer: vec![0_u32; width * height],
+            raw_buffer: vec![0_u32; width * height],
             width,
             height
         }
@@ -26,7 +26,7 @@ impl Buffer {
         let color_32bit = (r << 16) | (g << 8) | b;
         let offset = x + (y*SCREEN_WIDTH);
 
-        self.buffer[offset] = color_32bit;
+        self.raw_buffer[offset] = color_32bit;
     }
 
     pub fn bresenham_line(
@@ -60,5 +60,9 @@ impl Buffer {
                 curr_y += sy
             }
         }
+    }
+
+    pub fn clear(&mut self) {
+        self.raw_buffer.iter_mut().for_each(|pixel| *pixel = 0);
     }
 }

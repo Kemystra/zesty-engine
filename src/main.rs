@@ -10,6 +10,7 @@ pub mod graphic;
 use scene::Scene;
 use object::{Object3D, Camera};
 use math_utils::vector3d::Vector3D;
+use graphic::Buffer;
 
 pub const SCREEN_WIDTH: usize = 640;
 pub const SCREEN_HEIGHT: usize = 360;
@@ -31,23 +32,24 @@ pub fn main() {
     };
     // End boilerplate section
     
-    let mut buffer: Vec<u32> = vec![0; SCREEN_WIDTH * SCREEN_HEIGHT];
     let mut window = Window::new(
         "Zesty Engine v0.5",
         SCREEN_WIDTH, 
         SCREEN_HEIGHT,
         WindowOptions::default()
     ).unwrap_or_else(|e| panic!("{}", e));
-
     window.limit_update_rate(Some(Duration::from_micros(16600)));
+
+    let mut buffer = Buffer::new(&window);
 
     while window.is_open() && !window.is_key_down(Key::Escape) {
         scene.render(&mut buffer);
         
         window
-            .update_with_buffer(&buffer, SCREEN_WIDTH, SCREEN_HEIGHT)
+            .update_with_buffer(&buffer.raw_buffer, SCREEN_WIDTH, SCREEN_HEIGHT)
             .unwrap();
-        buffer =  vec![0; buffer.len()]
+
+        buffer.clear();
     }
     
 }
