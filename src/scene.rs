@@ -35,6 +35,13 @@ impl Scene {
                 tmp_vertex.push(Vector3D::new(final_x, final_y, screen_coords.z));
             }
 
+            for face in obj.get_triangles() {
+                let v1 = tmp_vertex[face[0] - 1];
+                let v2 = tmp_vertex[face[1] - 1];
+                buffer.bresenham_line(WHITE,
+                    v1.x as usize, v1.y as usize,
+                    v2.x as usize, v2.y as usize);
+            }
 
             obj.transform.rotate(rot, 0.0, rot);
         }
