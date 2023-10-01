@@ -8,6 +8,14 @@ pub struct Buffer {
 }
 
 impl Buffer {
+    pub fn new(window: minifb::Window) -> Buffer {
+        let (width, height) = window.get_size();
+        Buffer {
+            buffer: vec![0_u32; width * height],
+            width,
+            height
+        }
+    }
 
     pub fn plot_pixel(
         &mut self,
@@ -36,7 +44,7 @@ impl Buffer {
         let sy = if y0 < y1 {1} else {-1};
 
         loop {
-            self.plot_pixel(curr_x as usize, curr_y as usize, (255,255,255));
+            self.plot_pixel(curr_x as usize, curr_y as usize, color);
             if curr_x == x1 as isize || curr_y == y1 as isize {break}
             let e2 = error * 2;
 
