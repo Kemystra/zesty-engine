@@ -48,10 +48,11 @@ impl Object3D {
                 let mut facet_data = line.split_whitespace();
 
                 facet_data.next();
+                // Substract by one to make it easy for indexing later
                 let facet = [
-                    facet_data.next().unwrap().parse::<usize>().unwrap(),
-                    facet_data.next().unwrap().parse::<usize>().unwrap(),
-                    facet_data.next().unwrap().parse::<usize>().unwrap(),
+                    facet_data.next().unwrap().parse::<usize>().unwrap() - 1,
+                    facet_data.next().unwrap().parse::<usize>().unwrap() - 1,
+                    facet_data.next().unwrap().parse::<usize>().unwrap() - 1,
                 ];
 
                 triangles.push(facet);
