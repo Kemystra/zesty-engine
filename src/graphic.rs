@@ -32,30 +32,33 @@ impl Buffer {
     pub fn bresenham_line(
         &mut self, color: (u8, u8, u8),
         x0: usize, y0: usize,
-        x1: usize, y1: usize) {
+        end_x: usize, end_y: usize) {
         let mut curr_x = x0 as isize;
         let mut curr_y = y0 as isize;
 
-        let dx = ((x1 - x0) as isize).abs();
-        let dy = -((y1 - y0) as isize).abs();
+        let end_x = end_x as isize;
+        let end_y = end_y as isize;
+
+        let dx = (end_x - curr_x).abs();
+        let dy = -(end_y - curr_y).abs();
         let mut error = dx + dy;
 
-        let sx = if x0 < x1 {1} else {-1};
-        let sy = if y0 < y1 {1} else {-1};
+        let sx = if curr_x < end_x {1} else {-1};
+        let sy = if curr_y < end_y {1} else {-1};
 
         loop {
             self.plot_pixel(curr_x as usize, curr_y as usize, color);
-            if curr_x == x1 as isize || curr_y == y1 as isize {break}
+            if curr_x == end_x && curr_y == end_y {break}
             let e2 = error * 2;
 
             if e2 >= dy {
-                if curr_x == x1 as isize {break}
+                if curr_x == end_x {break}
                 error += dy;
                 curr_x += sx;
             }
 
             if e2 <= dx {
-                if curr_y == y1 as isize {break}
+                if curr_y == end_y {break}
                 error += dx;
                 curr_y += sy
             }
