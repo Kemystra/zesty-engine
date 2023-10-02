@@ -18,7 +18,7 @@ impl Scene {
         let rot = (PI/4.0) * (1.0/60.0);
         for obj in self.objects.iter_mut() {
 
-            let mut tmp_vertex: Vec<Vector3D> = vec![];
+            let mut tmp_vertex: Vec<[usize; 2]> = vec![];
             for vertex in obj.get_vertices() {
                 let vertex_in_world = obj.transform.to_world_space(*vertex);
                 let vertex_in_cam = self.camera.transform.to_local_space(vertex_in_world);
@@ -30,17 +30,16 @@ impl Scene {
                     z: (screen_coords.z + 1.0) * 0.5,
                 };
 
-                let final_x = ncd_coords.x * SCREEN_WIDTH as f64;
-                let final_y = ncd_coords.y * SCREEN_HEIGHT as f64;
-                tmp_vertex.push(Vector3D::new(final_x, final_y, screen_coords.z));
+                let final_x = (ncd_coords.x * SCREEN_WIDTH as f64) as usize;
+                let final_y = (ncd_coords.y * SCREEN_HEIGHT as f64) as usize;
+
+                tmp_vertex.push([final_x, final_y]);
             }
 
             for face in obj.get_triangles() {
                 let v1 = tmp_vertex[face[0] - 1];
                 let v2 = tmp_vertex[face[1] - 1];
-                buffer.bresenham_line(WHITE,
-                    v1.x as usize, v1.y as usize,
-                    v2.x as usize, v2.y as usize);
+                buffer.bresenham_line(WHITE, v1[0], v1[1], v2[0], v2[1]);
             }
 
             obj.transform.rotate(rot, 0.0, rot);
