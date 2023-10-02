@@ -39,7 +39,9 @@ impl Scene {
             for face in obj.get_triangles() {
                 let v1 = tmp_vertex[face[0] - 1];
                 let v2 = tmp_vertex[face[1] - 1];
+                let v3 = tmp_vertex[face[2] - 1];
                 buffer.bresenham_line(WHITE, v1[0], v1[1], v2[0], v2[1]);
+                buffer.bresenham_line(WHITE, v2[0], v2[1], v3[0], v3[1]);
             }
 
             obj.transform.rotate(rot, 0.0, rot);
