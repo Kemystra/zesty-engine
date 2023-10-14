@@ -34,16 +34,17 @@ pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
     val
 }
 
+pub fn round_place(num: f64, place: usize) -> f64{
+    let mult = 10_f64.powf(place as f64);
+    (num*mult).round() / mult
+}
 
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn round_place(num: f64, place: usize) -> f64{
-        let mult = 10_f64.powf(place as f64);
-        (num*mult).round() / mult
-    }
+    
 
     #[test]
     fn add_vector3d() {
