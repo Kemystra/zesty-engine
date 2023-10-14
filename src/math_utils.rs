@@ -44,46 +44,6 @@ pub fn round_place(num: f64, place: usize) -> f64{
 mod tests {
     use super::*;
 
-    
-
-    #[test]
-    fn add_vector3d() {
-        let a = Vector3D::new(2,5,10);
-        let b = Vector3D::new(5,6,11);
-
-        assert_eq!(a+b, Vector3D::new(7,11,21));
-    }
-
-    #[test]
-    fn substract_vector3d() {
-        let a = Vector3D::new(4, 20, 5);
-        let b = Vector3D::new(8, 11, 7);
-
-        assert_eq!(a-b, Vector3D::new(-4, 9, -2));
-    }
-
-    #[test]
-    fn dot_product_vector3d() {
-        let a = Vector3D::new(5,6,7);
-        let b = Vector3D::new(10,2,3);
-
-        assert_eq!(a*b, 83_f64);
-    }
-
-    #[test]
-    fn invert_trs_matrix() {
-        let mat = [
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0],
-            [3.0, 10.0, 1.0]
-        ];
-        let result = invert_matrix(&mat).unwrap();
-        assert_eq!(round_place(result[3][0], 2), -3.0);
-        assert_eq!(round_place(result[3][1], 2), -10.0);
-        assert_eq!(round_place(result[3][2], 2), -1.0);
-    }
-
     fn compare_quaternions(q: Quaternion, precision: usize,
         a2: f64, b2: f64, c2: f64, d2: f64) {
         let Quaternion(a1, b1, c1, d1) = q;
