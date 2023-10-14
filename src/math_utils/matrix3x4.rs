@@ -78,3 +78,24 @@ pub fn invert_matrix(matrix: &Matrix3x4) -> Result<Matrix3x4, String> {
     }
     Ok(inv_matrix)
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::math_utils::round_place;
+
+    #[test]
+    fn invert_trs_matrix() {
+        let mat = [
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [3.0, 10.0, 1.0]
+        ];
+        let result = invert_matrix(&mat).unwrap();
+        assert_eq!(round_place(result[3][0], 2), -3.0);
+        assert_eq!(round_place(result[3][1], 2), -10.0);
+        assert_eq!(round_place(result[3][2], 2), -1.0);
+    }
+}
