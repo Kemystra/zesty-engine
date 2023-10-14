@@ -136,7 +136,7 @@ mod tests {
     #[test]
     fn quaternion_from_euler_angle_all() {
         let q = Quaternion::from_euler_angles(1,1,1);
-        compare_quaternions(q, 5, 0.56568, 0.57094, 0.16752, 0.57094);
+        compare_quaternions(q, 5, 0.78607, 0.16752, 0.57094, 0.16752);
     }
 
     #[test]
