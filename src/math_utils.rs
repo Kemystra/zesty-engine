@@ -44,53 +44,57 @@ pub fn round_place(num: f64, place: usize) -> f64{
 mod tests {
     use super::*;
 
-    fn compare_quaternions(q: Quaternion, precision: usize,
-        a2: f64, b2: f64, c2: f64, d2: f64) {
-        let Quaternion(a1, b1, c1, d1) = q;
+    #[test]
+    fn round_to_whole() {
+        let fl = 12.45;
+        let result = round_place(fl, 0);
 
-        dbg!(a1, b1, c1, d1);
-
-        assert_eq!(round_place(a1, precision), a2);
-        assert_eq!(round_place(b1, precision), b2);
-        assert_eq!(round_place(c1, precision), c2);
-        assert_eq!(round_place(d1, precision), d2);
-
+        assert_eq!(result, 12_f64);
     }
 
     #[test]
-    fn quaternion_from_euler_angle_x_only() {
-        let q = Quaternion::from_euler_angles(1,0,0);
-        compare_quaternions(q, 5, 0.87758, 0.47943, 0.0, 0.0);
-    }
-    
-    #[test]
-    fn quaternion_from_euler_angle_y_only() {
-        let q = Quaternion::from_euler_angles(0,1,0);
-        compare_quaternions(q, 5, 0.87758, 0.0, 0.47943, 0.0);
+    fn round_forward() {
+        let fl = 12.55;
+        let result = round_place(fl, 0);
+
+        assert_eq!(result, 13_f64);
     }
 
     #[test]
-    fn quaternion_from_euler_angle_z_only() {
-        let q = Quaternion::from_euler_angles(0,0,1);
-        compare_quaternions(q, 5, 0.87758, 0.0, 0.0, 0.47943);
+    fn round_one_place() {
+        let fl = 45.892;
+        let result = round_place(fl, 1);
+
+        assert_eq!(result, 45.9_f64);
     }
 
     #[test]
-    fn quaternion_from_euler_angle_all() {
-        let q = Quaternion::from_euler_angles(1,1,1);
-        compare_quaternions(q, 5, 0.56568, 0.57094, 0.16752, 0.57094);
+    fn clamp_in_interval() {
+        let raw_num = 10;
+        let result = clamp(raw_num, 1, 100);
+
+        assert_eq!(result, 10);
     }
 
     #[test]
-    fn quaternion_multiply() {
-        let q1 = Quaternion(1.0, 0.4, 0.5, 0.6);
-        let q2 = Quaternion(2.0, 0.2, 0.34, 0.79);
+    fn clamp_below_interval() {
+        let raw_num = 5;
+        let result = clamp(raw_num, 10, 100);
 
-        let res1 = q1 * q2;
-        let res2 = q2 * q1;
+        assert_eq!(result, 10);
+    }
 
-        compare_quaternions(res1, 3, 1.276, 1.191, 1.144, 2.026);
-        compare_quaternions(res2, 3, 1.276, 0.809, 1.536, 1.954);
-        assert_ne!(res1, res2);
+    #[test]
+    fn clamp_above_interval() {
+        let raw_num = 6;
+        let result = clamp(raw_num, 1, 5);
+        
+        assert_eq!(result, 5);
+    }
+
+    #[test]
+    #[should_panic(expected = "min bigger than max")]
+    fn clamp_panic() {
+        let result = clamp(val, min, max);
     }
 }
