@@ -172,8 +172,19 @@ mod tests {
     fn rotate_transform() {
         let mut transform = Transform::new();
         transform.rotate(1.0, 2.0, 0.5);
+        let result = transform.get_matrix();
 
-        dbg!(transform.get_matrix());
-        panic!("help");
+        let expected = [
+            [-0.36520, 0.41245, 0.83458],
+            [-0.19951, 0.84099, -0.50292],
+            [-0.90930, -0.35018, -0.22485],
+            [0.0, 0.0, 0.0],
+        ];
+
+        for (i,row) in result.iter().enumerate() {
+            for (j,num) in row.iter().enumerate() {
+                assert_eq!(round_place(*num, 5), expected[i][j]);
+            }
+        }
     }
 }
