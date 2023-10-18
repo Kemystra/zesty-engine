@@ -100,3 +100,21 @@ impl Renderer {
         }
     }
 }
+
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn new_color() {
+        let color = Color::new(255, 100, 12);
+
+        assert_eq!(color, Color {
+            r: 255, g: 100, b: 12
+        });
+    }
+
+    fn new_invalid_color() {
+        let color = Color::new(256, 0, 0);
+    }
+}
