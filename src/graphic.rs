@@ -1,17 +1,22 @@
 #[derive(Debug)]
 struct Color(u8, u8, u8);
-    pub raw_buffer: Vec<u32>,
+
+
+#[derive(Debug)]
+pub struct Buffer<F>
+    where F: FnMut(usize, usize, Color) -> () {
     width: usize,
-    height: usize
+    height: usize,
+    draw_func: F
 }
 
-impl Buffer {
-    pub fn new(window: &minifb::Window) -> Buffer {
-        let (width, height) = window.get_size();
-        Buffer {
-            raw_buffer: vec![0_u32; width * height],
+impl<F> Buffer<F>
+    where F: FnMut(usize, usize, Color) -> () {
+    pub fn new(width: usize, height: usize, draw_func: F) -> Self {
+        Self {
             width,
-            height
+            height,
+            draw_func
         }
     }
 
