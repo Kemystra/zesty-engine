@@ -8,20 +8,19 @@ pub struct Color {
 }
 
 
-#[derive(Debug)]
 pub struct Renderer {
     width: usize,
     height: usize,
-    draw_func: fn(usize, usize, Color) -> ()
+    draw_func: Box<dyn FnMut(usize, usize, Color) -> ()>
 }
 
 impl Renderer {
     pub fn new(width: usize, height: usize,
-        draw_func: fn(usize, usize, Color) -> ()) -> Self {
+        draw_func: impl FnMut(usize, usize, Color) -> () + 'static) -> Self {
         Self {
             width,
             height,
-            draw_func
+            draw_func: Box::new(draw_func)
         }
     }
 
