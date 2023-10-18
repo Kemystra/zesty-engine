@@ -2,7 +2,7 @@ use crate::scene::Scene;
 use crate::math_utils::vector3d::Vector3D;
 use std::f64::consts::PI;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Color {
     pub r: u8, pub g: u8, pub b: u8
 }
@@ -16,7 +16,9 @@ impl Color {
         }
     }
 }
-
+const WHITE: Color = Color {
+    r: 255, g: 255, b: 255
+};
 
 pub struct Renderer {
     width: usize,
@@ -36,7 +38,6 @@ impl Renderer {
 
     pub fn render(&mut self, scene: &mut Scene) -> () {
         let rot = (PI/4.0) * (1.0/60.0);
-        const WHITE: Color = Color::new(255, 255, 255);
 
         for obj in scene.objects.iter_mut() {
 
@@ -124,6 +125,7 @@ mod tests {
         });
     }
 
+    #[test]
     fn new_invalid_color() {
         let color = Color::new(256, 34, -1);
 
