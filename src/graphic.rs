@@ -3,14 +3,14 @@ struct Color(u8, u8, u8);
 
 
 #[derive(Debug)]
-pub struct Buffer<F>
+pub struct BufferInterface<F>
     where F: FnMut(usize, usize, Color) -> () {
     width: usize,
     height: usize,
     draw_func: F
 }
 
-impl<F> Buffer<F>
+impl<F> BufferInterface<F>
     where F: FnMut(usize, usize, Color) -> () {
     pub fn new(width: usize, height: usize, draw_func: F) -> Self {
         Self {
@@ -25,7 +25,7 @@ impl<F> Buffer<F>
     }
 
     pub fn bresenham_line(
-        &mut self, color: (u8, u8, u8),
+        &mut self, color: Color,
         x0: usize, y0: usize,
         end_x: usize, end_y: usize) {
         let mut curr_x = x0 as isize;
