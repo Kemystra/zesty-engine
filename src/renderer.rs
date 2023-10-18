@@ -3,16 +3,15 @@ struct Color(u8, u8, u8);
 
 
 #[derive(Debug)]
-pub struct Renderer<F>
-    where F: FnMut(usize, usize, Color) -> () {
+pub struct Renderer {
     width: usize,
     height: usize,
-    draw_func: F
+    draw_func: fn(usize, usize, Color) -> ()
 }
 
-impl<F> Renderer<F>
-    where F: FnMut(usize, usize, Color) -> () {
-    pub fn new(width: usize, height: usize, draw_func: F) -> Self {
+impl Renderer {
+    pub fn new(width: usize, height: usize,
+        draw_func: fn(usize, usize, Color) -> ()) -> Self {
         Self {
             width,
             height,
