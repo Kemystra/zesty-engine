@@ -59,8 +59,4 @@ impl<F> BufferInterface<F>
             }
         }
     }
-
-    pub fn clear(&mut self) {
-        self.raw_buffer.iter_mut().for_each(|pixel| *pixel = 0);
-    }
 }
