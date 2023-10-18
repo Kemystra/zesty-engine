@@ -1,3 +1,7 @@
+use crate::scene::Scene;
+use crate::math_utils::vector3d::Vector3D;
+use std::f64::consts::PI;
+
 #[derive(Debug)]
 struct Color(u8, u8, u8);
 
@@ -16,6 +20,42 @@ impl Renderer {
             width,
             height,
             draw_func
+        }
+    }
+
+    pub fn render(&mut self, scene: &mut Scene) -> () {
+        let rot = (PI/4.0) * (1.0/60.0);
+        const WHITE: Color = Color(255,255,255);
+
+        for obj in scene.objects.iter_mut() {
+
+            let mut tmp_vertex: Vec<[usize; 2]> = vec![];
+            for vertex in obj.get_vertices() {
+                let vertex_in_world = obj.transform.to_world_space(*vertex);
+                let vertex_in_cam = scene.camera.transform.to_local_space(vertex_in_world);
+                let screen_coords = scene.camera.project_to_screen_space(vertex_in_cam);
+
+                let ncd_coords = Vector3D {
+                    x: (screen_coords.x + 1.0) * 0.5,
+                    y: (screen_coords.y + 1.0) * 0.5,
+                    z: (screen_coords.z + 1.0) * 0.5,
+                };
+
+                let final_x = (ncd_coords.x * self.width as f64) as usize;
+                let final_y = (ncd_coords.y * self.height as f64) as usize;
+
+                tmp_vertex.push([final_x, final_y]);
+            }
+
+            for face in obj.get_triangles() {
+                let v1 = tmp_vertex[face[0]];
+                let v2 = tmp_vertex[face[1]];
+                let v3 = tmp_vertex[face[2]];
+                self.bresenham_line(WHITE, v1[0], v1[1], v2[0], v2[1]);
+                self.bresenham_line(WHITE, v2[0], v2[1], v3[0], v3[1]);
+            }
+
+            obj.transform.rotate(rot, 0.0, rot);
         }
     }
 
