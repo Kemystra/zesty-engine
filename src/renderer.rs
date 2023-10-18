@@ -3,7 +3,7 @@ use crate::math_utils::vector3d::Vector3D;
 use std::f64::consts::PI;
 
 #[derive(Debug)]
-struct Color(u8, u8, u8);
+pub struct Color(u8, u8, u8);
 
 
 #[derive(Debug)]
