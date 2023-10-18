@@ -3,14 +3,14 @@ struct Color(u8, u8, u8);
 
 
 #[derive(Debug)]
-pub struct BufferInterface<F>
+pub struct Renderer<F>
     where F: FnMut(usize, usize, Color) -> () {
     width: usize,
     height: usize,
     draw_func: F
 }
 
-impl<F> BufferInterface<F>
+impl<F> Renderer<F>
     where F: FnMut(usize, usize, Color) -> () {
     pub fn new(width: usize, height: usize, draw_func: F) -> Self {
         Self {
