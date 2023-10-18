@@ -15,7 +15,12 @@ impl Color {
             b: b.try_into().unwrap_or_default()
         }
     }
+
+    pub fn get_rgb_u32(&self) -> u32 {
+        (self.r as u32) | ((self.g as u32) << 8) | ((self.b as u32) << 16)
+    }
 }
+
 const WHITE: Color = Color {
     r: 255, g: 255, b: 255
 };
@@ -112,7 +117,7 @@ impl Renderer {
     }
 }
 
-
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -132,5 +137,13 @@ mod tests {
         assert_eq!(color, Color {
             r: 0, g: 34, b: 0
         })
+    }
+
+    #[test]
+    fn output_rgb_as_u32() {
+        let color = Color::new(100, 234, 88);
+        let expected = 100_u32 | (234 << 8) | (88 << 16);
+
+        assert_eq!(color.get_rgb_u32(), expected);
     }
 }
