@@ -1,7 +1,6 @@
 use crate::object::{Object3D, Camera};
 use crate::math_utils::vector3d::Vector3D;
 use crate::{SCREEN_WIDTH, SCREEN_HEIGHT};
-use crate::graphic::Buffer;
 
 use std::f64::consts::PI;
 

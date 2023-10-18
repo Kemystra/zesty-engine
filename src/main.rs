@@ -2,12 +2,12 @@ pub mod transform;
 pub mod math_utils;
 pub mod object;
 pub mod scene;
-pub mod graphic;
+pub mod renderer;
 
 use scene::Scene;
 use object::{Object3D, Camera};
 use math_utils::vector3d::Vector3D;
-use graphic::Buffer;
+use renderer::Renderer;
 
 pub const SCREEN_WIDTH: usize = 640;
 pub const SCREEN_HEIGHT: usize = 360;
