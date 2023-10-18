@@ -1,3 +1,11 @@
+use std::num::NonZeroU32;
+
+use winit::window::WindowBuilder;
+use winit::event_loop::{ControlFlow, EventLoop};
+use winit::event::{Event, WindowEvent};
+
+use softbuffer::{Context, Surface};
+
 pub mod transform;
 pub mod math_utils;
 pub mod object;
@@ -7,10 +15,7 @@ pub mod renderer;
 use scene::Scene;
 use object::{Object3D, Camera};
 use math_utils::vector3d::Vector3D;
-use renderer::Renderer;
-
-pub const SCREEN_WIDTH: usize = 640;
-pub const SCREEN_HEIGHT: usize = 360;
+use renderer::{Color, Renderer};
 
 pub fn main() {
     // NOTE: the coordinates are left-handed
@@ -26,11 +31,16 @@ pub fn main() {
         objects: vec![cube],
         camera
     };
+
     // End boilerplate section
     
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-    
+
+    // Renderer init
+    let (width, height) = { let size = window.inner_size(); (size.width, size.height) };
+    let pitch = width;
+ 
     let context = unsafe { Context::new(&window) }.unwrap();
     let mut surface = unsafe { Surface::new(&context, &window) }.unwrap();
 
@@ -54,16 +64,12 @@ pub fn main() {
                     ).unwrap();
 
                     let mut buffer = surface.buffer_mut().unwrap();
-                    for index in 0..(width * height) {
-                        let y = index / width;
-                        let x = index % width;
 
-                        let red = x % 255;
-                        let green = y % 255;
-                        let blue = (x*y) % 255;
+                    let renderer = Renderer::new(width as usize, height as usize,
+                        |x: usize, y: usize, color: Color| {
+                            buffer[x + (y*pitch)] = color.r | (color.g << 8) | (color.b << 16);
+                    });
 
-                        buffer[index as usize] = blue | (green << 8) | (red << 16);
-                    }
 
                     buffer.present().unwrap();
                 }
