@@ -1,6 +1,3 @@
-use minifb::{Key, Window, WindowOptions};
-use std::time::Duration;
-
 pub mod transform;
 pub mod math_utils;
 pub mod object;
@@ -16,7 +13,6 @@ pub const SCREEN_WIDTH: usize = 640;
 pub const SCREEN_HEIGHT: usize = 360;
 
 pub fn main() {
-
     // NOTE: the coordinates are left-handed
     // Thank you, past me
 
@@ -32,24 +28,47 @@ pub fn main() {
     };
     // End boilerplate section
     
-    let mut window = Window::new(
-        "Zesty Engine v0.5",
-        SCREEN_WIDTH, 
-        SCREEN_HEIGHT,
-        WindowOptions::default()
-    ).unwrap_or_else(|e| panic!("{}", e));
-    window.limit_update_rate(Some(Duration::from_micros(16600)));
-
-    let mut buffer = Buffer::new(&window);
-
-    while window.is_open() && !window.is_key_down(Key::Escape) {
-        scene.render(&mut buffer);
-        
-        window
-            .update_with_buffer(&buffer.raw_buffer, SCREEN_WIDTH, SCREEN_HEIGHT)
-            .unwrap();
-
-        buffer.clear();
-    }
+    let event_loop = EventLoop::new();
+    let window = WindowBuilder::new().build(&event_loop).unwrap();
     
+    let context = unsafe { Context::new(&window) }.unwrap();
+    let mut surface = unsafe { Surface::new(&context, &window) }.unwrap();
+
+    event_loop.run(move |event, _, control_flow| {
+        *control_flow = ControlFlow::Wait;
+
+        match event {
+            Event::WindowEvent { window_id, event: WindowEvent::CloseRequested }
+                if window_id == window.id() => { *control_flow = ControlFlow::Exit }
+
+            // Exit window with ANY keypress
+            Event::WindowEvent { window_id, event: WindowEvent::KeyboardInput {..} }
+                if window_id == window.id() => { *control_flow = ControlFlow::Exit }
+
+            Event::RedrawRequested(window_id)
+                if window_id == window.id() => {
+                    let (width, height) = { let size = window.inner_size(); (size.width, size.height) };
+                    surface.resize(
+                        NonZeroU32::new(width).unwrap(),
+                        NonZeroU32::new(height).unwrap()
+                    ).unwrap();
+
+                    let mut buffer = surface.buffer_mut().unwrap();
+                    for index in 0..(width * height) {
+                        let y = index / width;
+                        let x = index % width;
+
+                        let red = x % 255;
+                        let green = y % 255;
+                        let blue = (x*y) % 255;
+
+                        buffer[index as usize] = blue | (green << 8) | (red << 16);
+                    }
+
+                    buffer.present().unwrap();
+                }
+
+            _ => {}
+        }
+    });
 }
