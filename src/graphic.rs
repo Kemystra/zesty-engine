@@ -1,5 +1,5 @@
 #[derive(Debug)]
-pub struct Buffer {
+struct Color(u8, u8, u8);
     pub raw_buffer: Vec<u32>,
     width: usize,
     height: usize
