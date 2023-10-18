@@ -20,16 +20,8 @@ impl<F> Buffer<F>
         }
     }
 
-    pub fn plot_pixel(
-        &mut self,
-        x: usize, y: usize,
-        color: (u8, u8, u8)) -> () {
-
-        let (r,g,b) = (color.0 as u32, color.1 as u32, color.2 as u32);
-        let color_32bit = (r << 16) | (g << 8) | b;
-        let offset = x + (y*self.width);
-
-        self.raw_buffer[offset] = color_32bit;
+    pub fn plot_pixel(&mut self, x: usize, y: usize, color: Color) {
+        (self.draw_func)(x, y, color);
     }
 
     pub fn bresenham_line(
