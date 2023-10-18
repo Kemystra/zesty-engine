@@ -1,5 +1,3 @@
-use crate::SCREEN_WIDTH;
-
 #[derive(Debug)]
 pub struct Buffer {
     pub raw_buffer: Vec<u32>,
@@ -24,7 +22,7 @@ impl Buffer {
 
         let (r,g,b) = (color.0 as u32, color.1 as u32, color.2 as u32);
         let color_32bit = (r << 16) | (g << 8) | b;
-        let offset = x + (y*SCREEN_WIDTH);
+        let offset = x + (y*self.width);
 
         self.raw_buffer[offset] = color_32bit;
     }
