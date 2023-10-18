@@ -115,6 +115,10 @@ mod tests {
     }
 
     fn new_invalid_color() {
-        let color = Color::new(256, 0, 0);
+        let color = Color::new(256, 34, -1);
+
+        assert_eq!(color, Color {
+            r: 0, g: 34, b: 0
+        })
     }
 }
