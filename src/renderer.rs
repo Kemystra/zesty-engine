@@ -28,20 +28,19 @@ const WHITE: Color = Color {
 pub struct Renderer {
     width: usize,
     height: usize,
-    draw_func: Box<dyn FnMut(usize, usize, Color) -> ()>
+    tmp_buffer: Vec<u32>
 }
 
 impl Renderer {
-    pub fn new(width: usize, height: usize,
-        draw_func: impl FnMut(usize, usize, Color) -> () + 'static) -> Self {
+    pub fn new(width: usize, height: usize) -> Self {
         Self {
             width,
             height,
-            draw_func: Box::new(draw_func)
+            tmp_buffer: vec![0; width*height]
         }
     }
 
-    pub fn render(&mut self, scene: &mut Scene) -> () {
+    pub fn render(&mut self, scene: &mut Scene) -> &Vec<u32> {
         let rot = (PI/4.0) * (1.0/60.0);
 
         for obj in scene.objects.iter_mut() {
@@ -74,10 +73,12 @@ impl Renderer {
 
             obj.transform.rotate(rot, 0.0, rot);
         }
+
+        &self.tmp_buffer
     }
 
     pub fn plot_pixel(&mut self, x: usize, y: usize, color: Color) {
-        (self.draw_func)(x, y, color);
+        self.tmp_buffer[x + (y*self.width)] = color.get_rgb_u32();
     }
 
     pub fn bresenham_line(
