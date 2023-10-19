@@ -13,7 +13,7 @@ pub mod scene;
 pub mod renderer;
 
 use scene::Scene;
-use object::{Object3D, Camera};
+use object::{Object3D, Camera, AspectRatio};
 use math_utils::vector3d::Vector3D;
 use renderer::Renderer;
 
@@ -25,7 +25,7 @@ pub fn main() {
     let mut cube = Object3D::load_obj("test_scene/tinker.obj".to_string()).unwrap();
     cube.transform.translate(Vector3D::new(0, 0, 5));
 
-    let camera = Camera::new(1, 30, 90);
+    let camera = Camera::new(1, 30, 90, AspectRatio(16.0, 9.0));
 
     let mut scene = Scene {
         objects: vec![cube],

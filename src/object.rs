@@ -1,8 +1,9 @@
 use std::io::{self, BufReader, BufRead};
 use std::fs::File;
+use std::f64::consts::PI;
 
 use crate::transform::Transform;
-use crate::math_utils::{vector3d::Vector3D, ProjectionData};
+use crate::math_utils::{vector3d::Vector3D};
 
 
 #[derive(Debug)]
@@ -84,19 +85,23 @@ pub struct Camera {
     near_clip_distance: f64,
     far_clip_distance: f64,
     field_of_view: f64,
+    aspect_ratio: AspectRatio,
     projection_data: ProjectionData,
     dirty_flag: bool
 }
 
 
 impl Camera {
-    pub fn new<T: Into<f64>+Copy>(n: T, f: T, fov: T) -> Self {
+    pub fn new<T: Into<f64>+Copy>(n: T, f: T, fov: T, aspect_ratio: AspectRatio) -> Self {
         Self {
             transform: Transform::new(),
             near_clip_distance: n.into(),
             far_clip_distance: f.into(),
             field_of_view: fov.into(),
-            projection_data: ProjectionData::generate(n.into(), f.into(), fov.into()),
+            aspect_ratio,
+            projection_data: ProjectionData::generate(
+                n.into(), f.into(), fov.into(), aspect_ratio
+            ),
             dirty_flag: false
         }
     }
@@ -106,7 +111,8 @@ impl Camera {
             self.projection_data = ProjectionData::generate(
                 self.near_clip_distance, 
                 self.far_clip_distance,
-                self.field_of_view
+                self.field_of_view,
+                self.aspect_ratio
             )
         }
         &self.projection_data
@@ -126,5 +132,27 @@ impl Camera {
             y: y/w,
             z: z/w,
         }
+    }
+}
+
+
+#[derive(Debug, Clone, Copy)]
+pub struct AspectRatio(pub f64, pub f64);
+
+
+#[derive(Debug)]
+pub struct ProjectionData(f64, f64, f64, f64);
+
+// I'm just gonna hard code the aspect ratio lol
+impl ProjectionData {
+    pub fn generate(n: f64, f: f64, fov: f64, ratio: AspectRatio) -> ProjectionData {
+        let fov_tan_val = n * (fov/2.0 * PI/180.0).tan();
+        let near_far_interval = f - n;
+        ProjectionData(
+            1.0 / (fov_tan_val),
+            ratio.0 / (ratio.1*fov_tan_val),
+            -f / near_far_interval,
+            -f*n / near_far_interval
+        )
     }
 }
