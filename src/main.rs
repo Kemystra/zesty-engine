@@ -48,7 +48,12 @@ pub fn main() {
     let mut surface = unsafe { Surface::new(&context, &window) }.unwrap();
 
     let mut renderer = Renderer::new(width as usize, height as usize);
-    dbg!("{:?}", (width, height));
+    surface.resize(
+
+        NonZeroU32::new(width).unwrap(),
+        NonZeroU32::new(height).unwrap()
+    ).unwrap();
+
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -63,11 +68,6 @@ pub fn main() {
 
             Event::RedrawRequested(window_id)
                 if window_id == window.id() => {
-                    let (width, height) = { let size = window.inner_size(); (size.width, size.height) };
-                    surface.resize(
-                        NonZeroU32::new(width).unwrap(),
-                        NonZeroU32::new(height).unwrap()
-                    ).unwrap();
 
                     let mut buffer = surface.buffer_mut().unwrap();
                     let tmp = renderer.render(&mut scene);
