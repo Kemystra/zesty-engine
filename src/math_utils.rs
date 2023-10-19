@@ -76,6 +76,6 @@ mod tests {
     #[test]
     #[should_panic(expected = "min bigger than max")]
     fn clamp_panic() {
-        let result = clamp(9, 10, 7);
+        let _ = clamp(9, 10, 7);
     }
 }
