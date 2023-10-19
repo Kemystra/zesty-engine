@@ -15,7 +15,7 @@ pub mod renderer;
 use scene::Scene;
 use object::{Object3D, Camera};
 use math_utils::vector3d::Vector3D;
-use renderer::{Color, Renderer};
+use renderer::Renderer;
 
 pub fn main() {
     // NOTE: the coordinates are left-handed
@@ -39,10 +39,12 @@ pub fn main() {
 
     // Renderer init
     let (width, height) = { let size = window.inner_size(); (size.width, size.height) };
-    let pitch = width;
- 
+
     let context = unsafe { Context::new(&window) }.unwrap();
     let mut surface = unsafe { Surface::new(&context, &window) }.unwrap();
+
+    let mut renderer = Renderer::new(width as usize, height as usize);
+
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -64,12 +66,9 @@ pub fn main() {
                     ).unwrap();
 
                     let mut buffer = surface.buffer_mut().unwrap();
+                    let tmp = renderer.render(&mut scene);
 
-                    let renderer = Renderer::new(width as usize, height as usize,
-                        |x: usize, y: usize, color: Color| {
-                            buffer[x + (y*pitch)] = color.r | (color.g << 8) | (color.b << 16);
-                    });
-
+                    buffer.copy_from_slice(tmp);
 
                     buffer.present().unwrap();
                 }
