@@ -3,6 +3,7 @@ use std::num::NonZeroU32;
 use winit::window::WindowBuilder;
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit::event::{Event, WindowEvent};
+use winit::dpi::PhysicalSize;
 
 use softbuffer::{Context, Surface};
 
@@ -35,7 +36,10 @@ pub fn main() {
     // End boilerplate section
     
     let event_loop = EventLoop::new();
-    let window = WindowBuilder::new().build(&event_loop).unwrap();
+    let window = WindowBuilder::new()
+        .with_inner_size(PhysicalSize::new(640, 360))
+        .with_resizable(false)
+        .build(&event_loop).unwrap();
 
     // Renderer init
     let (width, height) = { let size = window.inner_size(); (size.width, size.height) };
@@ -44,7 +48,7 @@ pub fn main() {
     let mut surface = unsafe { Surface::new(&context, &window) }.unwrap();
 
     let mut renderer = Renderer::new(width as usize, height as usize);
-
+    dbg!("{:?}", (width, height));
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -54,8 +58,8 @@ pub fn main() {
                 if window_id == window.id() => { *control_flow = ControlFlow::Exit }
 
             // Exit window with ANY keypress
-            Event::WindowEvent { window_id, event: WindowEvent::KeyboardInput {..} }
-                if window_id == window.id() => { *control_flow = ControlFlow::Exit }
+            //Event::WindowEvent { window_id, event: WindowEvent::KeyboardInput {..} }
+            //    if window_id == window.id() => { *control_flow = ControlFlow::Exit }
 
             Event::RedrawRequested(window_id)
                 if window_id == window.id() => {
