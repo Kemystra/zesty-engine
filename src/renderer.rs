@@ -77,6 +77,10 @@ impl Renderer {
         &self.tmp_buffer
     }
 
+    pub fn clear_tmp_buffer(&mut self) {
+        self.tmp_buffer.iter_mut().for_each(|x| *x = 0);
+    }
+
     pub fn plot_pixel(&mut self, x: usize, y: usize, color: Color) {
         self.tmp_buffer[x + (y*self.width)] = color.get_rgb_u32();
     }
