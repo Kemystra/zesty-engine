@@ -41,7 +41,7 @@ impl Renderer {
     }
 
     pub fn render(&mut self, scene: &mut Scene) -> &Vec<u32> {
-        let rot = (PI/4.0) * (1.0/60.0);
+        let rot = (PI/4.0) * (1.0/200.0);
 
         for obj in scene.objects.iter_mut() {
 

@@ -49,15 +49,12 @@ pub fn main() {
 
     let mut renderer = Renderer::new(width as usize, height as usize);
     surface.resize(
-
         NonZeroU32::new(width).unwrap(),
         NonZeroU32::new(height).unwrap()
     ).unwrap();
 
 
     event_loop.run(move |event, _, control_flow| {
-        *control_flow = ControlFlow::Wait;
-
         match event {
             Event::WindowEvent { window_id, event: WindowEvent::CloseRequested }
                 if window_id == window.id() => { *control_flow = ControlFlow::Exit }
@@ -66,16 +63,14 @@ pub fn main() {
             //Event::WindowEvent { window_id, event: WindowEvent::KeyboardInput {..} }
             //    if window_id == window.id() => { *control_flow = ControlFlow::Exit }
 
-            Event::RedrawRequested(window_id)
-                if window_id == window.id() => {
+            Event::MainEventsCleared => {
+                let mut buffer = surface.buffer_mut().unwrap();
+                let tmp = renderer.render(&mut scene);
 
-                    let mut buffer = surface.buffer_mut().unwrap();
-                    let tmp = renderer.render(&mut scene);
+                buffer.copy_from_slice(tmp);
 
-                    buffer.copy_from_slice(tmp);
-
-                    buffer.present().unwrap();
-                }
+                buffer.present().unwrap();
+            }
 
             _ => {}
         }
