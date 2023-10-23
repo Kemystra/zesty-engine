@@ -11,5 +11,10 @@ softbuffer = "0.3.1"
 winit = "0.28.7"
 
 
-[profile.release]
-debug = 1
+[[bin]]
+name = "runner"
+path = "src/runner.rs"
+
+[[bin]]
+name = "editor"
+path = "src/editor.rs"
