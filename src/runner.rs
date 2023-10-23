@@ -25,7 +25,7 @@ pub fn main() {
 
     // Boilerplate section for testing
     let mut cube = Object3D::load_obj("test_scene/tinker.obj".to_string()).unwrap();
-    cube.transform.translate(Vector3D::new(0, 0, 80));
+    cube.transform.translate(Vector3D::new(0, 0, 5));
 
     let camera = Camera::new(1, 30, 90, AspectRatio(16.0, 9.0));
 
