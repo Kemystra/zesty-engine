@@ -4,8 +4,22 @@ use std::f64::consts::PI;
 
 use crate::transform::Transform;
 use crate::math_utils::vector3d::Vector3D;
-use crate::component;
+use crate::component::Component;
 
+
+pub struct Object {
+    pub transform: Transform,
+    pub components: Vec<Box<dyn Component>>
+}
+
+impl Object {
+    pub fn new() -> Self {
+        Self {
+            transform: Transform::new(),
+            components: vec![]
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct Object3D {
@@ -155,5 +169,18 @@ impl ProjectionData {
             -f / near_far_interval,
             -f*n / near_far_interval
         )
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn new_obj() {
+        let obj = Object::new();
+        assert_eq!(obj.transform, Transform::new());
+        assert_eq!(obj.components.len(), 0);
     }
 }
