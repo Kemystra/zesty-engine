@@ -8,11 +8,7 @@ use winit::dpi::PhysicalSize;
 
 use softbuffer::{Context, Surface};
 
-pub mod transform;
-pub mod math_utils;
-pub mod object;
-pub mod scene;
-pub mod renderer;
+use lib_engine::{scene, object, math_utils, renderer};
 
 use scene::Scene;
 use object::{Object3D, Camera, AspectRatio};

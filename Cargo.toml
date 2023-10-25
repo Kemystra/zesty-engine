@@ -10,11 +10,14 @@ rand = "0.8.5"
 softbuffer = "0.3.1"
 winit = "0.28.7"
 
+[lib]
+name = "lib_engine"
+path = "src/lib_engine.rs"
 
 [[bin]]
 name = "runner"
-path = "src/runner.rs"
+path = "src/bin/runner.rs"
 
 [[bin]]
 name = "editor"
-path = "src/editor.rs"
+path = "src/bin/editor.rs"
