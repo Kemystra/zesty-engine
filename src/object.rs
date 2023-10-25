@@ -3,7 +3,8 @@ use std::fs::File;
 use std::f64::consts::PI;
 
 use crate::transform::Transform;
-use crate::math_utils::{vector3d::Vector3D};
+use crate::math_utils::vector3d::Vector3D;
+use crate::component;
 
 
 #[derive(Debug)]
