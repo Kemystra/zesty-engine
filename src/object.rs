@@ -20,15 +20,15 @@ impl Object {
         }
     }
 }
-
+/*
 #[derive(Debug)]
-pub struct Object3D {
+pub struct Object {
     pub transform: Transform,
     vertices: Vec<Vector3D>,
     triangles: Vec<[usize; 3]>
 }
 
-impl Object3D {
+impl Object {
     pub fn new(vertices: Vec<Vector3D>, triangles: Vec<[usize; 3]>) -> Self {
         Self {
             transform: Transform::new(),
@@ -93,7 +93,7 @@ impl Object3D {
         &self.triangles
     }
 }
-
+*/
 #[derive(Debug)]
 pub struct Camera {
     pub transform: Transform,
