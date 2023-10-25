@@ -6,7 +6,7 @@ use vector3d::Vector3D;
 
 // The struct will have getter and setter
 // So that we can use a dirty flag to track any changes
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Transform {
     matrix: Matrix3x4,
     inverse_matrix: Matrix3x4,
