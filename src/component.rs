@@ -7,7 +7,7 @@ pub enum ComponentType {
 }
 
 pub trait Component {
-    fn get_type(&self) -> ComponentType;
+    fn type(&self) -> ComponentType;
 }
 
 
@@ -28,14 +28,14 @@ mod tests {
     }
 
     impl Component for TestComponent {
-        fn get_type(&self) -> ComponentType {
+        fn type(&self) -> ComponentType {
             self.component_type
         }
     }
 
     #[test]
-    fn get_type() {
+    fn type() {
         let test_comp = TestComponent::new();
-        assert_eq!(test_comp.get_type(), ComponentType::Mesh);
+        assert_eq!(test_comp.type(), ComponentType::Mesh);
     }
 }

@@ -16,7 +16,7 @@ impl Color {
         }
     }
 
-    pub fn get_rgb_u32(&self) -> u32 {
+    pub fn rgb_u32(&self) -> u32 {
         (self.r as u32) | ((self.g as u32) << 8) | ((self.b as u32) << 16)
     }
 }
@@ -46,7 +46,7 @@ impl Renderer {
         for obj in scene.objects.iter_mut() {
 
             let mut tmp_vertex: Vec<[usize; 2]> = vec![];
-            for vertex in obj.get_vertices() {
+            for vertex in obj.vertices() {
                 let vertex_in_world = obj.transform.to_world_space(*vertex);
                 let vertex_in_cam = scene.camera.transform.to_local_space(vertex_in_world);
                 let screen_coords = scene.camera.project_to_screen_space(vertex_in_cam);
@@ -63,7 +63,7 @@ impl Renderer {
                 tmp_vertex.push([final_x, final_y]);
             }
 
-            for face in obj.get_triangles() {
+            for face in obj.triangles() {
                 let v1 = tmp_vertex[face[0]];
                 let v2 = tmp_vertex[face[1]];
                 let v3 = tmp_vertex[face[2]];
@@ -82,7 +82,7 @@ impl Renderer {
     }
 
     pub fn plot_pixel(&mut self, x: usize, y: usize, color: Color) {
-        self.tmp_buffer[x + (y*self.width)] = color.get_rgb_u32();
+        self.tmp_buffer[x + (y*self.width)] = color.rgb_u32();
     }
 
     pub fn bresenham_line(
@@ -149,6 +149,6 @@ mod tests {
         let color = Color::new(100, 234, 88);
         let expected = 100_u32 | (234 << 8) | (88 << 16);
 
-        assert_eq!(color.get_rgb_u32(), expected);
+        assert_eq!(color.rgb_u32(), expected);
     }
 }

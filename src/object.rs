@@ -85,11 +85,11 @@ impl Object3D {
 
     // Note that we use read-only borrow here
     // because we don't need to edit anything really
-    pub fn get_vertices(&self) -> &Vec<Vector3D> {
+    pub fn vertices(&self) -> &Vec<Vector3D> {
         &self.vertices
     }
 
-    pub fn get_triangles(&self) -> &Vec<[usize; 3]> {
+    pub fn triangles(&self) -> &Vec<[usize; 3]> {
         &self.triangles
     }
 }
@@ -121,7 +121,7 @@ impl Camera {
         }
     }
 
-    pub fn get_projection_data(&mut self) -> &ProjectionData {
+    pub fn projection_data(&mut self) -> &ProjectionData {
         if self.dirty_flag {
             self.projection_data = ProjectionData::generate(
                 self.near_clip_distance, 
@@ -136,7 +136,7 @@ impl Camera {
     pub fn project_to_screen_space(&mut self, point: Vector3D) -> Vector3D {
         // Deconstructing the data
         // What the actual frick
-        let ProjectionData(w_scaler, h_scaler, m1, m2) = self.get_projection_data();
+        let ProjectionData(w_scaler, h_scaler, m1, m2) = self.projection_data();
         let x = point.x * w_scaler;
         let y = point.y * h_scaler;
         let z = (point.z * m1) + m2;

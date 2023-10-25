@@ -47,11 +47,11 @@ impl Transform {
         })
     }
 
-    pub fn get_matrix(&self) -> Matrix3x4 {
+    pub fn matrix(&self) -> Matrix3x4 {
        self.matrix 
     }
 
-    pub fn get_inverse_matrix(&mut self) -> Matrix3x4 {
+    pub fn inverse_matrix(&mut self) -> Matrix3x4 {
         if self.dirty_flag {
             self.inverse_matrix = invert_matrix(&self.matrix).unwrap();
         }
@@ -164,7 +164,7 @@ mod tests {
         transform.translate(vec_random);
         assert_eq!(transform.has_changed(), true);
 
-        let new_matrix = transform.get_matrix();
+        let new_matrix = transform.matrix();
         assert_eq!(new_matrix[3], [a,b,c]);
     }
 
@@ -172,7 +172,7 @@ mod tests {
     fn rotate_transform() {
         let mut transform = Transform::new();
         transform.rotate(1.0, 2.0, 0.5);
-        let result = transform.get_matrix();
+        let result = transform.matrix();
 
         let expected = [
             [-0.36520, 0.41245, 0.83458],
