@@ -7,7 +7,7 @@ pub enum ComponentType {
 }
 
 pub trait Component {
-    fn type(&self) -> ComponentType;
+    fn component_type(&self) -> ComponentType;
 }
 
 
@@ -16,26 +16,26 @@ mod tests {
     use super::*;
 
     struct TestComponent {
-        component_type: ComponentType
+        component_component_type: ComponentType
     }
 
     impl TestComponent {
         fn new() -> Self {
             Self {
-                component_type: ComponentType::Mesh
+                component_component_type: ComponentType::Mesh
             }
         }
     }
 
     impl Component for TestComponent {
-        fn type(&self) -> ComponentType {
-            self.component_type
+        fn component_type(&self) -> ComponentType {
+            self.component_component_type
         }
     }
 
     #[test]
-    fn type() {
+    fn component_type() {
         let test_comp = TestComponent::new();
-        assert_eq!(test_comp.type(), ComponentType::Mesh);
+        assert_eq!(test_comp.component_type(), ComponentType::Mesh);
     }
 }
