@@ -1,7 +1,7 @@
-use crate::object::{Object3D, Camera};
+use crate::object::{Object, Camera};
 
 #[derive(Debug)]
 pub struct Scene {
-    pub objects: Vec<Object3D>,
+    pub objects: Vec<Object>,
     pub camera: Camera
 }

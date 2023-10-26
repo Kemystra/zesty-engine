@@ -11,7 +11,7 @@ use softbuffer::{Context, Surface};
 use lib_engine::{scene, object, math_utils, renderer};
 
 use scene::Scene;
-use object::{Object3D, Camera, AspectRatio};
+use object::{Object, Camera, AspectRatio};
 use math_utils::vector3d::Vector3D;
 use renderer::Renderer;
 
@@ -20,7 +20,7 @@ pub fn main() {
     // Thank you, past me
 
     // Boilerplate section for testing
-    let mut cube = Object3D::load_obj("test_scene/tinker.obj".to_string()).unwrap();
+    let mut cube = Object::load_obj("test_scene/tinker.obj".to_string()).unwrap();
     cube.transform.translate(Vector3D::new(0, 0, 5));
 
     let camera = Camera::new(1, 30, 90, AspectRatio(16.0, 9.0));
