@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::io::{self, BufReader, BufRead};
 use std::fs::File;
 use std::f64::consts::PI;
@@ -9,14 +10,14 @@ use crate::component::Component;
 
 pub struct Object {
     pub transform: Transform,
-    pub components: Vec<Box<dyn Component>>
+    components: HashMap<String, Box<dyn Component>>
 }
 
 impl Object {
     pub fn new() -> Self {
         Self {
             transform: Transform::new(),
-            components: vec![]
+            components: HashMap::new()
         }
     }
 }
