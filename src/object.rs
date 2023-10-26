@@ -8,6 +8,7 @@ use crate::math_utils::vector3d::Vector3D;
 use crate::component::Component;
 
 
+#[derive(Debug)]
 pub struct Object {
     pub transform: Transform,
     components: HashMap<String, Box<dyn Component>>

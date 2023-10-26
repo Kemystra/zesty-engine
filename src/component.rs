@@ -1,13 +1,16 @@
 use core::fmt;
 
 
-#[derive(Debug, PartialEq, Clone, Copy)]
-pub enum ComponentType {
-    Mesh
+pub trait Component {}
+
+impl fmt::Debug for dyn Component {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Help")
+    }
 }
 
-pub trait Component {
-    fn component_type(&self) -> ComponentType;
+pub trait ComponentType: Component {
+    const TYPE: String;
 }
 
 
@@ -15,27 +18,16 @@ pub trait Component {
 mod tests {
     use super::*;
 
-    struct TestComponent {
-        component_component_type: ComponentType
-    }
+    struct TestComponent;
 
-    impl TestComponent {
-        fn new() -> Self {
-            Self {
-                component_component_type: ComponentType::Mesh
-            }
-        }
-    }
+    impl Component for TestComponent {}
 
-    impl Component for TestComponent {
-        fn component_type(&self) -> ComponentType {
-            self.component_component_type
-        }
+    impl ComponentType for TestComponent {
+        const TYPE: String = "Mesh".to_string();
     }
 
     #[test]
     fn component_type() {
-        let test_comp = TestComponent::new();
-        assert_eq!(test_comp.component_type(), ComponentType::Mesh);
+        assert_eq!(TestComponent::TYPE, "Mesh");
     }
 }
