@@ -20,16 +20,24 @@ pub trait ComponentType: Component {
 mod tests {
     use super::*;
 
-    struct TestComponent;
+    struct ManualImplComponent;
 
-    impl Component for TestComponent {}
+    impl Component for ManualImplComponent {}
 
-    impl ComponentType for TestComponent {
+    impl ComponentType for ManualImplComponent {
         const TYPE: String = "Test".to_string();
     }
 
     #[test]
     fn component_type() {
-        assert_eq!(TestComponent::TYPE, "Test");
+        assert_eq!(ManualImplComponent::TYPE, "Test");
+    }
+
+    #[derive(Component, ComponentType)]
+    struct AutoImplComponent;
+
+    #[test]
+    fn component_custom_derive() {
+        assert_eq!(AutoImplComponent::TYPE, "AutoImplComponent");
     }
 }
