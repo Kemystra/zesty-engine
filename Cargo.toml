@@ -9,6 +9,7 @@ edition = "2021"
 rand = "0.8.5"
 softbuffer = "0.3.1"
 winit = "0.28.7"
+lib_derive = { path = "lib_derive/" }
 
 [lib]
 name = "lib_engine"
