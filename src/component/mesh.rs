@@ -13,11 +13,11 @@ pub struct Mesh {
 }
 
 impl Mesh {
-    pub fn new(vertices: Vec<Vector3D>, triangles: Vec<[usize; 3]>) -> Self {
+    pub fn new() -> Self {
         Self {
             src: "".to_string(),
-            vertices,
-            triangles
+            vertices: vec![],
+            triangles: vec![]
         }
     }
 
@@ -77,5 +77,17 @@ impl Mesh {
 
     pub fn triangles(&self) -> &Vec<[usize; 3]> {
         &self.triangles
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mesh_init() {
+        let mesh = Mesh::new();
+        assert_eq!(mesh.vertices.len(), 0);
+        assert_eq!(mesh.triangles.len(), 0);
     }
 }
