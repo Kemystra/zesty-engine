@@ -7,7 +7,7 @@ pub trait Component {}
 
 impl fmt::Debug for dyn Component {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Help")
+        write!(f, "Component")
     }
 }
 
@@ -25,11 +25,11 @@ mod tests {
     impl Component for TestComponent {}
 
     impl ComponentType for TestComponent {
-        const TYPE: String = "Mesh".to_string();
+        const TYPE: String = "Test".to_string();
     }
 
     #[test]
     fn component_type() {
-        assert_eq!(TestComponent::TYPE, "Mesh");
+        assert_eq!(TestComponent::TYPE, "Test");
     }
 }
