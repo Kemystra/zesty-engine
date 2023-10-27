@@ -1,10 +1,10 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn;
+use syn::{self, DeriveInput};
 
 #[proc_macro_derive(Component)]
 pub fn component_derive(input: TokenStream) -> TokenStream {
-    let ast = syn::parse(input).unwrap();
+    let ast: DeriveInput = syn::parse(input).unwrap();
     let name = ast.ident;
     let generated_impl = quote! {
         impl Component for #name {}
@@ -15,7 +15,7 @@ pub fn component_derive(input: TokenStream) -> TokenStream {
 
 #[proc_macro_derive(ComponentType)]
 pub fn component_type_derive(input: TokenStream) -> TokenStream {
-    let ast = syn::parse(input).unwrap();
+    let ast: DeriveInput = syn::parse(input).unwrap();
     let name = ast.ident;
     let generated_impl = quote! {
         impl ComponentType for #name {
