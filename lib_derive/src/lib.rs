@@ -1,14 +1,27 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+use proc_macro::TokenStream;
+use quote::quote;
+use syn;
+
+#[proc_macro_derive(Component)]
+pub fn component_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    let name = ast.ident;
+    let generated_impl = quote! {
+        impl Component for #name {}
+    };
+
+    generated_impl.into()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[proc_macro_derive(ComponentType)]
+pub fn component_type_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    let name = ast.ident;
+    let generated_impl = quote! {
+        impl ComponentType for #name {
+            const TYPE: String = stringify!(#name);
+        }
+    };
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+    generated_impl.into()
 }
