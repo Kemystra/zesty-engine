@@ -1,5 +1,7 @@
 use core::fmt;
 
+use lib_derive::{Component, ComponentType};
+
 mod mesh;
 
 
