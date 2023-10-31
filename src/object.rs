@@ -113,6 +113,8 @@ impl ProjectionData {
 
 #[cfg(test)]
 mod tests {
+    use std::any::Any;
+
     use crate::component::{Component, ComponentType};
     use lib_derive::{Component, ComponentType};
 
@@ -142,5 +144,31 @@ mod tests {
         let result = obj.get_component::<TestComponent>();
 
         assert_eq!(result, Some(&TestComponent{}));
+    }
+
+    #[derive(Debug, Component, ComponentType, PartialEq)]
+    struct ComponentWithField {
+        name: String
+    }
+
+    #[test]
+    fn get_mutable_component() {
+        let mut obj = Object::new();
+        let comp = ComponentWithField {
+            name: "Hewwo".to_string()
+        };
+
+        obj.add_component(comp);
+
+        let mut mutable_comp = obj
+            .get_component_mut::<ComponentWithField>()
+            .unwrap();
+        mutable_comp.name = "Za Warudo!".to_string();
+
+        let new_comp = obj
+            .get_component::<ComponentWithField>()
+            .unwrap();
+
+        assert_eq!(new_comp.name, "Za Warudo!".to_string());
     }
 }
