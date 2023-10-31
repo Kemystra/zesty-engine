@@ -3,7 +3,7 @@ use std::f64::consts::PI;
 
 use crate::transform::Transform;
 use crate::math_utils::vector3d::Vector3D;
-use crate::component::Component;
+use crate::component::{Component, ComponentType};
 
 
 #[derive(Debug)]
@@ -20,7 +20,16 @@ impl Object {
         }
     }
 
+    pub fn add_component<T>(&mut self, component: T)
+    where T: Component + ComponentType {
+        self.components.insert(T::TYPE, Box::new(component));
+    }
 
+    pub fn get_component<T>(&self) -> Option<&T>
+    where T: Component + ComponentType {
+        let dyn_obj = self.components.get(&T::TYPE)?;
+        dyn_obj.as_any().downcast_ref::<T>()
+    }
 }
 
 #[derive(Debug)]
