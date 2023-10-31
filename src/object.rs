@@ -124,7 +124,7 @@ mod tests {
         assert_eq!(obj.transform, Transform::new());
     }
 
-    #[derive(Debug, Component, ComponentType)]
+    #[derive(Debug, Component, ComponentType, PartialEq)]
     struct TestComponent {}
 
     #[test]
@@ -137,10 +137,10 @@ mod tests {
 
     #[test]
     fn add_comp_to_obj() {
-        let obj = Object::new();
+        let mut obj = Object::new();
         obj.add_component(TestComponent{});
         let result = obj.get_component::<TestComponent>();
 
-        assert_eq!(result, Some(TestComponent{}));
+        assert_eq!(result, Some(&TestComponent{}));
     }
 }
