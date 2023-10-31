@@ -3,7 +3,7 @@ use std::any::Any;
 
 use lib_derive::{Component, ComponentType};
 
-mod mesh;
+pub mod mesh;
 
 
 pub trait Component {
