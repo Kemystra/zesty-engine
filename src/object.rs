@@ -30,6 +30,12 @@ impl Object {
         let dyn_obj = self.components.get(&T::TYPE)?;
         dyn_obj.as_any().downcast_ref::<T>()
     }
+
+    pub fn get_component_mut<T>(&mut self) -> Option<&mut T>
+    where T: Component + ComponentType {
+        let dyn_obj = self.components.get_mut(&T::TYPE)?;
+        dyn_obj.as_any().downcast_mut::<T>()
+    }
 }
 
 #[derive(Debug)]
