@@ -104,12 +104,8 @@ fn fast_3x4_multiply(matrix: &Matrix3x4, point: Vector3D) -> Vector3D {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::round_place;
     use rand::Rng;
-
-    fn round_place(num: f64, place: usize) -> f64{
-        let mult = 10_f64.powf(place as f64);
-        (num*mult).round() / mult
-    }
 
     fn round_vector3d(vector: Vector3D) -> [f64; 3] {
         [

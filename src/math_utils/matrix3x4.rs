@@ -83,7 +83,7 @@ pub fn invert_matrix(matrix: &Matrix3x4) -> Result<Matrix3x4, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math_utils::round_place;
+    use crate::test_utils::round_place;
 
     #[test]
     fn invert_trs_matrix() {

@@ -100,7 +100,7 @@ impl Quaternion {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math_utils::round_place;
+    use crate::test_utils::round_place;
 
     fn compare_quaternions(q: Quaternion, precision: usize,
         a2: f64, b2: f64, c2: f64, d2: f64) {
