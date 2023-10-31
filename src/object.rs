@@ -19,6 +19,8 @@ impl Object {
             components: HashMap::new()
         }
     }
+
+
 }
 
 #[derive(Debug)]
@@ -102,12 +104,34 @@ impl ProjectionData {
 
 #[cfg(test)]
 mod tests {
+    use crate::component::{Component, ComponentType};
+    use lib_derive::{Component, ComponentType};
+
     use super::*;
 
     #[test]
     fn new_obj() {
         let obj = Object::new();
         assert_eq!(obj.transform, Transform::new());
-        assert_eq!(obj.components.len(), 0);
+    }
+
+    #[derive(Debug, Component, ComponentType)]
+    struct TestComponent {}
+
+    #[test]
+    fn get_none_component() {
+        let obj = Object::new();
+        let result = obj.get_component::<TestComponent>();
+
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn add_comp_to_obj() {
+        let obj = Object::new();
+        obj.add_component(TestComponent{});
+        let result = obj.get_component::<TestComponent>();
+
+        assert_eq!(result, Some(TestComponent{}));
     }
 }
