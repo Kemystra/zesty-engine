@@ -1,11 +1,15 @@
 use core::fmt;
+use std::any::Any;
 
 use lib_derive::{Component, ComponentType};
 
 mod mesh;
 
 
-pub trait Component {}
+pub trait Component {
+    fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
+}
 
 impl fmt::Debug for dyn Component {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
