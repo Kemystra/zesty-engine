@@ -22,9 +22,18 @@ pub trait ComponentType: Component {
 mod tests {
     use super::*;
 
+    #[derive(Debug)]
     struct ManualImplComponent;
 
-    impl Component for ManualImplComponent {}
+    impl Component for ManualImplComponent {
+        fn as_any(&self) -> &dyn Any {
+            self
+        }
+
+        fn as_any_mut(&mut self) -> &mut dyn Any {
+            self
+        }
+    }
 
     impl ComponentType for ManualImplComponent {
         const TYPE: String = "Test".to_string();
@@ -35,7 +44,7 @@ mod tests {
         assert_eq!(ManualImplComponent::TYPE, "Test");
     }
 
-    #[derive(Component, ComponentType)]
+    #[derive(Component, ComponentType, Debug, PartialEq)]
     struct AutoImplComponent;
 
     #[test]
@@ -50,20 +59,22 @@ mod tests {
 
         let original_a = trait_obj_a
             .as_any()
-            .downcast_ref::<AutoImplComponent>();
+            .downcast_ref::<AutoImplComponent>()
+            .unwrap();
 
-        assert_eq!(original_a, Some(&a));
+        assert_eq!(original_a, &a);
     }
 
     #[test]
     fn get_concrete_type_back_mut() {
         let mut a = AutoImplComponent{};
-        let trait_obj_a: Box<dyn Component> = Box::new(a);
+        let mut trait_obj_a: Box<dyn Component> = Box::new(a);
 
         let original_a = trait_obj_a
-            .as_any()
-            .downcast_mut::<AutoImplComponent>();
+            .as_any_mut()
+            .downcast_mut::<AutoImplComponent>()
+            .unwrap();
 
-        assert_eq!(original_a, Some(&mut a));
+        assert_eq!(original_a, &mut a);
     }
 }
