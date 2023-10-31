@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
+use std::any::Any;
 
 use crate::math_utils::vector3d::Vector3D;
 use super::{Component, ComponentType};

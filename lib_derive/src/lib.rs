@@ -7,7 +7,6 @@ pub fn component_derive(input: TokenStream) -> TokenStream {
     let ast: DeriveInput = syn::parse(input).unwrap();
     let name = ast.ident;
     let generated_impl = quote! {
-        use std::any::Any;
         impl Component for #name {
             fn as_any(&self) -> &dyn Any {
                 self
