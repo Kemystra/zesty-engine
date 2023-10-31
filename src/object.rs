@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use std::io::{self, BufReader, BufRead};
-use std::fs::File;
 use std::f64::consts::PI;
 
 use crate::transform::Transform;
