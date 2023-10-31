@@ -42,4 +42,28 @@ mod tests {
     fn component_custom_derive() {
         assert_eq!(AutoImplComponent::TYPE, "AutoImplComponent");
     }
+
+    #[test]
+    fn get_concrete_type_back() {
+        let a = AutoImplComponent{};
+        let trait_obj_a: Box<dyn Component> = Box::new(a);
+
+        let original_a = trait_obj_a
+            .as_any()
+            .downcast_ref::<AutoImplComponent>();
+
+        assert_eq!(original_a, Some(&a));
+    }
+
+    #[test]
+    fn get_concrete_type_back_mut() {
+        let mut a = AutoImplComponent{};
+        let trait_obj_a: Box<dyn Component> = Box::new(a);
+
+        let original_a = trait_obj_a
+            .as_any()
+            .downcast_mut::<AutoImplComponent>();
+
+        assert_eq!(original_a, Some(&mut a));
+    }
 }
