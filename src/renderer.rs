@@ -1,6 +1,8 @@
+use std::f64::consts::PI;
+
 use crate::scene::Scene;
 use crate::math_utils::vector3d::Vector3D;
-use std::f64::consts::PI;
+use crate::component::mesh::Mesh;
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Color {
@@ -44,9 +46,10 @@ impl Renderer {
         let rot = (PI/4.0) * (1.0/200.0);
 
         for obj in scene.objects.iter_mut() {
+            let mesh = obj.get_component::<Mesh>().unwrap();
 
             let mut tmp_vertex: Vec<[usize; 2]> = vec![];
-            for vertex in obj.vertices() {
+            for vertex in mesh.vertices() {
                 let vertex_in_world = obj.transform.to_world_space(*vertex);
                 let vertex_in_cam = scene.camera.transform.to_local_space(vertex_in_world);
                 let screen_coords = scene.camera.project_to_screen_space(vertex_in_cam);
@@ -63,7 +66,7 @@ impl Renderer {
                 tmp_vertex.push([final_x, final_y]);
             }
 
-            for face in obj.triangles() {
+            for face in mesh.triangles() {
                 let v1 = tmp_vertex[face[0]];
                 let v2 = tmp_vertex[face[1]];
                 let v3 = tmp_vertex[face[2]];
