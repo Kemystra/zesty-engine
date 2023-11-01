@@ -66,12 +66,12 @@ mod tests {
             .downcast_ref::<AutoImplComponent>()
             .unwrap();
 
-        assert_eq!(original_a, &a);
+        assert_eq!(original_a, &AutoImplComponent{});
     }
 
     #[test]
     fn get_concrete_type_back_mut() {
-        let mut a = AutoImplComponent{};
+        let a = AutoImplComponent{};
         let mut trait_obj_a: Box<dyn Component> = Box::new(a);
 
         let original_a = trait_obj_a
@@ -79,6 +79,6 @@ mod tests {
             .downcast_mut::<AutoImplComponent>()
             .unwrap();
 
-        assert_eq!(original_a, &mut a);
+        assert_eq!(original_a, &mut AutoImplComponent{});
     }
 }
