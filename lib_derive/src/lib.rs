@@ -27,7 +27,7 @@ pub fn component_type_derive(input: TokenStream) -> TokenStream {
     let name = ast.ident;
     let generated_impl = quote! {
         impl ComponentType for #name {
-            const TYPE: String = stringify!(#name).to_string();
+            const TYPE: &'static str = stringify!(#name);
         }
     };
 

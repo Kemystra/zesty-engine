@@ -18,7 +18,7 @@ impl fmt::Debug for dyn Component {
 }
 
 pub trait ComponentType: Component {
-    const TYPE: String;
+    const TYPE: &'static str;
 }
 
 
@@ -40,7 +40,7 @@ mod tests {
     }
 
     impl ComponentType for ManualImplComponent {
-        const TYPE: String = "Test".to_string();
+        const TYPE: &'static str = "Test";
     }
 
     #[test]

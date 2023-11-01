@@ -9,7 +9,7 @@ use crate::component::{Component, ComponentType};
 #[derive(Debug)]
 pub struct Object {
     pub transform: Transform,
-    components: HashMap<String, Box<dyn Component>>
+    components: HashMap<&'static str, Box<dyn Component>>
 }
 
 impl Object {
@@ -21,20 +21,20 @@ impl Object {
     }
 
     pub fn add_component<T>(&mut self, component: T)
-    where T: Component + ComponentType {
+    where T: Component + ComponentType + 'static {
         self.components.insert(T::TYPE, Box::new(component));
     }
 
     pub fn get_component<T>(&self) -> Option<&T>
-    where T: Component + ComponentType {
+    where T: Component + ComponentType + 'static {
         let dyn_obj = self.components.get(&T::TYPE)?;
         dyn_obj.as_any().downcast_ref::<T>()
     }
 
     pub fn get_component_mut<T>(&mut self) -> Option<&mut T>
-    where T: Component + ComponentType {
+    where T: Component + ComponentType + 'static {
         let dyn_obj = self.components.get_mut(&T::TYPE)?;
-        dyn_obj.as_any().downcast_mut::<T>()
+        dyn_obj.as_any_mut().downcast_mut::<T>()
     }
 }
 
