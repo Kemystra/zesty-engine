@@ -28,9 +28,6 @@ impl Mesh {
         let file = File::open(file_path)?;
         let mut lines = BufReader::new(file).lines();
 
-        let mut vertices: Vec<Vector3D> = vec![];
-        let mut triangles: Vec<[usize; 3]> = vec![];
-
         // I just want to parse text
         // Why tf is it so complicated
         while let Some(Ok(line)) = lines.next() {
@@ -44,7 +41,7 @@ impl Mesh {
                     vertex_data.next().unwrap().parse::<f64>().unwrap(),
                 );
 
-                vertices.push(vertex);
+                self.vertices.push(vertex);
             }
 
             if line.chars().nth(0) == Some('f') {
@@ -58,11 +55,11 @@ impl Mesh {
                     facet_data.next().unwrap().parse::<usize>().unwrap() - 1,
                 ];
 
-                triangles.push(facet);
+                self.triangles.push(facet);
             }
         }
 
-        if vertices.len() == 0 || triangles.len() == 0 {
+        if self.vertices.len() == 0 || self.triangles.len() == 0 {
             let no_3d_data_error = io::Error::new(io::ErrorKind::Other, "No 3D data found.");
             return Err(no_3d_data_error)
         }
