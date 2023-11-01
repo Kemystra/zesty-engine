@@ -25,7 +25,8 @@ pub fn main() {
     cube.transform.translate(Vector3D::new(0, 0, 5));
 
     let mut mesh = Mesh::new();
-    cube.add_component();
+    mesh.load_obj("./test_scene/tinker.obj").unwrap();
+    cube.add_component(mesh);
 
     let camera = Camera::new(1, 30, 90, AspectRatio(16.0, 9.0));
 
