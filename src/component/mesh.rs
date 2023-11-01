@@ -22,8 +22,8 @@ impl Mesh {
         }
     }
 
-    pub fn load_obj(&mut self, file_path: String) -> io::Result<()> {
-        self.src = file_path;
+    pub fn load_obj(&mut self, file_path: &str) -> io::Result<()> {
+        self.src = file_path.to_string();
 
         let file = File::open(file_path)?;
         let mut lines = BufReader::new(file).lines();
