@@ -17,9 +17,6 @@ use math_utils::vector3d::Vector3D;
 use renderer::Renderer;
 
 pub fn main() {
-    // NOTE: the coordinates are left-handed
-    // Thank you, past me
-
     // Boilerplate section for testing
     let mut cube = Object::new();
     cube.transform.translate(Vector3D::new(0, 0, 5));
