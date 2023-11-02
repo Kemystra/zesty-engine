@@ -69,9 +69,9 @@ pub fn main() {
 
             Event::MainEventsCleared => {
                 let mut buffer = surface.buffer_mut().unwrap();
-                let tmp = renderer.render(&mut scene);
+                renderer.render(&mut scene);
 
-                buffer.copy_from_slice(tmp);
+                buffer.copy_from_slice(renderer.buffer()) ;
 
                 buffer.present().unwrap();
                 renderer.clear_tmp_buffer();

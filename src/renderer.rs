@@ -42,7 +42,7 @@ impl Renderer {
         }
     }
 
-    pub fn render(&mut self, scene: &mut Scene) -> &Vec<u32> {
+    pub fn render(&mut self, scene: &mut Scene) {
         let rot = (PI/4.0) * (1.0/200.0);
 
         for obj in scene.objects.iter_mut() {
@@ -66,17 +66,11 @@ impl Renderer {
                 tmp_vertex.push([final_x, final_y]);
             }
 
-            for face in mesh.triangles() {
-                let v1 = tmp_vertex[face[0]];
-                let v2 = tmp_vertex[face[1]];
-                let v3 = tmp_vertex[face[2]];
-                self.bresenham_line(WHITE, v1[0], v1[1], v2[0], v2[1]);
-                self.bresenham_line(WHITE, v2[0], v2[1], v3[0], v3[1]);
-            }
-
             obj.transform.rotate(rot, 0.0, rot);
         }
+    }
 
+    pub fn buffer(&self) -> &Vec<u32> {
         &self.tmp_buffer
     }
 
