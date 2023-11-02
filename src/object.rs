@@ -105,13 +105,13 @@ pub struct ProjectionData(f64, f64, f64, f64);
 // I'm just gonna hard code the aspect ratio lol
 impl ProjectionData {
     pub fn generate(n: f64, f: f64, fov: f64, ratio: AspectRatio) -> ProjectionData {
-        let fov_tan_val = n * (fov/2.0 * PI/180.0).tan();
+        let fov_tan_val = (fov/2.0 * PI/180.0).tan();
         let near_far_interval = f - n;
         ProjectionData(
             1.0 / (fov_tan_val),
             ratio.0 / (ratio.1*fov_tan_val),
             -f / near_far_interval,
-            -f*n / near_far_interval
+            f*n / near_far_interval
         )
     }
 }

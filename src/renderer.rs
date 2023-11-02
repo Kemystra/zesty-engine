@@ -57,7 +57,7 @@ impl Renderer {
                 let ncd_coords = Vector3D {
                     x: (screen_coords.x + 1.0) * 0.5,
                     y: (screen_coords.y + 1.0) * 0.5,
-                    z: (screen_coords.z + 1.0) * 0.5,
+                    z: screen_coords.z,
                 };
 
                 let final_x = (ncd_coords.x * self.width as f64) as usize;
