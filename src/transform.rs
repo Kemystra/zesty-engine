@@ -1,5 +1,5 @@
-use crate::math_utils::{vector3d, quaternion, matrix3x4};
-use matrix3x4::{Matrix3x4, invert_matrix};
+use crate::math_utils::{vector3d, quaternion, matrix4x4};
+use matrix4x4::{Matrix4x4, invert_matrix};
 use quaternion::{Quaternion, IDENTITY_QUATERNION};
 use vector3d::Vector3D;
 
@@ -8,8 +8,8 @@ use vector3d::Vector3D;
 // So that we can use a dirty flag to track any changes
 #[derive(Debug, PartialEq)]
 pub struct Transform {
-    matrix: Matrix3x4,
-    inverse_matrix: Matrix3x4,
+    matrix: Matrix4x4,
+    inverse_matrix: Matrix4x4,
     rotation: Quaternion,
     scale: Vector3D,
     dirty_flag: bool
@@ -36,7 +36,7 @@ impl Transform {
         }
     }
 
-    pub fn from_matrix(matrix: Matrix3x4) -> Result<Self, String>{
+    pub fn from_matrix(matrix: Matrix4x4) -> Result<Self, String>{
         Ok(
         Self {
             matrix,
@@ -47,11 +47,11 @@ impl Transform {
         })
     }
 
-    pub fn matrix(&self) -> Matrix3x4 {
+    pub fn matrix(&self) -> Matrix4x4 {
        self.matrix 
     }
 
-    pub fn inverse_matrix(&mut self) -> Matrix3x4 {
+    pub fn inverse_matrix(&mut self) -> Matrix4x4 {
         if self.dirty_flag {
             self.inverse_matrix = invert_matrix(&self.matrix).unwrap();
         }
@@ -92,7 +92,7 @@ impl Transform {
 // Helps to convert between local and world coord. system
 // Note that transform can also be the inverted version
 #[inline]
-fn fast_3x4_multiply(matrix: &Matrix3x4, point: Vector3D) -> Vector3D {
+fn fast_3x4_multiply(matrix: &Matrix4x4, point: Vector3D) -> Vector3D {
     Vector3D { 
         x: matrix[0][0]*point.x + matrix[1][0]*point.y + matrix[2][0]*point.z + matrix[3][0],
         y: matrix[0][1]*point.x + matrix[1][1]*point.y + matrix[2][1]*point.z + matrix[3][1],

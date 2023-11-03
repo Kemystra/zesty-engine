@@ -1,18 +1,18 @@
-pub type Matrix3x4 = [[f64; 3]; 4];
+pub type Matrix4x4 = [[f64; 4]; 4];
 
-pub const NIL_MATRIX3X4: Matrix3x4 = [
-    [1.0, 0.0, 0.0], 
-    [0.0, 1.0, 0.0], 
-    [0.0, 0.0, 1.0], 
-    [0.0, 0.0, 0.0]
+pub const NIL_MATRIX4X4: Matrix4x4 = [
+    [1.0, 0.0, 0.0, 0.0], 
+    [0.0, 1.0, 0.0, 0.0], 
+    [0.0, 0.0, 1.0, 0.0], 
+    [0.0, 0.0, 0.0, 0.0]
 ];
 
-pub fn invert_matrix(matrix: &Matrix3x4) -> Result<Matrix3x4, String> {
-    const ROW: usize = 4;
-    const COL: usize = 3;
+pub fn invert_matrix(matrix: &Matrix4x4, ignore_4th_col: bool) -> Result<Matrix4x4, String> {
+    let ROW: usize = 4;
+    let COL: usize = if ignore_4th_col { 3 } else { 4 };
 
     let mut matrix = matrix.clone();
-    let mut inv_matrix = NIL_MATRIX3X4.clone();
+    let mut inv_matrix = NIL_MATRIX4X4.clone();
 
     for column in 0..COL {
         // Making sure pivot is a non-zero number

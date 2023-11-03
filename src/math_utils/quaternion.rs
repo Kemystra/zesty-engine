@@ -1,5 +1,5 @@
-use crate::math_utils::{matrix3x4, vector3d};
-use matrix3x4::Matrix3x4;
+use crate::math_utils::{matrix4x4, vector3d};
+use matrix4x4::Matrix4x4;
 use vector3d::Vector3D;
 
 use std::ops::{Mul, MulAssign};
@@ -55,7 +55,7 @@ impl Quaternion {
         )
     }
 
-    pub fn update_3x4_matrix(&self, matrix: &mut Matrix3x4, scale: &Vector3D) {
+    pub fn update_3x4_matrix(&self, matrix: &mut Matrix4x4, scale: &Vector3D) {
         let wx = self.0 * self.1 * 2.0;
         let wy = self.0 * self.2 * 2.0;
         let wz = self.0 * self.3 * 2.0;

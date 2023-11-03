@@ -1,5 +1,5 @@
 pub mod vector3d;
-pub mod matrix3x4;
+pub mod matrix4x4;
 pub mod quaternion;
 
 pub fn clamp<T: PartialOrd>(val: T, min: T, max: T) -> T {
