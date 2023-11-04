@@ -57,7 +57,9 @@ impl Renderer {
 
             for triangle in mesh.triangles() {
                 let triangle_vertices = triangle.iter().map(|vertex_index| {
-                    obj_vertex_loopkup.get(vertex_index).unwrap();
+                    if let Some(i) = obj_vertex_loopkup.get(vertex_index) {
+                        return *i;
+                    }
 
                     let vertex_in_cam = vector_matrix_multiply(&obj_to_cam_matrix, all_vertices[*vertex_index], true);
                     camera.project_to_screen_space(vertex_in_cam)
