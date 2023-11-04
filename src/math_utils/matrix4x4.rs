@@ -83,6 +83,13 @@ mod tests {
     use super::*;
     use crate::test_utils::round_place;
 
+    fn compare_matrices(mat1: &Matrix4x4, mat2: &Matrix4x4, precision: usize) {
+        let flat_rounded_mat1 = mat1.iter().flatten().map(|x| round_place(*x, precision));
+        let flat_rounded_mat2 = mat2.iter().flatten().map(|x| round_place(*x, precision));
+
+        assert!(flat_rounded_mat1.eq(flat_rounded_mat2));
+    }
+
     #[test]
     fn invert_trs_matrix() {
         let mat = [
@@ -99,22 +106,21 @@ mod tests {
 
     #[test]
     fn invert_whole_matrix() {
-        let mut matrix: Matrix4x4 = [
-            [1.0, 2.0, 3.0, 4.0],
-            [5.0, 6.0, 7.0, 8.0],
-            [9.0, 10.0, 11.0, 12.0],
-            [13.0, 14.0, 15.0, 16.0],
+        let matrix: Matrix4x4 = [
+            [1.0, 0.5, 3.0, 0.0],
+            [5.0, 6.0, 0.6, 0.0],
+            [3.0, 1.0, 11.0, -12.0],
+            [13.0, 14.0, 15.0, 2.0]
         ];
 
-        let result = [
+        let expected_result = [
             [3.85953, 1.42211, -0.12309, -0.73853],
             [-3.17385, -0.98748, 0.10014, 0.60083],
             [-0.4242, -0.30946, 0.02434, 0.14604],
             [0.31154, -0.01043, -0.08345, -0.0007]
         ];
 
-        invert_matrix(&matrix, false).unwrap();
-
-        assert_eq!(matrix, result);
+        let result = invert_matrix(&matrix, false).unwrap();
+        compare_matrices(&expected_result, &result, 5);
     }
 }
