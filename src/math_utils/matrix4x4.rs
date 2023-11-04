@@ -80,6 +80,23 @@ pub fn invert_matrix(matrix: &Matrix4x4, ignore_4th_col: bool) -> Result<Matrix4
     Ok(inv_matrix)
 }
 
+pub fn vector_matrix_multiply(vector: Vector3D, matrix: &Matrix4x4, non_homogeneous: bool) -> Vector3D {
+    let x = matrix[0][0]*vector.x + matrix[1][0]*vector.y + matrix[2][0]*vector.z + matrix[3][0];
+    let y = matrix[0][1]*vector.x + matrix[1][1]*vector.y + matrix[2][1]*vector.z + matrix[3][1];
+    let z = matrix[0][2]*vector.x + matrix[1][2]*vector.y + matrix[2][2]*vector.z + matrix[3][2];
+
+    if non_homogeneous {
+        return Vector3D::new(x, y, z)
+    }
+
+    let w = matrix[0][3]*vector.x + matrix[1][3]*vector.y + matrix[2][3]*vector.z + matrix[3][3];
+    Vector3D {
+        x: x/w,
+        y: y/w,
+        z: z/w
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -137,7 +154,7 @@ mod tests {
         ];
         let vector = Vector3D::new(1,2,3);
 
-        let result = vector_matrix_multiply(vector, &matrix, false);
+        let result = vector_matrix_multiply(vector, &matrix, true);
         assert_eq!(result, Vector3D::new(40, 47, 54));
     }
 
@@ -151,7 +168,7 @@ mod tests {
         ];
         let vector = Vector3D::new(1,2,3);
 
-        let result = vector_matrix_multiply(vector, &matrix, true);
+        let result = vector_matrix_multiply(vector, &matrix, false);
         assert_eq!(result, Vector3D::new(1.0, 1.175, 1.35));
     }
 }
