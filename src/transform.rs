@@ -1,5 +1,5 @@
 use crate::math_utils::{vector3d, quaternion, matrix4x4};
-use matrix4x4::{Matrix4x4, IDENTITY_MATRIX4X4, invert_matrix};
+use matrix4x4::{Matrix4x4, IDENTITY_MATRIX4X4, invert_matrix, vector_matrix_multiply};
 use quaternion::{Quaternion, IDENTITY_QUATERNION};
 use vector3d::Vector3D;
 
@@ -51,12 +51,12 @@ impl Transform {
 
     #[inline]
     pub fn to_world_space(&self, coord: Vector3D) -> Vector3D {
-        fast_3x4_multiply(&self.matrix, coord)
+        vector_matrix_multiply(&self.matrix, coord, true)
     }
 
     #[inline]
     pub fn to_local_space(&self, coord: Vector3D) -> Vector3D {
-        fast_3x4_multiply(&self.inverse_matrix, coord)
+        vector_matrix_multiply(&self.inverse_matrix, coord, true)
     }
 
     pub fn has_changed(&self) -> bool {
@@ -76,17 +76,6 @@ impl Transform {
         self.rotation *= new_q;
         self.rotation.lazy_normalize();
         self.rotation.update_3x4_matrix(&mut self.matrix, &self.scale);
-    }
-}
-
-// Helps to convert between local and world coord. system
-// Note that transform can also be the inverted version
-#[inline]
-fn fast_3x4_multiply(matrix: &Matrix4x4, point: Vector3D) -> Vector3D {
-    Vector3D { 
-        x: matrix[0][0]*point.x + matrix[1][0]*point.y + matrix[2][0]*point.z + matrix[3][0],
-        y: matrix[0][1]*point.x + matrix[1][1]*point.y + matrix[2][1]*point.z + matrix[3][1],
-        z: matrix[0][2]*point.x + matrix[1][2]*point.y + matrix[2][2]*point.z + matrix[3][2],
     }
 }
 
