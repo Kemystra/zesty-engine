@@ -1,10 +1,10 @@
 pub type Matrix4x4 = [[f64; 4]; 4];
 
-pub const NIL_MATRIX4X4: Matrix4x4 = [
+pub const IDENTITY_MATRIX4X4: Matrix4x4 = [
     [1.0, 0.0, 0.0, 0.0], 
     [0.0, 1.0, 0.0, 0.0], 
     [0.0, 0.0, 1.0, 0.0], 
-    [0.0, 0.0, 0.0, 0.0]
+    [0.0, 0.0, 0.0, 1.0]
 ];
 
 pub fn invert_matrix(matrix: &Matrix4x4, ignore_4th_col: bool) -> Result<Matrix4x4, String> {
@@ -12,7 +12,7 @@ pub fn invert_matrix(matrix: &Matrix4x4, ignore_4th_col: bool) -> Result<Matrix4
     let col: usize = if ignore_4th_col { 3 } else { 4 };
 
     let mut matrix = matrix.clone();
-    let mut inv_matrix = NIL_MATRIX4X4.clone();
+    let mut inv_matrix = IDENTITY_MATRIX4X4.clone();
 
     for column in 0..col {
         // Making sure pivot is a non-zero number

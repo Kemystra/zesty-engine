@@ -1,5 +1,5 @@
 use crate::math_utils::{vector3d, quaternion, matrix4x4};
-use matrix4x4::{Matrix4x4, invert_matrix};
+use matrix4x4::{Matrix4x4, NIL_MATRIX4X4, invert_matrix};
 use quaternion::{Quaternion, IDENTITY_QUATERNION};
 use vector3d::Vector3D;
 
