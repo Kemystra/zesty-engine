@@ -171,4 +171,46 @@ mod tests {
         let result = vector_matrix_multiply(&matrix, vector, false);
         assert_eq!(result, Vector3D::new(1.0, 1.175, 1.35));
     }
+
+    #[test]
+    fn matrix_multiply_trs() {
+        let matrix = [
+            [1.0, 2.0, 3.0, 0.0],
+            [4.0, 5.0, 6.0, 0.0],
+            [7.0, 8.0, 9.0, 0.0],
+            [10.0, 11.0, 12.0, 1.0],
+        ];
+
+        let result = multiply_matrix(&matrix, &matrix, true);
+
+        let expected_result = [
+            [30.0, 36.0, 42.0, 0.0],
+            [66.0, 81.0, 96.0, 0.0],
+            [102.0, 126.0, 150.0, 0.0],
+            [148.0, 182.0, 216.0, 1.0],
+        ];
+
+        compare_matrices(&result, &expected_result, 1);
+    }
+
+    #[test]
+    fn matrix_multiply_whole() {
+        let matrix = [
+            [1.0, 2.0, 3.0, 5.0],
+            [4.0, 5.0, 6.0, 0.0],
+            [7.0, 8.0, 9.0, 3.0],
+            [10.0, 11.0, 12.0, 1.0],
+        ];
+
+        let result = multiply_matrix(&matrix, &matrix, false);
+
+        let expected_result = [
+            [80.0, 91.0, 102.0, 19.0],
+            [66.0, 81.0, 96.0, 38.0],
+            [132.0, 159.0, 186.0, 65.0],
+            [148.0, 182.0, 216.0, 87.0],
+        ];
+
+        compare_matrices(&result, &expected_result, 1);
+    }
 }
