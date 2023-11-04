@@ -80,6 +80,14 @@ impl Renderer {
         }
     }
 
+    fn to_ncd_space(&self, vector: Vector3D) -> Vector3D {
+        Vector3D {
+            x: (vector.x + 1.0) * 0.5,
+            y: (vector.y + 1.0) * 0.5,
+            z: vector.z,
+        }
+    }
+
     pub fn buffer(&self) -> &Vec<u32> {
         &self.tmp_buffer
     }
