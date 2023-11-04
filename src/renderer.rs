@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::f64::consts::PI;
 
 use crate::scene::Scene;
-use crate::math_utils::{vector3d::Vector3D, matrix4x4};
+use crate::math_utils::{vector3d::Vector3D, matrix4x4, clamp};
 use matrix4x4::{matrix_multiply, vector_matrix_multiply};
 use crate::component::mesh::Mesh;
 
@@ -71,7 +71,11 @@ impl Renderer {
                     let final_x = (ncd_coords.x * self.width as f64) as usize;
                     let final_y = (ncd_coords.y * self.height as f64) as usize;
 
-                    for i in 0..25 { self.plot_pixel(final_x + (i % 5), final_y + (i / 5), WHITE) }
+                    for i in 0..25 {
+                        self.plot_pixel(
+                            clamp(final_x + (i % 5), 0, self.width),
+                            clamp(final_y + (i / 5), 0, self.height), WHITE)
+                    }
                 });
             }
 
