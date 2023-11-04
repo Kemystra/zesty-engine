@@ -97,6 +97,23 @@ pub fn vector_matrix_multiply(matrix: &Matrix4x4, vector: Vector3D, non_homogene
     }
 }
 
+pub fn matrix_multiply(matrix1: &Matrix4x4, matrix2: &Matrix4x4) -> Matrix4x4 {
+    let mut result = IDENTITY_MATRIX4X4.clone();
+    const SIZE: usize = 4;
+
+    for x in 0..SIZE {
+        for y in 0..SIZE {
+            let mut sum = 0.0;
+            for num in 0..4 {
+                sum += matrix1[y][num] * matrix2[x][num];
+                result[x][y] = sum;
+            }
+        }
+    }
+
+    result
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -181,7 +198,7 @@ mod tests {
             [10.0, 11.0, 12.0, 1.0],
         ];
 
-        let result = multiply_matrix(&matrix, &matrix, true);
+        let result = matrix_multiply(&matrix, &matrix);
 
         let expected_result = [
             [30.0, 36.0, 42.0, 0.0],
@@ -202,7 +219,7 @@ mod tests {
             [10.0, 11.0, 12.0, 1.0],
         ];
 
-        let result = multiply_matrix(&matrix, &matrix, false);
+        let result = matrix_multiply(&matrix, &matrix);
 
         let expected_result = [
             [80.0, 91.0, 102.0, 19.0],
