@@ -74,10 +74,11 @@ impl Camera {
                 self.aspect_ratio
             )
         }
+
         &self.projection_data
     }
 
-    pub fn project_to_screen_space(&self, point: Vector3D) -> Vector3D {
+    pub fn project_to_screen_space(&mut self, point: Vector3D) -> Vector3D {
         // Deconstructing the data
         // What the actual frick
         let ProjectionData(w_scaler, h_scaler, m1, m2) = self.projection_data();

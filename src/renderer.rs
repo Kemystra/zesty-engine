@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::f64::consts::PI;
 
 use crate::scene::Scene;
@@ -45,16 +46,24 @@ impl Renderer {
 
     pub fn render(&mut self, scene: &mut Scene) {
         let rot = (PI/4.0) * (1.0/200.0);
-        let camera = &scene.camera;
+        let camera = &mut scene.camera;
 
         for obj in scene.objects.iter_mut() {
             let mesh = obj.get_component::<Mesh>().unwrap();
             let obj_to_cam_matrix = matrix_multiply(&obj.transform.matrix(), &camera.transform.matrix());
 
-            for vertex in mesh.vertices() {
-                let vertex_in_cam = vector_matrix_multiply(&obj_to_cam_matrix, *vertex, true);
-                let screen_coords = camera.project_to_screen_space(vertex_in_cam);
+            let all_vertices = mesh.vertices();
+            let obj_vertex_loopkup: HashMap<usize, Vector3D> = HashMap::new();
 
+            for triangle in mesh.triangles() {
+                let triangle_vertices = triangle.iter().map(|vertex_index| {
+                    obj_vertex_loopkup.get(vertex_index).unwrap();
+
+                    let vertex_in_cam = vector_matrix_multiply(&obj_to_cam_matrix, all_vertices[*vertex_index], true);
+                    camera.project_to_screen_space(vertex_in_cam)
+                });
+
+                /*
                 let ncd_coords = Vector3D {
                     x: (screen_coords.x + 1.0) * 0.5,
                     y: (screen_coords.y + 1.0) * 0.5,
@@ -63,6 +72,8 @@ impl Renderer {
 
                 let final_x = (ncd_coords.x * self.width as f64) as usize;
                 let final_y = (ncd_coords.y * self.height as f64) as usize;
+
+                */
             }
 
             obj.transform.rotate(rot, 0.0, rot);
