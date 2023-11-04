@@ -63,17 +63,14 @@ impl Renderer {
                     camera.project_to_screen_space(vertex_in_cam)
                 });
 
-                /*
-                let ncd_coords = Vector3D {
-                    x: (screen_coords.x + 1.0) * 0.5,
-                    y: (screen_coords.y + 1.0) * 0.5,
-                    z: screen_coords.z,
-                };
+                triangle_vertices.for_each(|point| {
+                    let ncd_coords = self.to_ncd_space(point);
 
-                let final_x = (ncd_coords.x * self.width as f64) as usize;
-                let final_y = (ncd_coords.y * self.height as f64) as usize;
+                    let final_x = (ncd_coords.x * self.width as f64) as usize;
+                    let final_y = (ncd_coords.y * self.height as f64) as usize;
 
-                */
+                    for i in 0..25 { self.plot_pixel(final_x + (i % 5), final_y + (i / 5), WHITE) }
+                });
             }
 
             obj.transform.rotate(rot, 0.0, rot);
