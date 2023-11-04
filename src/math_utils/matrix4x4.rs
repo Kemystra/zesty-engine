@@ -105,8 +105,8 @@ pub fn matrix_multiply(matrix1: &Matrix4x4, matrix2: &Matrix4x4) -> Matrix4x4 {
         for y in 0..SIZE {
             let mut sum = 0.0;
             for num in 0..4 {
-                sum += matrix1[y][num] * matrix2[x][num];
-                result[x][y] = sum;
+                sum += matrix1[y][num] * matrix2[num][x];
+                result[y][x] = sum;
             }
         }
     }
@@ -206,6 +206,8 @@ mod tests {
             [102.0, 126.0, 150.0, 0.0],
             [148.0, 182.0, 216.0, 1.0],
         ];
+
+        dbg!("{:?}", result);
 
         compare_matrices(&result, &expected_result, 1);
     }
