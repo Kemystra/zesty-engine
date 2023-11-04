@@ -1,5 +1,5 @@
 use crate::math_utils::{vector3d, quaternion, matrix4x4};
-use matrix4x4::{Matrix4x4, NIL_MATRIX4X4, invert_matrix};
+use matrix4x4::{Matrix4x4, IDENTITY_MATRIX4X4, invert_matrix};
 use quaternion::{Quaternion, IDENTITY_QUATERNION};
 use vector3d::Vector3D;
 
@@ -18,18 +18,8 @@ pub struct Transform {
 impl Transform {
     pub fn new() -> Self {
         Self {
-            matrix: [
-                [1.0, 0.0, 0.0], 
-                [0.0, 1.0, 0.0], 
-                [0.0, 0.0, 1.0], 
-                [0.0, 0.0, 0.0]
-            ],
-            inverse_matrix: [
-                [1.0, 0.0, 0.0], 
-                [0.0, 1.0, 0.0], 
-                [0.0, 0.0, 1.0], 
-                [0.0, 0.0, 0.0]
-            ],
+            matrix: IDENTITY_MATRIX4X4,
+            inverse_matrix: IDENTITY_MATRIX4X4,
             rotation: IDENTITY_QUATERNION,
             scale: Vector3D::new(1,1,1),
             dirty_flag: false
@@ -40,7 +30,7 @@ impl Transform {
         Ok(
         Self {
             matrix,
-            inverse_matrix: invert_matrix(&matrix)?,
+            inverse_matrix: invert_matrix(&matrix, true)?,
             rotation: IDENTITY_QUATERNION,
             scale: Vector3D::new(1,1,1),
             dirty_flag: false
@@ -53,7 +43,7 @@ impl Transform {
 
     pub fn inverse_matrix(&mut self) -> Matrix4x4 {
         if self.dirty_flag {
-            self.inverse_matrix = invert_matrix(&self.matrix).unwrap();
+            self.inverse_matrix = invert_matrix(&self.matrix, true).unwrap();
         }
 
         self.inverse_matrix
@@ -119,10 +109,10 @@ mod tests {
     fn transform_to_world() {
         let mat_a = Vector3D::new(5.0,3.0,12.0);
         let matrix = [
-                [0.9, 0.4, 0.12],
-                [0.7, 0.06, 0.5],
-                [0.1, 0.4, 2.7],
-                [10.0,12.0,11.0],
+                [0.9, 0.4, 0.12, 0.0],
+                [0.7, 0.06, 0.5, 0.0],
+                [0.1, 0.4, 2.7, 0.0],
+                [10.0,12.0,11.0, 1.0],
             ];
         let transform_b = Transform::from_matrix(matrix).unwrap();
         let result = transform_b.to_world_space(mat_a);
@@ -135,10 +125,10 @@ mod tests {
     fn transform_to_local() {
         let mat_a = Vector3D::new(5,10,2);
         let matrix = [
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0],
-            [3.0, 4.0, 2.0]
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [3.0, 4.0, 2.0, 1.0]
         ];
         let transform_b = Transform::from_matrix(matrix).unwrap();
         let result = transform_b.to_local_space(mat_a);
@@ -161,7 +151,7 @@ mod tests {
         assert_eq!(transform.has_changed(), true);
 
         let new_matrix = transform.matrix();
-        assert_eq!(new_matrix[3], [a,b,c]);
+        assert_eq!(new_matrix[3], [a,b,c,1.0]);
     }
 
     #[test]
@@ -171,10 +161,10 @@ mod tests {
         let result = transform.matrix();
 
         let expected = [
-            [-0.36520, 0.41245, 0.83458],
-            [-0.19951, 0.84099, -0.50292],
-            [-0.90930, -0.35018, -0.22485],
-            [0.0, 0.0, 0.0],
+            [-0.36520, 0.41245, 0.83458, 0.0],
+            [-0.19951, 0.84099, -0.50292, 0.0],
+            [-0.90930, -0.35018, -0.22485, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
         ];
 
         for (i,row) in result.iter().enumerate() {
