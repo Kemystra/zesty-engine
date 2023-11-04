@@ -1,3 +1,6 @@
+use super::vector3d::Vector3D;
+
+
 pub type Matrix4x4 = [[f64; 4]; 4];
 
 pub const IDENTITY_MATRIX4X4: Matrix4x4 = [
@@ -122,5 +125,33 @@ mod tests {
 
         let result = invert_matrix(&matrix, false).unwrap();
         compare_matrices(&expected_result, &result, 5);
+    }
+
+    #[test]
+    fn vector_multiply_normal() {
+        let matrix = [
+            [1.0, 2.0, 3.0, 0.0],
+            [4.0, 5.0, 6.0, 0.0],
+            [7.0, 8.0, 9.0, 0.0],
+            [10.0, 11.0, 12.0, 1.0],
+        ];
+        let vector = Vector3D::new(1,2,3);
+
+        let result = vector_matrix_multiply(vector, &matrix, false);
+        assert_eq!(result, Vector3D::new(40, 47, 54));
+    }
+
+    #[test]
+    fn vector_multiply_homogeneous() {
+        let matrix = [
+            [1.0, 2.0, 3.0, 2.0],
+            [4.0, 5.0, 6.0, 5.0],
+            [7.0, 8.0, 9.0, 9.0],
+            [10.0, 11.0, 12.0, 1.0],
+        ];
+        let vector = Vector3D::new(1,2,3);
+
+        let result = vector_matrix_multiply(vector, &matrix, true);
+        assert_eq!(result, Vector3D::new(1.0, 1.175, 1.35));
     }
 }
