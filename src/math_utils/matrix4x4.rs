@@ -7,10 +7,11 @@ pub const NIL_MATRIX4X4: Matrix4x4 = [
     [0.0, 0.0, 0.0, 0.0]
 ];
 
-pub fn invert_matrix(matrix: &mut Matrix4x4, ignore_4th_col: bool) -> Result<(), String> {
+pub fn invert_matrix(matrix: &Matrix4x4, ignore_4th_col: bool) -> Result<Matrix4x4, String> {
     let row: usize = 4;
     let col: usize = if ignore_4th_col { 3 } else { 4 };
 
+    let mut matrix = matrix.clone();
     let mut inv_matrix = NIL_MATRIX4X4.clone();
 
     for column in 0..col {
@@ -73,7 +74,7 @@ pub fn invert_matrix(matrix: &mut Matrix4x4, ignore_4th_col: bool) -> Result<(),
             matrix[row][column] = 0.0;
         }
     }
-    Ok(())
+    Ok(inv_matrix)
 }
 
 
@@ -84,17 +85,16 @@ mod tests {
 
     #[test]
     fn invert_trs_matrix() {
-        let mut mat = [
+        let mat = [
             [1.0, 0.0, 0.0, 0.0],
             [0.0, 1.0, 0.0, 0.0],
             [0.0, 0.0, 1.0, 0.0],
             [3.0, 10.0, 1.0, 1.0]
         ];
-
-        invert_matrix(&mut mat, true).unwrap();
-        assert_eq!(round_place(mat[3][0], 2), -3.0);
-        assert_eq!(round_place(mat[3][1], 2), -10.0);
-        assert_eq!(round_place(mat[3][2], 2), -1.0);
+        let result = invert_matrix(&mat, true).unwrap();
+        assert_eq!(round_place(result[3][0], 2), -3.0);
+        assert_eq!(round_place(result[3][1], 2), -10.0);
+        assert_eq!(round_place(result[3][2], 2), -1.0);
     }
 
     #[test]
@@ -113,7 +113,8 @@ mod tests {
             [0.31154, -0.01043, -0.08345, -0.0007]
         ];
 
-        invert_matrix(&mut matrix, false).unwrap();
+        invert_matrix(&matrix, false).unwrap();
+
         assert_eq!(matrix, result);
     }
 }
