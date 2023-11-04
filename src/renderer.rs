@@ -1,7 +1,8 @@
 use std::f64::consts::PI;
 
 use crate::scene::Scene;
-use crate::math_utils::vector3d::Vector3D;
+use crate::math_utils::{vector3d::Vector3D, matrix4x4};
+use matrix4x4::{matrix_multiply, vector_matrix_multiply};
 use crate::component::mesh::Mesh;
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -44,15 +45,15 @@ impl Renderer {
 
     pub fn render(&mut self, scene: &mut Scene) {
         let rot = (PI/4.0) * (1.0/200.0);
+        let camera = &scene.camera;
 
         for obj in scene.objects.iter_mut() {
             let mesh = obj.get_component::<Mesh>().unwrap();
+            let obj_to_cam_matrix = matrix_multiply(&obj.transform.matrix(), &camera.transform.matrix());
 
-            let mut tmp_vertex: Vec<[usize; 2]> = vec![];
             for vertex in mesh.vertices() {
-                let vertex_in_world = obj.transform.to_world_space(*vertex);
-                let vertex_in_cam = scene.camera.transform.to_local_space(vertex_in_world);
-                let screen_coords = scene.camera.project_to_screen_space(vertex_in_cam);
+                let vertex_in_cam = vector_matrix_multiply(&obj_to_cam_matrix, *vertex, true);
+                let screen_coords = camera.project_to_screen_space(vertex_in_cam);
 
                 let ncd_coords = Vector3D {
                     x: (screen_coords.x + 1.0) * 0.5,
@@ -62,8 +63,6 @@ impl Renderer {
 
                 let final_x = (ncd_coords.x * self.width as f64) as usize;
                 let final_y = (ncd_coords.y * self.height as f64) as usize;
-
-                tmp_vertex.push([final_x, final_y]);
             }
 
             obj.transform.rotate(rot, 0.0, rot);
