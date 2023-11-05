@@ -14,8 +14,8 @@ impl Color {
     pub fn new<T: TryInto<u8>>(r: T, g: T, b: T) -> Self {
         Self(
             r.try_into().unwrap_or_default() as u32 |
-            ((g.try_into().unwrap_or_default() << 8) as u32) |
-            ((b.try_into().unwrap_or_default() << 16) as u32)
+            ((g.try_into().unwrap_or_default() as u32) << 8) |
+            ((b.try_into().unwrap_or_default() as u32) << 16)
         )
     }
 
