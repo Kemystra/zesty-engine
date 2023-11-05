@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::f64::consts::PI;
+use std::cmp::{min, max};
 
 use crate::scene::Scene;
 use crate::math_utils::{vector3d::Vector3D, matrix4x4, clamp};
@@ -72,7 +73,7 @@ impl Renderer {
                     camera.project_to_screen_space(vertex_in_cam)
                 });
 
-                let triangle_tuples = triangle_vertices.map(|point| {
+                let triangle_tuple = triangle_vertices.map(|point| {
                     let ncd_coords = self.to_ncd_space(point);
 
                     let final_x = (ncd_coords.x * self.width as f64) as isize;
@@ -81,7 +82,7 @@ impl Renderer {
                     (final_x, final_y)
                 }).collect::<Vec<(isize, isize)>>();
 
-                self.draw_triangles(triangle_tuples);
+                self.draw_triangles(triangle_tuple);
             }
 
             obj.transform.rotate(rot, 0.0, rot);
@@ -142,7 +143,23 @@ impl Renderer {
         }
     }
 
-    pub fn draw_triangles(&mut self, triangle: ) {}
+    pub fn draw_triangles(&mut self, triangle_tuple: Vec<(isize, isize)>) {
+        let mut max_x = triangle_tuple[0].0;
+        let mut max_y = triangle_tuple[0].1;
+        let mut min_x = max_x;
+        let mut min_y = max_y;
+
+        for index in 1..2 {
+            let x_part = triangle_tuple[index].0;
+            let y_part = triangle_tuple[index].1;
+
+            max_x = max(x_part, max_x);
+            min_x = min(x_part, min_x);
+
+            max_y = max(y_part, max_y);
+            min_y = min(y_part, min_y);
+        }
+    }
 }
 
 #[cfg(test)]
