@@ -104,19 +104,17 @@ impl Renderer {
         self.tmp_buffer.iter_mut().for_each(|x| *x = 0);
     }
 
-    pub fn plot_pixel(&mut self, x: usize, y: usize, color: Color) {
-        self.tmp_buffer[x + (y*self.width)] = color.rgb_u32();
+    pub fn plot_pixel<T: Into<usize>>(&mut self, x: T, y: T, color: Color) {
+        self.tmp_buffer[x.into() + (y.into()*self.width)] = color.rgb_u32();
     }
 
     pub fn bresenham_line(
         &mut self, color: Color,
-        x0: usize, y0: usize,
-        end_x: usize, end_y: usize) {
-        let mut curr_x = x0 as isize;
-        let mut curr_y = y0 as isize;
+        x0: isize, y0: isize,
+        end_x: isize, end_y: isize) {
 
-        let end_x = end_x as isize;
-        let end_y = end_y as isize;
+        let mut curr_x = x0;
+        let mut curr_y = y0;
 
         let dx = (end_x - curr_x).abs();
         let dy = -(end_y - curr_y).abs();
