@@ -169,7 +169,24 @@ impl Renderer {
             // Based on the edge function
             let first_result = (diff_x * (min_y - point.1)) - (diff_y * (min_x - point.0));
             (first_result, diff_x, diff_y)
-        });
+        }).collect::<Vec<(isize, isize, isize)>>();
+
+        for offset_x in 0..(max_x - min_x) {
+            for offset_y in 0..(max_y - min_y) {
+                let is_in_triangle = edge_results.iter().any(|results_group| {
+                    let (first_result, diff_x, diff_y) = results_group;
+                    let curr_result = first_result + (diff_x*offset_x) + (diff_y*offset_y);
+
+                    curr_result >= 0
+                });
+
+                if is_in_triangle {
+                    self.plot_pixel(
+                        (min_x + offset_x) as usize,
+                        (min_y + offset_y) as usize, WHITE);
+                }
+            }
+        }
     }
 }
 
