@@ -8,28 +8,28 @@ use matrix4x4::{matrix_multiply, vector_matrix_multiply};
 use crate::component::mesh::Mesh;
 
 #[derive(Debug, PartialEq, Clone, Copy)]
-pub struct Color {
-    pub r: u8, pub g: u8, pub b: u8
-}
+pub struct Color(u32);
 
 impl Color {
     pub fn new<T: TryInto<u8>>(r: T, g: T, b: T) -> Self {
-        Self {
-            r: r.try_into().unwrap_or_default(),
-            g: g.try_into().unwrap_or_default(),
-            b: b.try_into().unwrap_or_default()
-        }
+        Self(
+            r.try_into().unwrap_or_default() as u32 |
+            ((g.try_into().unwrap_or_default() << 8) as u32) |
+            ((b.try_into().unwrap_or_default() << 16) as u32)
+        )
     }
 
     pub fn rgb_u32(&self) -> u32 {
-        (self.r as u32) | ((self.g as u32) << 8) | ((self.b as u32) << 16)
+        self.0
     }
 }
 
-const WHITE: Color = Color {
-    r: 255, g: 255, b: 255
-};
+const WHITE: Color = Color::new(255, 255, 255);
+/*
+const COLOR_LIST: [Color; 8] = [
 
+];
+*/
 pub struct Renderer {
     width: usize,
     height: usize,
@@ -196,21 +196,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn new_color() {
-        let color = Color::new(255, 100, 12);
-
-        assert_eq!(color, Color {
-            r: 255, g: 100, b: 12
-        });
-    }
-
-    #[test]
     fn new_invalid_color() {
         let color = Color::new(256, 34, -1);
 
-        assert_eq!(color, Color {
-            r: 0, g: 34, b: 0
-        })
+        assert_eq!(color, Color::new(0, 34, 0));
     }
 
     #[test]
