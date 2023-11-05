@@ -94,7 +94,7 @@ impl Renderer {
                     (final_x, final_y)
                 }).collect::<Vec<(isize, isize)>>();
 
-                self.draw_triangles(triangle_tuple, color_list[i]);
+                self.draw_triangles(triangle_tuple, color_list[i % 8]);
                 i += 1;
             }
 
