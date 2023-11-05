@@ -159,6 +159,17 @@ impl Renderer {
             max_y = max(y_part, max_y);
             min_y = min(y_part, min_y);
         }
+
+        let edge_results = triangle_tuple.iter().enumerate().map(|pair| {
+            let (i, point) = pair;
+            let next_point = triangle_tuple[(i+1) % 3];
+            let diff_x = point.0 - next_point.0;
+            let diff_y = point.1 - next_point.1;
+
+            // Based on the edge function
+            let first_result = (diff_x * (min_y - point.1)) - (diff_y * (min_x - point.0));
+            (first_result, diff_x, diff_y)
+        });
     }
 }
 
