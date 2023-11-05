@@ -186,18 +186,17 @@ impl Renderer {
 
         for offset_x in 0..(max_x - min_x) {
             for offset_y in 0..(max_y - min_y) {
-                let is_in_triangle = edge_results.iter().all(|results_group| {
+                let not_in_triangle = edge_results.iter().any(|results_group| {
                     let (first_result, diff_x, diff_y) = results_group;
                     let curr_result = first_result + (diff_x*offset_y) - (diff_y*offset_x);
 
-                    curr_result >= 0
+                    curr_result < 0
                 });
 
-                if is_in_triangle {
-                    self.plot_pixel(
-                        (min_x + offset_x) as usize,
-                        (min_y + offset_y) as usize, color);
-                }
+                if not_in_triangle { continue; }
+                self.plot_pixel(
+                    (min_x + offset_x) as usize,
+                    (min_y + offset_y) as usize, color);
             }
         }
     }
