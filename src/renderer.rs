@@ -49,6 +49,10 @@ impl Renderer {
         let rot = (PI/4.0) * (1.0/200.0);
         let camera = &mut scene.camera;
 
+        self.draw_triangles(vec![
+            (100, 300), (600, 300), (300, 50)
+        ]);
+
         for obj in scene.objects.iter_mut() {
             let mesh = obj.get_component::<Mesh>().unwrap();
             let obj_to_cam_matrix = matrix_multiply(
@@ -58,7 +62,8 @@ impl Renderer {
 
             let all_vertices = mesh.vertices();
             let obj_vertex_loopkup: HashMap<usize, Vector3D> = HashMap::new();
-
+            
+            /*
             for triangle in mesh.triangles() {
                 let triangle_vertices = triangle.iter().map(|vertex_index| {
                     if let Some(i) = obj_vertex_loopkup.get(vertex_index) {
@@ -84,6 +89,7 @@ impl Renderer {
 
                 self.draw_triangles(triangle_tuple);
             }
+            */
 
             obj.transform.rotate(rot, 0.0, rot);
         }
@@ -149,7 +155,7 @@ impl Renderer {
         let mut min_x = max_x;
         let mut min_y = max_y;
 
-        for index in 1..2 {
+        for index in 1..3 {
             let x_part = triangle_tuple[index].0;
             let y_part = triangle_tuple[index].1;
 
@@ -167,15 +173,15 @@ impl Renderer {
             let diff_y = point.1 - next_point.1;
 
             // Based on the edge function
-            let first_result = (diff_x * (min_y - point.1)) - (diff_y * (min_x - point.0));
+            let first_result = ((min_y - point.1) * diff_x) - ((min_x - point.0) * diff_y);
             (first_result, diff_x, diff_y)
         }).collect::<Vec<(isize, isize, isize)>>();
 
         for offset_x in 0..(max_x - min_x) {
             for offset_y in 0..(max_y - min_y) {
-                let is_in_triangle = edge_results.iter().any(|results_group| {
+                let is_in_triangle = edge_results.iter().all(|results_group| {
                     let (first_result, diff_x, diff_y) = results_group;
-                    let curr_result = first_result + (diff_x*offset_x) + (diff_y*offset_y);
+                    let curr_result = first_result + (diff_x*offset_y) - (diff_y*offset_x);
 
                     curr_result >= 0
                 });
