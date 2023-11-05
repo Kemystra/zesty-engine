@@ -3,7 +3,7 @@ use std::f64::consts::PI;
 use std::cmp::{min, max};
 
 use crate::scene::Scene;
-use crate::math_utils::{vector3d::Vector3D, matrix4x4, clamp};
+use crate::math_utils::{vector3d::Vector3D, matrix4x4};
 use matrix4x4::{matrix_multiply, vector_matrix_multiply};
 use crate::component::mesh::Mesh;
 
@@ -24,12 +24,6 @@ impl Color {
     }
 }
 
-const WHITE: Color = Color::new(255, 255, 255);
-/*
-const COLOR_LIST: [Color; 8] = [
-
-];
-*/
 pub struct Renderer {
     width: usize,
     height: usize,
@@ -49,6 +43,17 @@ impl Renderer {
         let rot = (PI/4.0) * (1.0/200.0);
         let camera = &mut scene.camera;
 
+        let color_list: [Color; 8] = [
+            Color::new(255, 255, 255),
+            Color::new(0, 0, 255),
+            Color::new(255, 0, 0),
+            Color::new(0, 0, 255),
+            Color::new(0, 255, 255),
+            Color::new(255, 0, 255),
+            Color::new(255, 255, 0),
+            Color::new(100, 100, 100)
+        ];
+
         for obj in scene.objects.iter_mut() {
             let mesh = obj.get_component::<Mesh>().unwrap();
             let obj_to_cam_matrix = matrix_multiply(
@@ -58,6 +63,8 @@ impl Renderer {
 
             let all_vertices = mesh.vertices();
             let mut obj_vertex_loopkup: HashMap<usize, Vector3D> = HashMap::new();
+
+            let mut i = 0;
             
             for triangle in mesh.triangles() {
                 let triangle_vertices = triangle.iter().map(|&vertex_index| {
@@ -87,7 +94,8 @@ impl Renderer {
                     (final_x, final_y)
                 }).collect::<Vec<(isize, isize)>>();
 
-                self.draw_triangles(triangle_tuple);
+                self.draw_triangles(triangle_tuple, color_list[i]);
+                i += 1;
             }
 
             obj.transform.rotate(rot, 0.0, rot);
