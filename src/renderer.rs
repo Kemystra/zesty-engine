@@ -49,10 +49,6 @@ impl Renderer {
         let rot = (PI/4.0) * (1.0/200.0);
         let camera = &mut scene.camera;
 
-        self.draw_triangles(vec![
-            (100, 300), (600, 300), (300, 50)
-        ]);
-
         for obj in scene.objects.iter_mut() {
             let mesh = obj.get_component::<Mesh>().unwrap();
             let obj_to_cam_matrix = matrix_multiply(
@@ -63,7 +59,6 @@ impl Renderer {
             let all_vertices = mesh.vertices();
             let obj_vertex_loopkup: HashMap<usize, Vector3D> = HashMap::new();
             
-            /*
             for triangle in mesh.triangles() {
                 let triangle_vertices = triangle.iter().map(|vertex_index| {
                     if let Some(i) = obj_vertex_loopkup.get(vertex_index) {
@@ -75,6 +70,7 @@ impl Renderer {
                         all_vertices[*vertex_index],
                         true
                     );
+
                     camera.project_to_screen_space(vertex_in_cam)
                 });
 
@@ -89,7 +85,6 @@ impl Renderer {
 
                 self.draw_triangles(triangle_tuple);
             }
-            */
 
             obj.transform.rotate(rot, 0.0, rot);
         }
@@ -149,7 +144,7 @@ impl Renderer {
         }
     }
 
-    pub fn draw_triangles(&mut self, triangle_tuple: Vec<(isize, isize)>) {
+    pub fn draw_triangles(&mut self, triangle_tuple: Vec<(isize, isize)>, color: Color) {
         let mut max_x = triangle_tuple[0].0;
         let mut max_y = triangle_tuple[0].1;
         let mut min_x = max_x;
@@ -189,7 +184,7 @@ impl Renderer {
                 if is_in_triangle {
                     self.plot_pixel(
                         (min_x + offset_x) as usize,
-                        (min_y + offset_y) as usize, WHITE);
+                        (min_y + offset_y) as usize, color);
                 }
             }
         }
