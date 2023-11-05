@@ -50,7 +50,10 @@ impl Renderer {
 
         for obj in scene.objects.iter_mut() {
             let mesh = obj.get_component::<Mesh>().unwrap();
-            let obj_to_cam_matrix = matrix_multiply(&obj.transform.matrix(), &camera.transform.matrix());
+            let obj_to_cam_matrix = matrix_multiply(
+                &obj.transform.matrix(),
+                &camera.transform.matrix()
+            );
 
             let all_vertices = mesh.vertices();
             let obj_vertex_loopkup: HashMap<usize, Vector3D> = HashMap::new();
@@ -61,22 +64,24 @@ impl Renderer {
                         return *i;
                     }
 
-                    let vertex_in_cam = vector_matrix_multiply(&obj_to_cam_matrix, all_vertices[*vertex_index], true);
+                    let vertex_in_cam = vector_matrix_multiply(
+                        &obj_to_cam_matrix,
+                        all_vertices[*vertex_index],
+                        true
+                    );
                     camera.project_to_screen_space(vertex_in_cam)
                 });
 
-                triangle_vertices.for_each(|point| {
+                let triangle_tuples = triangle_vertices.map(|point| {
                     let ncd_coords = self.to_ncd_space(point);
 
-                    let final_x = (ncd_coords.x * self.width as f64) as usize;
-                    let final_y = (ncd_coords.y * self.height as f64) as usize;
+                    let final_x = (ncd_coords.x * self.width as f64) as isize;
+                    let final_y = (ncd_coords.y * self.height as f64) as isize;
 
-                    for i in 0..25 {
-                        self.plot_pixel(
-                            clamp(final_x + (i % 5), 0, self.width),
-                            clamp(final_y + (i / 5), 0, self.height), WHITE)
-                    }
-                });
+                    (final_x, final_y)
+                }).collect::<Vec<(isize, isize)>>();
+
+                self.draw_triangles(triangle_tuples);
             }
 
             obj.transform.rotate(rot, 0.0, rot);
@@ -138,6 +143,8 @@ impl Renderer {
             }
         }
     }
+
+    pub fn draw_triangles(&mut self, triangle: ) {}
 }
 
 #[cfg(test)]
